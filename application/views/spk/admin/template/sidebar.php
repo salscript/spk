@@ -2,7 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
-        <!-- <img src="<?= base_url() ?>assets/back/dist/img/insaba.png" alt="Helpdesk Logo" class="brand-image" style="opacity: 1"> -->
+        <img src="<?= base_url() ?>assets/back/dist/img/technolife.webp" alt="Helpdesk Logo" class="brand-image" style="opacity: 1">
         <span class="brand-text font-weight-normal">SPK IT</span>
     </a>
 
@@ -47,7 +47,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./index2.html" class="nav-link">
+                            <a href=" <?php echo base_url('aspect/aspect') ?>" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Aspect</p>
                             </a>
