@@ -29,22 +29,6 @@
                         </p>
                     </a>
                 </li>
-                <!-- <li class="nav-item">
-                    <a href="<?php echo base_url('ticket/admin') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'ticket') echo 'active' ?>">
-                        <i class="nav-icon fas fa-inbox"></i>
-                        <p>
-                            Tickets
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?php echo base_url('report/report_admin') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'report') echo 'active' ?>">
-                        <i class="nav-icon fas fa-file"></i>
-                        <p>
-                            Report
-                        </p>
-                    </a>
-                </li> -->
                 <hr>
                 <li class="nav-header">ADMINISTRATION</li>
                 <li class="nav-item" id="questioner-menu">
@@ -88,38 +72,6 @@
                         </li>
                     </ul>
                 </li>
-                <!-- <li class="nav-item">
-                    <a href="<?php echo base_url('subject/subject') ?>" class="nav-link">
-                        <i class="nav-icon fas fa-comment"></i>
-                        <p>
-                            Subject
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?php echo base_url('client/company') ?>" class="nav-link">
-                        <i class="nav-icon fas fa-building"></i>
-                        <p>
-                            Company
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?php echo base_url('divisi/divisi') ?>" class="nav-link">
-                        <i class="nav-icon fas fa-landmark"></i>
-                        <p>
-                            Divisi
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?php echo base_url('client/application') ?>" class="nav-link">
-                        <i class="nav-icon fas fa-window-maximize"></i>
-                        <p>
-                            Application
-                        </p>
-                    </a>
-                </li> -->
                 <li class="nav-item">
                     <a href="<?php echo base_url('user/user') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'user') echo 'active' ?>">
                         <i class="nav-icon fas fa-users"></i>
