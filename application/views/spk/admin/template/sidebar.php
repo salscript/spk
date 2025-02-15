@@ -29,6 +29,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?php echo base_url('ProsesPerhitungan/admin') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'dashboard') echo 'active' ?>">
+                        <i class="nav-icon fas fa-calculator"></i>
+                        <p>
+                            Proses Perhitungan
+                        </p>
+                    </a>
+                </li>
                 <hr>
                 <li class="nav-header">ADMINISTRATION</li>
                 <li class="nav-item" id="questioner-menu">
