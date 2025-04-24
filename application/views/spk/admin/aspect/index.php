@@ -8,7 +8,10 @@
             <div class="col-sm-6">
                <div class="row">
                   <div class="col-11">
-                     <button class="btn btn-primary text-sm float-right mr-2" onclick="crtQuestion()">Create Question</button>
+                     <button class="btn btn-primary text-sm float-right mr-2" onclick="crtAspect
+                     ()">Create Aspect
+
+                     </button>
                   </div>
                   <div class="col-1">
                      <button class="btn btn-outline-primary text-sm float-right" onclick="reload()">
@@ -58,13 +61,19 @@
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
    });
 
-   function crtQuestion() {
-      window.location.href = "<?= base_url('question/new_question') ?>"
+   function crtAspect
+   () {
+      window.location.href = "<?= base_url('aspect
+      /new_aspect
+      ') ?>"
    }
 
-   function get_question(id) {
+   function get_aspect
+   (id) {
       if (id != "") {
-         window.location.href = "<?= base_url('question/edit_question/') ?>" + id;
+         window.location.href = "<?= base_url('aspect
+         /edit_aspect
+         /') ?>" + id;
       } else {
          alert('Oops.!!');
       }
@@ -84,9 +93,12 @@
          if (result.value) {
             $.ajax({
                type: "post",
-               url: "<?php echo base_url('question/delete_question') ?>",
+               url: "<?php echo base_url('aspect
+               /delete_aspect
+               ') ?>",
                data: {
-                  id_question: id,
+                  id_aspect
+                  : id,
                },
                dataType: "json",
                success: function(response) {

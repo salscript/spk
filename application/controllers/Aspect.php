@@ -8,10 +8,12 @@ class Aspect extends MY_Controller
       parent::__construct();
       cek_login();
       check_admin();
+      $this->load->model('M_aspect');
    }
 
    public function aspect()
    {
-         $this->template->load('spk/template_admin', 'spk/admin/aspect/index');
+      $data['aspect'] = $this->M_aspect->get_all_aspect();
+      $this->template->load('spk/template_admin', 'spk/admin/aspect/index', $data);
    }
 }

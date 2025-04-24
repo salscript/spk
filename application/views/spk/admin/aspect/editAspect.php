@@ -11,8 +11,8 @@
     <section class="content">
         <div class="container-fluid">
             <div class="card">
-                <?php echo form_open('question/update_question', ['class' => 'formEditQuestion']) ?>
-                <!-- <form action="<?= base_url('question/update_question') ?>" method="post"> -->
+                <?php echo form_open('user/update_user', ['class' => 'formEditUser']) ?>
+                <!-- <form action="<?= base_url('user/update_user') ?>" method="post"> -->
                 <div class="card-body">
                     <div class="row mt-2">
                         <div class="col-4">

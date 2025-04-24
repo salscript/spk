@@ -43,7 +43,7 @@
                     <a href="<?php echo base_url('user/user') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'user') echo 'active' ?>">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
-                            User
+                            Data Karyawan
                         </p>
                     </a>
                 </li>
