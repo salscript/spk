@@ -79,7 +79,30 @@
                         </p>
                     </a>
                 </li>
-                </li>           
+                <li class="nav-item">
+                    <a href="<?php echo base_url('division/division') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'division') echo 'active' ?>">
+                        <i class="nav-icon far fa-id-card"></i>
+                        <p>
+                            Division
+                        </p>
+                    </a>
+                </li>     
+                <li class="nav-item">
+                    <a href="<?php echo base_url('position/position') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'position') echo 'active' ?>">
+                        <i class="nav-icon far fa-id-card"></i>
+                        <p>
+                            Position
+                        </p>
+                    </a>
+                </li>    
+                <li class="nav-item">
+                    <a href="<?php echo base_url('factor/factor') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'factor') echo 'active' ?>">
+                        <i class="nav-icon far fa-id-card"></i>
+                        <p>
+                            Factor
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="<?php echo base_url('calculation/calculation') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'calculation') echo 'active' ?>">
                         <i class="nav-icon fas fa-calculator"></i>
