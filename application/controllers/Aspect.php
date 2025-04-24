@@ -16,4 +16,13 @@ class Aspect extends MY_Controller
       $data['aspect'] = $this->M_aspect->get_all_aspect();
       $this->template->load('spk/template_admin', 'spk/admin/aspect/index', $data);
    }
+   
+   public function new_aspect()
+   {
+      $data['aspect'] = $this->M_aspect->get_all_aspect();
+      // $data['code_user'] = $this->M_user->code_user();
+      // $data['role'] = $this->M_userrole->get_all_roles();
+      
+      $this->template->load('spk/template_admin', 'spk/admin/aspect/addAspect', $data);
+   }
 }

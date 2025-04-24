@@ -8,8 +8,7 @@
             <div class="col-sm-6">
                <div class="row">
                   <div class="col-11">
-                     <button class="btn btn-primary text-sm float-right mr-2" onclick="crtAspect
-                     ()">Create Aspect
+                     <button class="btn btn-primary text-sm float-right mr-2" onclick="crtAspect()">Create Aspect
 
                      </button>
                   </div>
@@ -61,63 +60,16 @@
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
    });
 
-   function crtAspect
-   () {
-      window.location.href = "<?= base_url('aspect
-      /new_aspect
-      ') ?>"
+   function crtAspect() {
+      window.location.href = "<?= base_url('aspect/new_aspect') ?>"
    }
 
-   function get_aspect
-   (id) {
+   function get_aspect(id) {
       if (id != "") {
-         window.location.href = "<?= base_url('aspect
-         /edit_aspect
-         /') ?>" + id;
+         window.location.href = "<?= base_url('aspect/edit_aspect/') ?>" + id;
       } else {
          alert('Oops.!!');
       }
-   }
-
-   function deleteConfirm(id) {
-      Swal.fire({
-         title: 'Are you sure?',
-         text: `You won't be able to revert this`,
-         icon: 'warning',
-         showCancelButton: true,
-         confirmButtonColor: '#3085d6',
-         cancelButtonColor: '#d33',
-         confirmButtonText: 'Yes, delete it!',
-         cancelButtonText: 'Cancel'
-      }).then((result) => {
-         if (result.value) {
-            $.ajax({
-               type: "post",
-               url: "<?php echo base_url('aspect
-               /delete_aspect
-               ') ?>",
-               data: {
-                  id_aspect
-                  : id,
-               },
-               dataType: "json",
-               success: function(response) {
-                  if (response.success) {
-                     Swal.fire({
-                        icon: 'success',
-                        title: 'konfirmasi',
-                        text: response.success,
-                        showCancelButton: false,
-                        showConfirmButton: false
-                     });
-                     setTimeout(function() {
-                        location.reload();
-                     }, 1000);
-                  }
-               }
-            });
-         }
-      })
    }
 
    function reload() {
