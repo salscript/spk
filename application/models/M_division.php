@@ -8,19 +8,23 @@ class M_division extends CI_Model
    {
       return $this->db->get('division')->result();
    }
-   function code_division()
-    {
-        $q = $this->db->query("SELECT MAX(RIGHT(code_division,4)) AS code_division FROM division");
-        $kd = "";
-        if ($q->num_rows() > 0) {
-            foreach ($q->result() as $k) {
-                $tmp = ((int) $k->code_division) + 1;
-                $kd = sprintf("%04s", $tmp);
-            }
-        } else {
-            $kd = "0001";
-        }
-        // date_default_timezone_set('Asia/Jakarta');
-        return "DIV" . $kd;
-    }
+   public function insert_division($data)
+   {
+       return $this->db->insert('division', $data);
+   }
+
+   public function get_by_id($id)
+   {
+       return $this->db->get_where('division', ['id' => $id])->row();
+   }
+
+   public function update_division($id, $data)
+   {
+       return $this->db->update('division', $data, ['id' => $id]);
+   }
+
+   public function delete_division($id)
+   {
+       return $this->db->delete('division', ['id' => $id]);
+   }
 }

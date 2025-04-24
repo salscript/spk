@@ -24,17 +24,7 @@
                         <label for="division" class="font-weight-normal">division</label>
                         <input type="text" name="division" id="division" class="form-control text-dark font-weight-normal text-sm" placeholder="division">
                      </div>
-                     <div class="form-group">
-                        <label for="criteria" class="font-weight-normal">Criteria</label>
-                        <select name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm">
-                           <option value="0" selected disabled>Select an option</option>
-                           <?php
-                           foreach ($criteria as $row) :
-                              echo "<option value='$row->id'>$row->name" . "</option>";
-                           endforeach;
-                           ?>
-                        </select>
-                     </div>
+                    
                   </div>
                </div>
             </div>

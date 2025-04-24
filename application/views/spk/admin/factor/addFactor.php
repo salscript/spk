@@ -19,6 +19,10 @@
                      <p class="font-weight-normal text-black-50  text-sm"> This information will be displayed publicly.</p>
                   </div>
                   <div class="col-8 text-sm">
+                  <div class="form-group">
+                        <label for="code_factor" class="font-weight-normal">Code Factor</label>
+                        <input type="text" name="code_factor" id="code_factor" value="<?= $code_factor ?>" class="form-control" readonly>
+                     </div>
                      <div class="form-group">
                         <label for="factor" class="font-weight-normal">Factor</label>
                         <input type="text" name="factor" id="factor" class="form-control text-dark font-weight-normal text-sm" placeholder="factor">
