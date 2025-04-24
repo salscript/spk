@@ -16,4 +16,12 @@ class Question extends MY_Controller
       $data['question'] = $this->M_question->get_all_questions();
       $this->template->load('spk/template_admin', 'spk/admin/question/index', $data);
    }
+   public function new_question()
+   {
+      $data['code_question'] = $this->M_question->code_question();
+      // $data['code_user'] = $this->M_user->code_user();
+      // $data['role'] = $this->M_userrole->get_all_roles();
+      
+      $this->template->load('spk/template_admin', 'spk/admin/question/addQuestion', $data);
+   }
 }

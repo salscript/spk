@@ -1,26 +1,26 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class M_question extends CI_Model
+class M_criteria extends CI_Model
 {
 
-   function get_all_questions()
+   function get_all_criteria()
    {
-      return $this->db->get('question')->result();
+      return $this->db->get('criteria')->result();
    }
-   function code_question()
+   function code_criteria()
     {
-        $q = $this->db->query("SELECT MAX(RIGHT(code_question,4)) AS code_question FROM question");
+        $q = $this->db->query("SELECT MAX(RIGHT(code_criteria,4)) AS code_criteria FROM criteria");
         $kd = "";
         if ($q->num_rows() > 0) {
             foreach ($q->result() as $k) {
-                $tmp = ((int) $k->code_question) + 1;
+                $tmp = ((int) $k->code_criteria) + 1;
                 $kd = sprintf("%04s", $tmp);
             }
         } else {
             $kd = "0001";
         }
         // date_default_timezone_set('Asia/Jakarta');
-        return "QST" . $kd;
+        return "CRI" . $kd;
     }
 }

@@ -19,7 +19,7 @@ class Aspect extends MY_Controller
    
    public function new_aspect()
    {
-      $data['aspect'] = $this->M_aspect->get_all_aspect();
+      $data['code_aspect'] = $this->M_aspect->code_aspect();
       // $data['code_user'] = $this->M_user->code_user();
       // $data['role'] = $this->M_userrole->get_all_roles();
       
