@@ -24,8 +24,8 @@
                         <input type="text" name="code_question" id="code_question" value="<?= $code_question ?>" class="form-control" readonly>
                      </div>
                      <div class="form-group">
-                        <label for="question" class="font-weight-normal">question</label>
-                        <input type="text" name="question" id="question" class="form-control text-dark font-weight-normal text-sm" placeholder="question">
+                        <label for="question" class="font-weight-normal">Question</label>
+                        <input type="text" name="question" id="question" class="form-control text-dark font-weight-normal text-sm" placeholder="Question">
                      </div>
                      <div class="form-group">
                         <label for="criteria" class="font-weight-normal">Criteria</label>

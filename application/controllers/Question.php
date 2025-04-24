@@ -9,6 +9,7 @@ class Question extends MY_Controller
       cek_login();
       check_admin();
       $this->load->model('M_question');
+      $this->load->model('M_criteria');
    }
 
    public function question()
@@ -19,8 +20,7 @@ class Question extends MY_Controller
    public function new_question()
    {
       $data['code_question'] = $this->M_question->code_question();
-      // $data['code_user'] = $this->M_user->code_user();
-      // $data['role'] = $this->M_userrole->get_all_roles();
+      $data['criteria'] = $this->M_criteria->get_all_criteria();
       
       $this->template->load('spk/template_admin', 'spk/admin/question/addQuestion', $data);
    }

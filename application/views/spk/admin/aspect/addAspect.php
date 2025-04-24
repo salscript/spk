@@ -24,19 +24,12 @@
                         <input type="text" name="code_aspect" id="code_aspect" value="<?= $code_aspect ?>" class="form-control" readonly>
                      </div>
                      <div class="form-group">
-                        <label for="aspect" class="font-weight-normal">aspect</label>
-                        <input type="text" name="aspect" id="aspect" class="form-control text-dark font-weight-normal text-sm" placeholder="aspect">
+                        <label for="name" class="font-weight-normal">Name</label>
+                        <input type="text" name="name" id="name" class="form-control text-dark font-weight-normal text-sm" placeholder="Aspect Name">
                      </div>
                      <div class="form-group">
-                        <label for="criteria" class="font-weight-normal">Criteria</label>
-                        <select name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm">
-                           <option value="0" selected disabled>Select an option</option>
-                           <?php
-                           foreach ($criteria as $row) :
-                              echo "<option value='$row->id'>$row->name" . "</option>";
-                           endforeach;
-                           ?>
-                        </select>
+                        <label for="persentase" class="font-weight-normal">Persentase</label>
+                        <input type="number" name="persentase" id="persentase" step="0.01"  min="0" max="9.99" class="form-control text-dark font-weight-normal text-sm" placeholder="Persentase">
                      </div>
                   </div>
                </div>
@@ -63,7 +56,7 @@
          $(this).bootstrapSwitch('state');
       });
 
-      $('.formSimpanaspect').submit(function(e) {
+      $('.formSimpanAspect').submit(function(e) {
          $.ajax({
             type: "post",
             url: $(this).attr('action'),

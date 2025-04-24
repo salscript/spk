@@ -31,10 +31,8 @@ class User extends MY_Controller
    {
       $data['user'] = $this->M_user->get_user_by_id($id_user);
       $data['role'] = $this->M_userrole->get_all_roles();
-      // $data['company'] = $this->M_client->get_company();
-      // $data['divisi'] = $this->M_divisi->get_divisi();
+      
       $this->template->load('spk/template_admin', 'spk/admin/user/editUser', $data);
-      // print_r($data);
    }
 
    // public function save_user()
