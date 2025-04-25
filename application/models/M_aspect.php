@@ -35,8 +35,7 @@ class M_aspect extends CI_Model
             'code_aspect' => $code_aspect,
             'name' => $name,
             'persentase' => $persentase,
-            'created_on' => $created_on,
-            'updated_on' => null
+            'created_on' => $created_on
         ];
 
         // var_dump($simpan);
