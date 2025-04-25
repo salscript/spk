@@ -24,11 +24,37 @@
                         <input type="text" name="code_criteria" id="code_criteria" value="<?= $code_criteria ?>" class="form-control" readonly>
                      </div>
                      <div class="form-group">
-                        <label for="criteria" class="font-weight-normal">Criteria</label>
+                        <label for="criteria" class="font-weight-normal">Nama Aspek Penilaian </label>
+                        <select name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm">
+                           <option value="0" selected disabled>Select an option</option>
+                           <?php
+                           foreach ($criteria as $row) :
+                              echo "<option value='$row->id'>$row->name" . "</option>";
+                           endforeach;
+                           ?>
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label for="criteria" class="font-weight-normal">Nama Criteria</label>
                         <input type="text" name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm" placeholder="criteria">
                      </div>
                      <div class="form-group">
-                        <label for="criteria" class="font-weight-normal">Criteria</label>
+                        <label for="criteria" class="font-weight-normal">Presentase</label>
+                        <input type="text" name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm" placeholder="criteria">
+                     </div>
+                     <div class="form-group">
+                        <label for="criteria" class="font-weight-normal">Target </label>
+                        <select name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm">
+                           <option value="0" selected disabled>Select an option</option>
+                           <?php
+                           foreach ($criteria as $row) :
+                              echo "<option value='$row->id'>$row->name" . "</option>";
+                           endforeach;
+                           ?>
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label for="criteria" class="font-weight-normal"> Type Factor </label>
                         <select name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm">
                            <option value="0" selected disabled>Select an option</option>
                            <?php

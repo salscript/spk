@@ -24,20 +24,9 @@
                         <input type="text" name="code_factor" id="code_factor" value="<?= $code_factor ?>" class="form-control" readonly>
                      </div>
                      <div class="form-group">
-                        <label for="factor" class="font-weight-normal">Factor</label>
+                        <label for="factor" class="font-weight-normal">Nama Factor</label>
                         <input type="text" name="factor" id="factor" class="form-control text-dark font-weight-normal text-sm" placeholder="factor">
-                     </div>
-                     <div class="form-group">
-                        <label for="criteria" class="font-weight-normal">Criteria</label>
-                        <select name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm">
-                           <option value="0" selected disabled>Select an option</option>
-                           <?php
-                           foreach ($criteria as $row) :
-                              echo "<option value='$row->id'>$row->name" . "</option>";
-                           endforeach;
-                           ?>
-                        </select>
-                     </div>
+</div>
                   </div>
                </div>
             </div>
