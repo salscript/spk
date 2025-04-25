@@ -68,7 +68,6 @@
                 // data: $(this).serialize(),
                 data: {
                     id: $id,
-                    code_aspect: $code_aspect,
                     name: $name,
                     persentase: $persentase,
                 },

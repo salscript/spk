@@ -55,7 +55,7 @@
 
         $('.formEditFactor').submit(function(e) {
             $id = $('#id').val();
-            $name = $('#factor').val();
+            $factor = $('#factor').val();
 
             $.ajax({
                 type: "post",
@@ -63,8 +63,7 @@
                 // data: $(this).serialize(),
                 data: {
                     id: $id,
-                    code_factor: $code_factor,
-                    name: $name,
+                    factor: $factor
                 },
                 dataType: "json",
                 success: function(response) {

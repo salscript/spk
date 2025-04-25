@@ -19,19 +19,36 @@ class Division extends MY_Controller
    
    public function new_division()
    {
-      
-      $this->template->load('spk/template_admin', 'spk/admin/division/adddivision' );
+        $this->template->load('spk/template_admin', 'spk/admin/division/addDivision' );
    }
+
    public function save_division()
     {
-        $name = $this->input->post('division_name');
-        $data = [
-            'name' => $name,  
-        ];
+        if ($this->input->is_ajax_request() == true) {
+            $name = $this->input->post('division');
 
-        $this->M_division->insert_division($data);
-        redirect('division');
-    } 
+            $this->form_validation->set_rules('division', 'Nama Division', 'required', ['required' => '%s tidak boleh kosong']);
+
+            if ($this->form_validation->run() == TRUE) {
+                $data = [
+                    'name' => $name,  
+                ];
+        
+                $save = $this->M_division->insert_division($data);
+                
+                if ($save) {
+                    $msg = ['success' => 'Division berhasil disimpan'];
+                } else {
+                    $msg = ['error' => 'Gagal menyimpan division: '. $this->db->error()['message']];
+                }
+            } else {
+                $msg = ['error' => validation_errors()];
+            }
+            
+            echo json_encode($msg);
+        }
+    }
+
      // Edit data (optional)
      public function edit_division($id)
      {

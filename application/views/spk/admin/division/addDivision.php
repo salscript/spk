@@ -21,8 +21,8 @@
                   <div class="col-8 text-sm">
                      
                      <div class="form-group">
-                        <label for="division" class="font-weight-normal">division</label>
-                        <input type="text" name="division" id="division" class="form-control text-dark font-weight-normal text-sm" placeholder="division">
+                        <label for="division" class="font-weight-normal"> Name Division</label>
+                        <input type="text" name="division" id="division" class="form-control text-dark font-weight-normal text-sm" placeholder="Name Division">
                      </div>
                     
                   </div>
@@ -58,7 +58,6 @@
             dataType: "json",
             success: function(response) {
                if (response.error) {
-                  // $('.pesan').html(response.error).show();
                   toastr.error(response.error);
                }
                if (response.success) {

@@ -8,6 +8,7 @@ class M_division extends CI_Model
    {
       return $this->db->get('division')->result();
    }
+   
    public function insert_division($data)
    {
        return $this->db->insert('division', $data);
