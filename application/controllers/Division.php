@@ -56,9 +56,8 @@ class Division extends MY_Controller
          $this->template->load('spk/template_admin', 'spk/admin/division/editDivision', $data);
      }
  
-     // Update data (optional)
-     public function update_factor()
-   {
+    public function update_division()
+    {
       if ($this->input->is_ajax_request() == true) {
          $id = $this->input->post('id', true);
          $name = $this->input->post('division', true);
@@ -67,7 +66,12 @@ class Division extends MY_Controller
          $this->form_validation->set_rules('division', 'Division', 'required', ['required' => '%s tidak boleh kosong']);
         
          if ($this->form_validation->run() == TRUE) {
-            $update = $this->M_division->update_division($id, $name, $updated_on);
+            $data = [
+                'name' => $name,
+                'updated_on' => $updated_on  
+            ];
+
+            $update = $this->M_division->update_division($id, $data);
             if ($update) {
                $msg = ['success' => 'division berhasil diupdated'];
             } else {
@@ -83,7 +87,7 @@ class Division extends MY_Controller
     
       public function delete_division() {
         if ($this->input->is_ajax_request() == true) {
-           $id = $this->input->post('id_division', true);
+           $id = $this->input->post('id', true);
            $delete = $this->M_division->delete_division($id);
   
            if ($delete) {

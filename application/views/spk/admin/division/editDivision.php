@@ -12,7 +12,6 @@
         <div class="container-fluid">
             <div class="card">
                 <?php echo form_open('division/update_division', ['class' => 'formEditDivision']) ?>
-                <!-- <form action="<?= base_url('division/update_division') ?>" method="post"> -->
                 <div class="card-body">
                     <div class="row mt-2">
                         <div class="col-4">
@@ -21,8 +20,7 @@
                         </div>
                         <div class="col-8 text-sm">
                             <div class="form-group">
-                            <input type="hidden" name="id" id="id" class="form-control" value="<?= $division->id ?>">
-</div>
+                            <input type="hidden" name="id" id="id" class="form-control" value="<?= $division->id ?>"></div>
                             <div class="form-group">
                                 <label for="name" class="font-weight-normal">Nama division</label>
                                 <input type="text" name="division" id="division" class="form-control text-dark font-weight-normal text-sm" value="<?= $division->name ?>" placeholder="division Name">
@@ -51,14 +49,13 @@
         });
         // bsCustomFileInput.init();
 
-        $('.formEditdivision').submit(function(e) {
+        $('.formEditDivision').submit(function(e) {
             $id = $('#id').val();
             $division = $('#division').val();
 
             $.ajax({
                 type: "post",
                 url: $(this).attr('action'),
-                // data: $(this).serialize(),
                 data: {
                     id: $id,
                     division: $division

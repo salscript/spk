@@ -98,9 +98,9 @@
          if (result.value) {
             $.ajax({
                type: "post",
-               url: "<?php echo base_url('division/deleteDivision') ?>",
+               url: "<?php echo base_url('division/delete_division') ?>",
                data: {
-                  id_division: id,
+                  id: id,
                },
                dataType: "json",
                success: function(response) {

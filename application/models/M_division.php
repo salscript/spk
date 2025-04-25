@@ -16,18 +16,11 @@ class M_division extends CI_Model
    {
        return $this->db->insert('division', $data);
    }
-   function save_division($division, $created_on) {
-    $simpan = [
-        'name' => $division,
-        'created_on' => $created_on
-    ];
-
-    // var_dump($simpan);
-    return $this->db->insert('division', $simpan);
-}
+   
    public function update_division($id, $data)
    {
-       return $this->db->update('division', $data, ['id' => $id]);
+        $this->db->where('id', $id);
+        return $this->db->update('division', $data);
    }
 
    public function delete_division($id)

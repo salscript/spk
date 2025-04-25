@@ -28,7 +28,7 @@
                         <select name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm">
                            <option value="0" selected disabled>Select an option</option>
                            <?php
-                           foreach ($criteria as $row) :
+                           foreach ($aspect as $row) :
                               echo "<option value='$row->id'>$row->name" . "</option>";
                            endforeach;
                            ?>
