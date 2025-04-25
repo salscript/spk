@@ -9,6 +9,7 @@ class SubKriteria extends MY_Controller
       cek_login();
       check_admin();
       $this->load->model('M_subkriteria');
+      $this->load->model('M_criteria');
    }
 
    public function subkriteria()
@@ -20,6 +21,7 @@ class SubKriteria extends MY_Controller
    public function new_subkriteria()
    {
       $data['code_subkriteria'] = $this->M_subkriteria->code_subkriteria();
+      $data['criteria'] = $this->M_criteria->get_all_criteria();
       $this->template->load('spk/template_admin', 'spk/admin/subkriteria/addSubkriteria', $data);
    }
 
@@ -31,7 +33,7 @@ class SubKriteria extends MY_Controller
    public function save_subkriteria()
    {
       if ($this->input->is_ajax_request() == true) {
-         $code_subkriteria = $this->input->post('code_subkriteria', true);
+         $code_subkriteria = $this->input->post('code_sub_kriteria', true);
          $name = $this->input->post('name', true);
          $bobot = $this->input->post('bobot', true);
          $created_on = date("Y-m-d H:i:s");
