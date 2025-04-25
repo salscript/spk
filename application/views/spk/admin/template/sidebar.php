@@ -80,6 +80,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="<?php echo base_url('subkriteria/subkriteria') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'subkriteria') echo 'active' ?>">
+                        <i class="nav-icon far fa-id-card"></i>
+                        <p>
+                           Sub Criteria
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="<?php echo base_url('division/division') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'division') echo 'active' ?>">
                         <i class="nav-icon far fa-id-card"></i>
                         <p>
