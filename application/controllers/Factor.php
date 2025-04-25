@@ -76,7 +76,7 @@ class Factor extends MY_Controller
       }
    }
 
-   public function delete_factor() {
+   public function deletefactor() {
       if ($this->input->is_ajax_request() == true) {
          $id = $this->input->post('id_factor', true);
          $delete = $this->M_factor->delete_factor($id);

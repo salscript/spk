@@ -37,8 +37,7 @@ class M_factor extends CI_Model
         // var_dump($simpan);
         return $this->db->insert('factor', $simpan);
     }
-
-    function update_factor($id, $factor, $updated_on) {
+    function update_factor($id, $factor, $persentase, $updated_on) {
         $update = [
             'name' => $factor,
             'updated_on' => $updated_on

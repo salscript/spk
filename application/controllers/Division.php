@@ -52,28 +52,46 @@ class Division extends MY_Controller
      // Edit data (optional)
      public function edit_division($id)
      {
-         $data['division'] = $this->M_division->get_by_id($id);
-         $this->template->load('spk/template_admin', 'spk/admin/division/editdivision', $data);
+         $data['division'] = $this->M_division->get_division_by_id($id);
+         $this->template->load('spk/template_admin', 'spk/admin/division/editDivision', $data);
      }
  
      // Update data (optional)
-     public function update_division()
-     {
-         $id   = $this->input->post('id');
-         $name = $this->input->post('division_name');
-         
-         $data = [
-             'name' => $name,
-         ];
- 
-         $this->M_division->update_division($id, $data);
-         redirect('division');
-     }
- 
-     // Hapus data (optional)
-     public function delete_division($id)
-     {
-         $this->M_division->delete_division($id);
-         redirect('division');
+     public function update_factor()
+   {
+      if ($this->input->is_ajax_request() == true) {
+         $id = $this->input->post('id', true);
+         $name = $this->input->post('division', true);
+         $updated_on = date("Y-m-d H:i:s");
+
+         $this->form_validation->set_rules('division', 'Division', 'required', ['required' => '%s tidak boleh kosong']);
+        
+         if ($this->form_validation->run() == TRUE) {
+            $update = $this->M_division->update_division($id, $name, $updated_on);
+            if ($update) {
+               $msg = ['success' => 'division berhasil diupdated'];
+            } else {
+               $msg = ['error' => 'Gagal mengupdate division: '. $this->db->error()['message']];
+            }
+         } else {
+            $msg = ['error' => validation_errors()];
+         }
+
+         echo json_encode($msg);
+      }
+    }
+    
+      public function delete_division() {
+        if ($this->input->is_ajax_request() == true) {
+           $id = $this->input->post('id_division', true);
+           $delete = $this->M_division->delete_division($id);
+  
+           if ($delete) {
+              $msg = ['success' => 'Division Berhasil Terhapus'];
+           } else {
+              $msg = ['error' => 'Gagal menghapus division: '. $this->db->error()['message']];
+           }
+           echo json_encode($msg);
+        }
      }
 }
