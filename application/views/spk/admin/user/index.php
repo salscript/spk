@@ -29,9 +29,13 @@
                      <table id="example1" class="table table-head-fixed text-nowrap">
                         <thead>
                            <tr>
-                              <!-- <th class="col-md-1 font-weight-normal text-sm">No</th> -->
-                              <th class="font-weight-normal text-sm">Name</th>
-                              <!-- <th class="font-weight-normal text-sm">Role</th>  -->
+                              <th class="col-md-1 font-weight-normal text-sm">No</th>
+                              <th class="font-weight-normal text-sm">Nama</th>
+                              <th class="font-weight-normal text-sm">Email</th> 
+                              <th class="font-weight-normal text-sm">Position</th>
+                              <th class="font-weight-normal text-sm">Division</th>  
+                              <th class="font-weight-normal text-sm">Alamat</th> 
+                              <th class="font-weight-normal text-sm">Nomor Telepon</th> 
                               <th class="font-weight-normal text-sm">Status</th>
                               <th class="col-md-2 font-weight-normal text-sm">Action</th>
                            </tr>
@@ -54,17 +58,17 @@
                                           <p class="text-sm text-muted mb-0"><?= $row->email; ?></p>
                                        </div>
                                     </div>
-                                    <!-- <?= $row->fullname ?><br>
-                                                <p class="text-black-50 font-weight-light text-sm"><i class="fas fa-envelope"></i> <?= $row->email ?></p> -->
+                                     <?= $row->fullname ?><br>
+                                                <p class="text-black-50 font-weight-light text-sm"><i class="fas fa-envelope"></i> <?= $row->email ?></p>
                                  </td>
-                                 <!-- <td>
-                                    <?php if ($row->divisi_id == 0) {
+                                  <td>
+                                    <?php if ($row->division_id == 0) {
                                        echo $row->role . ' - Client';
                                     } else {
-                                       echo $row->role . ' - ' . $row->divisi;
+                                       echo $row->role . ' - ' . $row->division;
                                     }
                                     ?>
-                                 </td> -->
+                                 </td> 
                                  <td>
                                     <?php if ($row->status == '1') {
                                        echo 'Active';

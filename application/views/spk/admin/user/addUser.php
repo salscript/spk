@@ -37,7 +37,7 @@
                                 <input type="text" name="password" id="password" class="form-control text-dark font-weight-normal text-sm" placeholder="Password">
                             </div>
                             <div class="form-group">
-                                <label for="position" class="font-weight-normal">Role</label>
+                                <label for="position" class="font-weight-normal">Position</label>
                                 <select name="position" id="position" class="form-control text-dark font-weight-normal text-sm">
                                     <option value="" selected disabled>Select an option</option>
                                     <?php
@@ -57,6 +57,14 @@
                                     endforeach;
                                     ?>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="address" class="font-weight-normal">Alamat</label>
+                                <input type="text" name="address" id="address" class="form-control text-dark font-weight-normal text-sm" placeholder="Address">
+                            </div>
+                            <div class="form-group">
+                                <label for="nomortelepon" class="font-weight-normal">Nomor Telepon</label>
+                                <input type="text" name="nomortelepon" id="nomortelepon" class="form-control text-dark font-weight-normal text-sm" placeholder="Nomor Telepon">
                             </div>
                         </div>
                     </div>
