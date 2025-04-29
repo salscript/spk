@@ -15,7 +15,7 @@ class Dashboard extends MY_Controller
       $data = array();
       $this->template->load('spk/template_admin', 'spk/admin/dashboard', $data);
    }
-
+ 
    public function user()
    {
       check_user();

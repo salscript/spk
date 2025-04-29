@@ -37,25 +37,25 @@
                                 <input type="text" name="password" id="password" class="form-control text-dark font-weight-normal text-sm" placeholder="Password">
                             </div>
                             <div class="form-group">
-                                <label for="position" class="font-weight-normal">Position</label>
+                                <label for="position" class="font-weight-normal">Role</label>
                                 <select name="position" id="position" class="form-control text-dark font-weight-normal text-sm">
-                                    <!-- <option value="" selected disabled>Select an option</option>
+                                    <option value="" selected disabled>Select an option</option>
                                     <?php
                                     foreach ($position as $row) :
-                                        echo "<option value='$row->id_position'>$row->name" . "</option>";
+                                        echo "<option value='$row->id'>$row->name" . "</option>";
                                     endforeach;
-                                    ?> -->
+                                    ?>
                                 </select>
                             </div>
-                            <div class="form-group" id="form_division">
+                            <div class="form-group">
                                 <label for="division" class="font-weight-normal">Division</label>
                                 <select name="division" id="division" class="form-control text-dark font-weight-normal text-sm">
-                                    <!-- <option value="" selected disabled>Select an option</option>
+                                    <option value="" selected disabled>Select an option</option>
                                     <?php
                                     foreach ($division as $row) :
-                                        echo "<option value='$row->id_division'>$row->name" . "</option>";
+                                        echo "<option value='$row->id'>$row->name" . "</option>";
                                     endforeach;
-                                    ?> -->
+                                    ?>
                                 </select>
                             </div>
                         </div>
