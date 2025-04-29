@@ -10,6 +10,8 @@ class User extends MY_Controller
       check_admin();
       $this->load->model('M_user');
       $this->load->model('M_userrole');
+      $this->load->model('M_position');
+      $this->load->model('M_division');
    }
 
    public function user()
@@ -22,8 +24,8 @@ class User extends MY_Controller
    {
       $data['code_user'] = $this->M_user->code_user();
       $data['role'] = $this->M_userrole->get_all_roles();
-      // $data['position'] = $this->M_position->get_position();
-      // $data['division'] = $this->M_division->get_division();
+      $data['position'] = $this->M_position->get_all_position();
+      $data['division'] = $this->M_division->get_all_division();
       $this->template->load('spk/template_admin', 'spk/admin/user/addUser', $data);
    }
 

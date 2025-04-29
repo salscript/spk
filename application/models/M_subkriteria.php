@@ -16,11 +16,11 @@ class M_subkriteria extends CI_Model
 
    function code_subkriteria()
     {
-        $q = $this->db->query("SELECT MAX(RIGHT(code_subkriteria,4)) AS code_subkriteria FROM subkriteria");
+        $q = $this->db->query("SELECT MAX(RIGHT(code_sub_criteria,4)) AS code_sub_criteria FROM sub_criteria");
         $kd = "";
         if ($q->num_rows() > 0) {
             foreach ($q->result() as $k) {
-                $tmp = ((int) $k->code_subkriteria) + 1;
+                $tmp = ((int) $k->code_sub_criteria) + 1;
                 $kd = sprintf("%04s", $tmp);
             }
         } else {
@@ -40,7 +40,7 @@ class M_subkriteria extends CI_Model
         ];
 
         // var_dump($simpan);
-        return $this->db->insert('subkriteria', $simpan);
+        return $this->db->insert('sub_criteria', $simpan);
     }
 
     function update_subkriteria($id, $name, $bobot, $updated_on) {
@@ -51,12 +51,12 @@ class M_subkriteria extends CI_Model
         ];
 
         $this->db->where('id', $id);
-        return $this->db->update('subkriteria', $update);
+        return $this->db->update('sub_criteria', $update);
 
     }
 
     public function delete_subkriteria($id)
     {
-        return $this->db->delete('subkriteria', ['id' => $id]);
+        return $this->db->delete('sub_criteria', ['id' => $id]);
     }
 }

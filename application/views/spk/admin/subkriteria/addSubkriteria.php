@@ -3,7 +3,7 @@
       <div class="container-fluid">
          <div class="row mb-3 mt-3">
             <div class="col-sm-6">
-               <h3 class="m-0 font-weight-bolder">Create criteria</h3>
+               <h3 class="m-0 font-weight-bolder">Create Sub Kriteria</h3>
             </div>
          </div>
       </div>
@@ -11,20 +11,21 @@
    <section class="content">
       <div class="container-fluid">
          <div class="card">
-            <?php echo form_open('criteria/save_criteria', ['class' => 'formSimpanCriteria']) ?>
+            <?php echo form_open('subkriteria/save_subkriteria', ['class' => 'formSimpanSubKriteria']) ?>
             <div class="card-body">
                <div class="row mt-2">
                   <div class="col-4">
-                     <h5 class="font-weight-normal"> criteria Details</h5>
+                     <h5 class="font-weight-normal"> Sub Kriteria Details</h5>
                      <p class="font-weight-normal text-black-50  text-sm"> This information will be displayed publicly.</p>
                   </div>
                   <div class="col-8 text-sm">
+
                      <div class="form-group">
-                        <label for="code_criteria" class="font-weight-normal">Code criteria</label>
-                        <input type="text" name="code_criteria" id="code_criteria" value="<?= $code_criteria ?>" class="form-control" readonly>
+                        <label for="code_subkriteria" class="font-weight-normal">Code Sub Kriteria</label>
+                        <input type="text" name="code_subkriteria" id="code_subkriteria" value="<?= $code_subkriteria ?>" class="form-control" readonly>
                      </div>
                      <div class="form-group">
-                        <label for="criteria" class="font-weight-normal">Nama Aspek Penilaian </label>
+                        <label for="criteria" class="font-weight-normal"> Nama Kriteria </label>
                         <select name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm">
                            <option value="0" selected disabled>Select an option</option>
                            <?php
@@ -35,34 +36,12 @@
                         </select>
                      </div>
                      <div class="form-group">
-                        <label for="criteria" class="font-weight-normal">Nama Criteria</label>
-                        <input type="text" name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm" placeholder="criteria">
+                        <label for="name" class="font-weight-normal">Nama Sub Kriteria</label>
+                        <input type="text" name="name" id="name" class="form-control text-dark font-weight-normal text-sm" placeholder="subkriteria Name">
                      </div>
                      <div class="form-group">
-                        <label for="criteria" class="font-weight-normal">Presentase</label>
-                        <input type="text" name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm" placeholder="criteria">
-                     </div>
-                     <div class="form-group">
-                        <label for="criteria" class="font-weight-normal">Target </label>
-                        <select name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm">
-                           <option value="0" selected disabled>Select an option</option>
-                           <?php
-                           foreach ($criteria as $row) :
-                              echo "<option value='$row->id'>$row->name" . "</option>";
-                           endforeach;
-                           ?>
-                        </select>
-                     </div>
-                     <div class="form-group">
-                        <label for="criteria" class="font-weight-normal"> Type Factor </label>
-                        <select name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm">
-                           <option value="0" selected disabled>Select an option</option>
-                           <?php
-                           foreach ($criteria as $row) :
-                              echo "<option value='$row->id'>$row->name" . "</option>";
-                           endforeach;
-                           ?>
-                        </select>
+                        <label for="bobot" class="font-weight-normal">Bobot</label>
+                        <input type="number" name="bobot" id="bobot" class="form-control text-dark font-weight-normal text-sm" placeholder="Persentase">
                      </div>
                   </div>
                </div>
@@ -83,13 +62,13 @@
 
 <script type="text/javascript">
    $(document).ready(function() {
-      $('#criteria').focus();
+      $('#subkriteria').focus();
 
       $("input[data-bootstrap-switch]").each(function() {
          $(this).bootstrapSwitch('state');
       });
 
-      $('.formSimpanCriteria').submit(function(e) {
+      $('.formSimpanSubKriteria').submit(function(e) {
          $.ajax({
             type: "post",
             url: $(this).attr('action'),
@@ -109,7 +88,7 @@
                      showConfirmButton: false
                   });
                   setTimeout(function() {
-                     window.location.href = "<?= base_url('criteria/criteria') ?>"
+                     window.location.href = "<?= base_url('subkriteria/subkriteria') ?>"
                      // location.reload();
                   }, 1000)
                }
@@ -124,6 +103,6 @@
    })
 
    function back() {
-      window.location.href = "<?= base_url('criteria/criteria') ?>"
+      window.location.href = "<?= base_url('subkriteria/subkriteria') ?>"
    }
 </script>

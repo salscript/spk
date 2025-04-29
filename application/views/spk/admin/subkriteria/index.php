@@ -32,7 +32,7 @@
                               <th class="col-md-1 font-weight-normal text-sm">No</th>
                               <th class="font-weight-normal text-sm">Code</th>
                               <th class="font-weight-normal text-sm">Nama Kriteria</th>
-                              <th class="font-weight-normal text-sm">Sub Kriteria</th>
+                              <th class="font-weight-normal text-sm">Nama Sub Kriteria</th>
                               <th class="font-weight-normal text-sm">Bobot</th>
                               <th class="col-md-2 font-weight-normal text-sm">Action</th>
                            </tr>

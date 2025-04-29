@@ -10,6 +10,7 @@ class Criteria extends MY_Controller
       check_admin();
       $this->load->model('M_criteria');
       $this->load->model('M_aspect');
+      $this->load->model('M_factor');
    }
 
    public function criteria()
@@ -22,7 +23,7 @@ class Criteria extends MY_Controller
    {
       $data['code_criteria'] = $this->M_criteria->code_criteria();
       $data['aspect'] = $this->M_aspect->get_all_aspect();
-
+      $data['factor'] = $this->M_factor->get_all_factor();
       // $data['role'] = $this->M_userrole->get_all_roles();
       
       $this->template->load('spk/template_admin', 'spk/admin/criteria/addcriteria', $data);
