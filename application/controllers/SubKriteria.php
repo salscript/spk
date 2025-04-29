@@ -15,6 +15,7 @@ class SubKriteria extends MY_Controller
    public function subkriteria()
    {
       $data['subkriteria'] = $this->M_subkriteria->get_all_subkriteria();
+      // print_r("cek");
       $this->template->load('spk/template_admin', 'spk/admin/subkriteria/index', $data);
    }
    
@@ -42,7 +43,7 @@ class SubKriteria extends MY_Controller
          $this->form_validation->set_rules('bobot', 'Bobot', 'required|numeric', ['required' => '%s tidak boleh kosong', 'numeric' => '%s harus berupa angka']);
 
          if ($this->form_validation->run() == TRUE) {
-            $save = $this->M_subkriteria->save_subkriteria($code_subkriteria, $name, $Bobot, $created_on);
+            $save = $this->M_subkriteria->save_subkriteria($code_subkriteria, $name, $bobot, $created_on);
             if ($save) {
                $msg = ['success' => 'subkriteria berhasil disimpan'];
             } else {
