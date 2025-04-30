@@ -15,7 +15,7 @@
             <div class="card-body">
                <div class="row mt-2">
                   <div class="col-4">
-                     <h5 class="font-weight-normal"> question Details</h5>
+                     <h5 class="font-weight-normal"> Question Details</h5>
                      <p class="font-weight-normal text-black-50  text-sm"> This information will be displayed publicly.</p>
                   </div>
                   <div class="col-8 text-sm">
@@ -33,7 +33,7 @@
                            <option value="0" selected disabled>Select an option</option>
                            <?php
                            foreach ($criteria as $row) :
-                              echo "<option value='$row->id'>$row->name" . "</option>";
+                              echo "<option value='$row->id'>$row->criteria" . "</option>";
                            endforeach;
                            ?>
                         </select>
@@ -71,7 +71,6 @@
             dataType: "json",
             success: function(response) {
                if (response.error) {
-                  // $('.pesan').html(response.error).show();
                   toastr.error(response.error);
                }
                if (response.success) {

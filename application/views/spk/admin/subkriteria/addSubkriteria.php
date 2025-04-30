@@ -21,8 +21,8 @@
                   <div class="col-8 text-sm">
 
                      <div class="form-group">
-                        <label for="code_subkriteria" class="font-weight-normal">Code Sub Kriteria</label>
-                        <input type="text" name="code_subkriteria" id="code_subkriteria" value="<?= $code_subkriteria ?>" class="form-control" readonly>
+                        <label for="code_sub_kriteria" class="font-weight-normal">Code Sub Kriteria</label>
+                        <input type="text" name="code_sub_kriteria" id="code_sub_kriteria" value="<?= $code_sub_kriteria ?>" class="form-control" readonly>
                      </div>
                      <div class="form-group">
                         <label for="criteria" class="font-weight-normal"> Nama Kriteria </label>
@@ -30,14 +30,14 @@
                            <option value="0" selected disabled>Select an option</option>
                            <?php
                            foreach ($criteria as $row) :
-                              echo "<option value='$row->id'>$row->name" . "</option>";
+                              echo "<option value='$row->id'>$row->criteria" . "</option>";
                            endforeach;
                            ?>
                         </select>
                      </div>
                      <div class="form-group">
                         <label for="name" class="font-weight-normal">Nama Sub Kriteria</label>
-                        <input type="text" name="name" id="name" class="form-control text-dark font-weight-normal text-sm" placeholder="subkriteria Name">
+                        <input type="text" name="name" id="name" class="form-control text-dark font-weight-normal text-sm" placeholder="Sub Kriteria Name">
                      </div>
                      <div class="form-group">
                         <label for="bobot" class="font-weight-normal">Bobot</label>

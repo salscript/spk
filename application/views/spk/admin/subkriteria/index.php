@@ -38,7 +38,25 @@
                            </tr>
                         </thead>
                         <tbody>
-
+                           <?php
+                           $no = 1;
+                           foreach ($subkriteria as $row) { ?>
+                              <tr>
+                                 <td><?= $no++ ?></td>
+                                 <td><?= $row->code ?></td>
+                                 <td><?= $row->criteria_name ?></td>
+                                 <td><?= $row->sub_name ?></td>
+                                 <td><?= $row->value ?></td>
+                                 <td>
+                                    <button title="Update" class="btn btn-sm btn-success" onclick="get_subkriteria(<?= $row->id ?>);">
+                                       <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button title="Delete" onclick="deleteConfirm(<?= $row->id ?>);" class="btn btn-sm btn-danger">
+                                       <i class="fa fa-trash"></i>
+                                    </button>
+                                 </td>
+                              </tr>
+                           <?php } ?>
                         </tbody>
                      </table>
                   </div>
@@ -87,7 +105,7 @@
                type: "post",
                url: "<?php echo base_url('subkriteria/delete_subkriteria') ?>",
                data: {
-                  id_subkriteria: id,
+                  id_sub: id,
                },
                dataType: "json",
                success: function(response) {

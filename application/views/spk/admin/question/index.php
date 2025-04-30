@@ -37,7 +37,24 @@
                            </tr>
                         </thead>
                         <tbody>
-
+                           <?php
+                           $no = 1;
+                           foreach ($question as $row) { ?>
+                              <tr>
+                                 <td><?= $no++ ?></td>
+                                 <td><?= $row->code ?></td>
+                                 <td><?= $row->question ?></td>
+                                 <td><?= $row->criteria ?></td>
+                                 <td>
+                                    <button title="Update" class="btn btn-sm btn-success" onclick="get_question(<?= $row->id ?>);">
+                                       <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button title="Delete" onclick="deleteConfirm(<?= $row->id ?>);" class="btn btn-sm btn-danger">
+                                       <i class="fa fa-trash"></i>
+                                    </button>
+                                 </td>
+                              </tr>
+                           <?php } ?>
                         </tbody>
                      </table>
                   </div>
