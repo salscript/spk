@@ -12,7 +12,6 @@
         <div class="container-fluid">
             <div class="card">
                 <?php echo form_open('user/save_user', ['class' => 'formSimpanUser']) ?>
-                <!-- <form action="<?= base_url('helpdesk/user/save_user') ?>" method="post"> -->
                 <div class="card-body">
                     <div class="row mt-2">
                         <div class="col-4">
@@ -95,7 +94,6 @@
                         <button type="submit" class="btn btn-primary text-sm">Save</button>
                     </div>
                 </div>
-                <!-- </form> -->
                 <?php echo form_close() ?>
             </div>
         </div>
@@ -106,7 +104,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#fullname').focus();
-        // $('#form_divisi').hide();
+
 
         $("input[data-bootstrap-switch]").each(function() {
             $(this).bootstrapSwitch('state');

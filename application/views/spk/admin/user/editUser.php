@@ -12,7 +12,6 @@
         <div class="container-fluid">
             <div class="card">
                 <?php echo form_open('user/update_user', ['class' => 'formEditUser']) ?>
-                <!-- <form action="<?= base_url('user/update_user') ?>" method="post"> -->
                 <div class="card-body">
                     <div class="row mt-2">
                         <div class="col-4">
@@ -22,7 +21,7 @@
                         <div class="col-8 text-sm">
                             <div class="form-group">
                                 <label for="code_user" class="font-weight-normal">Code User</label>
-                                <input type="hidden" name="id" id="id" value="<?= $user->id ?>" class="form-control">
+                                <input type="text" name="code_user" value="<?= $user['id'] ?>" class="form-control">
                                 <input type="text" name="code_user" id="code_user" readonly class="form-control text-dark font-weight-normal text-sm" value="<?= $user->code_user ?>">
                             </div>
                             <div class="form-group">
@@ -40,28 +39,36 @@
                             <div class="form-group">
                                 <label for="position" class="font-weight-normal">Position</label>
                                 <select name="position" id="position" class="form-control text-dark font-weight-normal text-sm">
-                                    <!-- <option value="" disabled>Select an option</option>
+                                    <option value="" disabled>Select an option</option>
                                     <?php
                                     foreach ($position as $row) { ?>
                                         <option value="<?= $row->id ?>" <?= $row->id == $user->position_id ? "selected" : null ?>>
                                             <?= $row->name ?>
                                         </option>
                                     <?php }
-                                    ?> -->
+                                    ?> 
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="division" class="font-weight-normal">Division</label>
                                 <select name="division" id="division" class="form-control text-dark font-weight-normal text-sm">
-                                    <!-- <option value="" disabled>Select an option</option>
+                                     <option value="" disabled>Select an option</option>
                                     <?php
                                     foreach ($division as $row) { ?>
                                         <option value="<?= $row->id ?>" <?= $row->id == $user->division_id ? "selected" : null ?>>
                                             <?= $row->name ?>
                                         </option>
                                     <?php }
-                                    ?> -->
+                                    ?> 
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="address" class="font-weight-normal">Alamat</label>
+                                <input type="text" name="address" id="address" class="form-control text-dark font-weight-normal text-sm" placeholder="Address">
+                            </div>
+                            <div class="form-group">
+                                <label for="nomortelepon" class="font-weight-normal">Nomor Telepon</label>
+                                <input type="text" name="nomortelepon" id="nomortelepon" class="form-control text-dark font-weight-normal text-sm" placeholder="Nomor Telepon">
                             </div>
                         </div>
                     </div>
@@ -110,7 +117,7 @@
                         <button type="submit" class="btn btn-primary text-sm">Update</button>
                     </div>
                 </div>
-                <!-- </form> -->
+
                 <?php echo form_close() ?>
             </div>
         </div>

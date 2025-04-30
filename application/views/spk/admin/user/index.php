@@ -30,58 +30,35 @@
                         <thead>
                            <tr>
                               <th class="col-md-1 font-weight-normal text-sm">No</th>
+                              <th class="font-weight-normal text-sm">Code User</th>
                               <th class="font-weight-normal text-sm">Nama</th>
-                              <th class="font-weight-normal text-sm">Email</th> 
+                              <th class="font-weight-normal text-sm">Email</th>
                               <th class="font-weight-normal text-sm">Position</th>
-                              <th class="font-weight-normal text-sm">Division</th>  
-                              <th class="font-weight-normal text-sm">Alamat</th> 
-                              <th class="font-weight-normal text-sm">Nomor Telepon</th> 
-                              <th class="font-weight-normal text-sm">Status</th>
+                              <th class="font-weight-normal text-sm">Division</th>
+                              <th class="font-weight-normal text-sm">Alamat</th>
+                              <th class="font-weight-normal text-sm">Nomor Telepon</th>
+                              <th class="font-weight-normal text-sm">Role</th> 
                               <th class="col-md-2 font-weight-normal text-sm">Action</th>
                            </tr>
                         </thead>
                         <tbody>
                            <?php
                            $no = 1;
-                           foreach ($user as $key => $row) { ?>
+                           foreach ($user as $row) { ?>
                               <tr>
-                                 <!-- <td><?= $no++ ?></td> -->
-                                 <td class="text-sm">
-                                    <div class="media align-items-center">
-                                       <div class="avatar-wrapper2">
-                                          <img src="<?php echo base_url('assets/back') ?><?= $row->avatar; ?>" class="img-size-32 img-circle">
-                                       </div>
-                                       <div class="media-body ml-2 ">
-                                          <h4 class="dropdown-item-title text-sm mb-0 ">
-                                             <?= $row->fullname; ?>
-                                          </h4>
-                                          <p class="text-sm text-muted mb-0"><?= $row->email; ?></p>
-                                       </div>
-                                    </div>
-                                     <?= $row->fullname ?><br>
-                                                <p class="text-black-50 font-weight-light text-sm"><i class="fas fa-envelope"></i> <?= $row->email ?></p>
-                                 </td>
-                                  <td>
-                                    <?php if ($row->division_id == 0) {
-                                       echo $row->role . ' - Client';
-                                    } else {
-                                       echo $row->role . ' - ' . $row->division;
-                                    }
-                                    ?>
-                                 </td> 
-                                 <td>
-                                    <?php if ($row->status == '1') {
-                                       echo 'Active';
-                                    } else {
-                                       echo 'Non Active';
-                                    }
-                                    ?>
-                                 </td>
-                                 <td>
+                              <td><?= $no++ ?></td>
+         <td><?= $row->code_user ?></td>
+         <td><?= $row->fullname ?></td>
+         <td><?= $row->email ?></td>
+         <td><?= $row->position_id ?></td>
+         <td><?= $row->division_id ?></td>
+         <td><?= $row->alamat ?></td>
+         <td><?= $row->nomortelepon ?></td>
+         <td><?= $row->role_id ?></td>
+         <td>
                                     <button title="Update" class="btn btn-sm btn-success" onclick="get_user(<?= $row->id ?>);">
                                        <i class="fa fa-edit"></i>
                                     </button>
-                                    <!-- &nbsp; -->
                                     <button title="Delete" onclick="deleteConfirm(<?= $row->id ?>);" class="btn btn-sm btn-danger">
                                        <i class="fa fa-trash"></i>
                                     </button>
@@ -135,12 +112,16 @@
          if (result.value) {
             $.ajax({
                type: "post",
-               url: "<?php echo base_url('user/deleteUser') ?>",
+               url: "<?php echo base_url('user/delete_user') ?>",
                data: {
                   id_user: id,
                },
                dataType: "json",
                success: function(response) {
+                  if (response.error) {
+                        toastr.error(response.error);
+                  }
+                  
                   if (response.success) {
                      Swal.fire({
                         icon: 'success',
