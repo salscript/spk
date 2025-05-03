@@ -29,7 +29,7 @@
                      <table id="example1" class="table table-head-fixed text-nowrap">
                         <thead>
                            <tr>
-                              <th class="col-md-1 font-weight-normal text-sm">No</th>
+                              <th class="col-ms-1 font-weight-normal text-sm">No</th>
                               <th class="font-weight-normal text-sm">Code User</th>
                               <th class="font-weight-normal text-sm">Nama</th>
                               <th class="font-weight-normal text-sm">Email</th>
@@ -38,32 +38,37 @@
                               <th class="font-weight-normal text-sm">Alamat</th>
                               <th class="font-weight-normal text-sm">Nomor Telepon</th>
                               <th class="font-weight-normal text-sm">Role</th> 
-                              <th class="col-md-2 font-weight-normal text-sm">Action</th>
+                              <th class="col-ms-2 font-weight-normal text-sm">Action</th>
                            </tr>
                         </thead>
                         <tbody>
                            <?php
                            $no = 1;
                            foreach ($user as $row) { ?>
-                              <tr>
+                           <tr>
                               <td><?= $no++ ?></td>
-         <td><?= $row->code_user ?></td>
-         <td><?= $row->fullname ?></td>
-         <td><?= $row->email ?></td>
-         <td><?= $row->position_id ?></td>
-         <td><?= $row->division_id ?></td>
-         <td><?= $row->alamat ?></td>
-         <td><?= $row->nomortelepon ?></td>
-         <td><?= $row->role_id ?></td>
-         <td>
-                                    <button title="Update" class="btn btn-sm btn-success" onclick="get_user(<?= $row->id ?>);">
-                                       <i class="fa fa-edit"></i>
-                                    </button>
-                                    <button title="Delete" onclick="deleteConfirm(<?= $row->id ?>);" class="btn btn-sm btn-danger">
-                                       <i class="fa fa-trash"></i>
-                                    </button>
-                                 </td>
-                              </tr>
+                              <td><?= $row->code_user ?></td>
+                              <td><?= $row->fullname ?></td>
+                              <td><?= $row->email ?></td>
+                              <td><?= $row->position_name ?></td>
+                              <td>
+                                 <?php foreach ($row->divisions as $div) { ?>
+                                    <p class="m-0">- <?= $div->name ?></p>
+                                 <?php } ?>
+                              </td>
+                              <!-- <td><?= $row->division_id ?></td> -->
+                              <td><?= $row->alamat ?></td>
+                              <td><?= $row->nomortelepon ?></td>
+                              <td><?= $row->role_name ?></td>
+                              <td>
+                                 <button title="Update" class="btn btn-sm btn-success" onclick="get_user(<?= $row->id ?>);">
+                                    <i class="fa fa-edit"></i>
+                                 </button>
+                                 <button title="Delete" onclick="deleteConfirm(<?= $row->id ?>);" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                 </button>
+                              </td>
+                           </tr>
                            <?php } ?>
                         </tbody>
                      </table>

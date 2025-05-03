@@ -12,6 +12,8 @@
         <div class="container-fluid">
             <div class="card">
                 <?php echo form_open('user/save_user', ['class' => 'formSimpanUser']) ?>
+                <!-- <form class="formSimpanUser"> -->
+
                 <div class="card-body">
                     <div class="row mt-2">
                         <div class="col-4">
@@ -48,8 +50,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="division" class="font-weight-normal">Division</label>
-                                <select name="division" id="division" class="form-control text-dark font-weight-normal text-sm">
-                                    <option value="" selected disabled>Select an option</option>
+                                <select multiple="multiple" name="division[]" id="division" class="form-control select2 text-dark font-weight-normal text-sm" placeholder="Select Divison">
+                                    <!-- <option value="" selected disabled>Select an option</option> -->
                                     <?php
                                     foreach ($division as $row) :
                                         echo "<option value='$row->id'>$row->name" . "</option>";
@@ -95,6 +97,7 @@
                     </div>
                 </div>
                 <?php echo form_close() ?>
+                 <!-- </form> -->
             </div>
         </div>
 
@@ -103,6 +106,11 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Pilih Divisi",
+            allowClear: true
+        });
+
         $('#fullname').focus();
 
 
@@ -138,6 +146,13 @@
                 }
             });
             return false;
+
+            /**
+            e.preventDefault();
+            $division = $("#division option:selected").map(function() {
+                return $(this).val();
+            }).get();
+            console.log($division); */
         });
 
     })
