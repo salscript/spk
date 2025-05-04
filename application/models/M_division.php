@@ -34,6 +34,11 @@ class M_division extends CI_Model
             return $this->db->update('division', $data);
     }
 
+    function delete_user_divisions($employee_id){
+        $this->db->where('employee_id', $employee_id);
+        return $this->db->delete('employee_division');
+    }
+
     public function delete_division($id)
     {
         return $this->db->delete('division', ['id' => $id]);

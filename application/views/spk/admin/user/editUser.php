@@ -21,7 +21,7 @@
                         <div class="col-8 text-sm">
                             <div class="form-group">
                                 <label for="code_user" class="font-weight-normal">Code User</label>
-                                <input type="text" name="code_user" value="<?= $user['id'] ?>" class="form-control">
+                                <input type="hidden" name="id_user" id="id_user" value="<?= $user->id ?>" class="form-control">
                                 <input type="text" name="code_user" id="code_user" readonly class="form-control text-dark font-weight-normal text-sm" value="<?= $user->code_user ?>">
                             </div>
                             <div class="form-group">
@@ -39,7 +39,6 @@
                             <div class="form-group">
                                 <label for="position" class="font-weight-normal">Position</label>
                                 <select name="position" id="position" class="form-control text-dark font-weight-normal text-sm">
-                                    <option value="" disabled>Select an option</option>
                                     <?php
                                     foreach ($position as $row) { ?>
                                         <option value="<?= $row->id ?>" <?= $row->id == $user->position_id ? "selected" : null ?>>
@@ -51,11 +50,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="division" class="font-weight-normal">Division</label>
-                                <select name="division" id="division" class="form-control text-dark font-weight-normal text-sm">
-                                     <option value="" disabled>Select an option</option>
+                                <select name="division[]" multiple="multiple" id="division" class="form-control select2 font-weight-normal text-sm">
                                     <?php
                                     foreach ($division as $row) { ?>
-                                        <option value="<?= $row->id ?>" <?= $row->id == $user->division_id ? "selected" : null ?>>
+                                        <option value="<?= $row->id ?>" <?= in_array($row->id, $user_division_ids) ? "selected" : "" ?>>
                                             <?= $row->name ?>
                                         </option>
                                     <?php }
@@ -64,11 +62,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="address" class="font-weight-normal">Alamat</label>
-                                <input type="text" name="address" id="address" class="form-control text-dark font-weight-normal text-sm" placeholder="Address">
+                                <input type="text" name="address" id="address" class="form-control text-dark font-weight-normal text-sm" value="<?= $user->alamat ?>">
                             </div>
                             <div class="form-group">
                                 <label for="nomortelepon" class="font-weight-normal">Nomor Telepon</label>
-                                <input type="text" name="nomortelepon" id="nomortelepon" class="form-control text-dark font-weight-normal text-sm" placeholder="Nomor Telepon">
+                                <input type="text" name="nomortelepon" id="nomortelepon" pattern="\d+" class="form-control text-dark font-weight-normal text-sm" value="<?= $user->nomortelepon ?>">
                             </div>
                         </div>
                     </div>
@@ -82,7 +80,6 @@
                             <div class="form-group">
                                 <label for="role" class="font-weight-normal">Role</label>
                                 <select name="role" id="role" class="form-control text-dark font-weight-normal text-sm">
-                                    <option value="" disabled>Select an option</option>
                                     <?php
                                     foreach ($role as $row) { ?>
                                         <option value="<?= $row->id ?>" <?= $row->id == $user->role_id ? "selected" : null ?>>
@@ -93,7 +90,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <?php $status = ($user->status == 1) ? "checked" : "unchecked"; ?>
+                                <?php $status = ($user->status == 1) ? "checked" : ""; ?>
                                 <?php if ($user->status == 1) {
                                     $desc = "actived";
                                 } else {
@@ -102,7 +99,7 @@
                                 <label for="status" class="font-weight-normal">Status</label><br>
                                 <div class="custom-control custom-switch">
                                     <!-- <input type="checkbox" name="my-checkbox" id="status" data-bootstrap-switch data-off-color="danger" data-on-color="success"> -->
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch1" <?php echo $status ?>>
+                                    <input type="checkbox" name="status" class="custom-control-input" id="customSwitch1" <?php echo $status ?>>
                                     <label class="custom-control-label" for="customSwitch1">
                                         <span class="text-xs font-weight-normal text-black-50">The user is <?= $desc ?></span>
                                     </label>
@@ -127,41 +124,43 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        $('.select2').select2();
+
         $("input[data-bootstrap-switch]").each(function() {
             $(this).bootstrapSwitch('state');
         });
         // bsCustomFileInput.init();
 
         $('.formEditUser').submit(function(e) {
-            $id_user = $('#id').val();
-            $code_user = $('#code').val();
+            $id_user = $('#id_user').val();
             $fullname = $('#fullname').val();
-            $email = $('#email').val();
             $password = $('#password').val();
-            $company = $('#company').val();
-            $divisi = $('#divisi').val();
+            $position = $('#position').val();
             $role = $('#role').val();
+            $address = $('#address').val();
+            $nomortelepon = $('#nomortelepon').val();
             $status = getStatusChanged('#customSwitch1');
+            $division = $("#division option:selected").map(function() {
+                return $(this).val();
+            }).get();
 
             $.ajax({
                 type: "post",
                 url: $(this).attr('action'),
-                // data: $(this).serialize(),
                 data: {
                     id_user: $id_user,
-                    code_user: $code_user,
                     fullname: $fullname,
-                    email: $email,
                     password: $password,
-                    company: $company,
-                    divisi: $divisi,
+                    position: $position,
+                    division: $division,
+                    address: $address,
+                    nomortelepon: $nomortelepon,
                     role: $role,
                     status: $status
                 },
                 dataType: "json",
                 success: function(response) {
                     if (response.error) {
-                        // $('.pesan').html(response.error).show();
                         toastr.error(response.error);
                     }
                     if (response.success) {
@@ -174,7 +173,6 @@
                         })
                         setTimeout(function() {
                             window.location.href = "<?= base_url('user/user') ?>"
-                            // location.reload();
                         }, 1000)
                     }
                 },
