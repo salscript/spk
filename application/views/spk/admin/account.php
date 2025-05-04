@@ -122,7 +122,7 @@
         const formData = new FormData(this);
 
         $.ajax({
-            url: '<?php echo base_url('helpdesk/user/update_account'); ?>',
+            url: '<?php echo base_url('account/update_account'); ?>',
             type: 'POST',
             data: formData,
             contentType: false,
@@ -143,7 +143,7 @@
                         showConfirmButton: false
                     });
                     setTimeout(function() {
-                        window.location.href = "<?= base_url('helpdesk/user/account_admin') ?>"
+                        window.location.href = "<?= base_url('account/account_admin') ?>"
                     }, 1000);
                 }
             },
@@ -160,7 +160,7 @@
         const formData = new FormData(this);
 
         $.ajax({
-            url: '<?php echo base_url('helpdesk/user/change_password'); ?>',
+            url: '<?php echo base_url('account/change_password'); ?>',
             type: 'POST',
             data: formData,
             contentType: false,
@@ -181,7 +181,7 @@
                         showConfirmButton: false
                     });
                     setTimeout(function() {
-                        window.location.href = "<?= base_url('helpdesk/user/account_admin') ?>"
+                        window.location.href = "<?= base_url('account/account_admin') ?>"
                     }, 1000);
                 }
             },

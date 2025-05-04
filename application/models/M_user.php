@@ -219,5 +219,16 @@ class M_user extends CI_Model
         return $this->db->delete('user', ['id' => $user_id]);
     }
 
+    function update_account($id_user, $data)
+    {
+        $this->db->where('id', $id_user);
+        return $this->db->update('user', $data);
+    }
+
+    function update_fullname($id_user, $data_name) {
+        $this->db->where('user_id', $id_user);
+        return $this->db->update('employee', $data_name);
+    }
+
 }
 

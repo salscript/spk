@@ -28,7 +28,7 @@
                     Dashboard
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="<?php echo base_url('user/account_admin') ?>" class="dropdown-item text-sm">
+                <a href="<?php echo base_url('account/account_admin') ?>" class="dropdown-item text-sm">
                     Account Settings
                 </a>
                 <div class="dropdown-divider"></div>

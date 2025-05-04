@@ -193,7 +193,6 @@ class User extends MY_Controller
          echo json_encode($msg);
       } 
    }
-    
  
    public function delete_user() {
       if ($this->input->is_ajax_request() == true) {

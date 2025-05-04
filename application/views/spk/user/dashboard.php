@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="alert alert-secondary" style="color: #383d41; background-color: #e2e3e5; border-color: #d6d8db;">
-                        Selamat <?= $salam; ?>, Selamat Datang <b><?= $this->session->fullname; ?></b> di Administrator Helpdesk IT
+                        Selamat <?= $salam; ?>, Selamat Datang <b><?= $this->session->fullname; ?></b>
                     </div>
                 </div>
             </div>
