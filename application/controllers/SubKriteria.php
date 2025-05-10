@@ -41,6 +41,7 @@ class SubKriteria extends MY_Controller
          $bobot = $this->input->post('bobot', true);
          $created_on = date("Y-m-d H:i:s");
 
+         $this->form_validation->set_rules('criteria', 'Criteria', 'required', ['required' => '%s tidak boleh kosong']);
          $this->form_validation->set_rules('name', 'Name', 'required', ['required' => '%s tidak boleh kosong']);
          $this->form_validation->set_rules('bobot', 'Bobot', 'required|numeric', ['required' => '%s tidak boleh kosong', 'numeric' => '%s harus berupa angka']);
 

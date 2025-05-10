@@ -27,7 +27,7 @@
                      <div class="form-group">
                         <label for="criteria" class="font-weight-normal"> Nama Kriteria </label>
                         <select name="criteria" id="criteria" class="form-control text-dark font-weight-normal text-sm">
-                           <option value="0" selected disabled>Select an option</option>
+                           <option value="" selected disabled>Select an option</option>
                            <?php
                            foreach ($criteria as $row) :
                               echo "<option value='$row->id'>$row->criteria" . "</option>";
