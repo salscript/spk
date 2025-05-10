@@ -112,10 +112,18 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="<?php echo base_url('factor/factor') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'factor') echo 'active' ?>">
+                        <i class="nav-icon far fa-id-card"></i>
+                        <p>
+                            Proses Penilaian
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="<?php echo base_url('calculation/calculation') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'calculation') echo 'active' ?>">
                         <i class="nav-icon fas fa-calculator"></i>
                         <p>
-                            Calculation Process
+                            Proses Perhitungan
                         </p>
                     </a>
                 </li>
