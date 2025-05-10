@@ -30,6 +30,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="<?php echo base_url('questioner/questioner_user') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'questioner') echo 'active' ?>">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Questioner
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="#" class="nav-link <?php if ($this->uri->segment(1) == 'result') echo 'active' ?>">
                         <i class="nav-icon fas fa-file-alt"></i>
                         <p>
@@ -37,7 +45,7 @@
                         </p>
                     </a>
                 </li>
-                <hr>
+                <!-- <hr>
                 <li class="nav-header">ADMINISTRATION</li>
                 <li class="nav-item" id="questioner-menu">
                     <a href="#" class="nav-link">
@@ -56,7 +64,7 @@
                         </li>
                     </ul> 
 
-                </li>
+                </li> -->
             </ul>
         </nav>
     </div>

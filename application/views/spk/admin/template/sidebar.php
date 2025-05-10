@@ -57,6 +57,14 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="<?php echo base_url('questioner/questioner') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'questioner') echo 'active' ?>">
+                                <i class="far fa-question-circle nav-icon"></i>
+                                <p>Form Questioner</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
                             <a href="<?php echo base_url('question/question') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'question') echo 'active' ?>">
                                 <i class="far fa-question-circle nav-icon"></i>
                                 <p>Question</p>
