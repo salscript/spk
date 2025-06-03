@@ -43,6 +43,36 @@ public function get_employee_id($user_id)
         $this->db->where('e.id !=', $employee_id);
         return $this->db->get()->result_array();
     }
+public function is_hrd($user_id)
+{
+    $this->db->select('p.name');
+    $this->db->from('employee e');
+    $this->db->join('position p', 'e.position_id = p.id', 'left');
+    $this->db->where('e.user_id', $user_id);
+    $query = $this->db->get();
+
+    if ($query->num_rows() > 0) {
+        $position_name = strtolower($query->row()->name);
+        return $position_name === 'hrd'; // atau gunakan strpos untuk lebih fleksibel
+    }
+
+    return false;
+}
+public function is_pic($user_id)
+{
+    $this->db->select('p.name');
+    $this->db->from('employee e');
+    $this->db->join('position p', 'e.position_id = p.id', 'left');
+    $this->db->where('e.user_id', $user_id);
+    $query = $this->db->get();
+
+    if ($query->num_rows() > 0) {
+        $position_name = strtolower($query->row()->name);
+        return $position_name === 'pic'; // atau sesuaikan jika nama posisi di tabel bukan 'PIC'
+    }
+
+    return false;
+}
 
     
 }

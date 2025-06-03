@@ -112,61 +112,7 @@ class M_questioner extends CI_Model {
         return array();
     }
 
-    // Validasi relasi rekan kerja (dalam divisi dan sub divisi yang sama)
-    public function validate_peer_relation($evaluator_id, $evaluatee_id) {
-        $evaluator = $this->db->select('ed.division_id, e.sub_divisi')
-            ->from('employee e')
-            ->join('employee_division ed', 'ed.employee_id = e.id')
-            ->where('e.id', $evaluator_id)
-            ->get()
-            ->row();
-        
-        if (!$evaluator) return false;
-        
-        return $this->db->select('e.id')
-            ->from('employee e')
-            ->join('employee_division ed', 'ed.employee_id = e.id')
-            ->where('e.id', $evaluatee_id)
-            ->where('ed.division_id', $evaluator->division_id)
-            ->where('e.sub_divisi', $evaluator->sub_divisi)
-            ->count_all_results() > 0;
-    }
-
-    // Validasi relasi atasan-bawahan (berdasarkan level dan divisi)
-    public function validate_supervisor_relation($evaluator_id, $evaluatee_id) {
-        $evaluator = $this->db->select('p.level_position, ed.division_id')
-            ->from('employee e')
-            ->join('position p', 'p.id = e.position_id')
-            ->join('employee_division ed', 'ed.employee_id = e.id')
-            ->where('e.id', $evaluator_id)
-            ->get()
-            ->row();
-        
-        if (!$evaluator) return false;
-        
-        $evaluatee = $this->db->select('p.level_position, ed.division_id')
-            ->from('employee e')
-            ->join('position p', 'p.id = e.position_id')
-            ->join('employee_division ed', 'ed.employee_id = e.id')
-            ->where('e.id', $evaluatee_id)
-            ->get()
-            ->row();
-        
-        if (!$evaluatee) return false;
-        
-        // HRD bisa menilai semua PIC/Managerial
-        if ($evaluator->level_position == 'hrd') {
-            return in_array($evaluatee->level_position, ['managerial', 'senior_staff']);
-        }
-        // PIC/Managerial hanya bisa menilai staff dalam divisi yang sama
-        elseif (in_array($evaluator->level_position, ['managerial', 'senior_staff'])) {
-            return ($evaluatee->level_position == 'staff') && 
-                   ($evaluator->division_id == $evaluatee->division_id);
-        }
-        
-        return false;
-    }
-
+    
     // Cek apakah sudah pernah menilai
     public function check_already_rated($evaluator_id, $evaluatee_id, $type) {
         return $this->db->where('evaluator_id', $evaluator_id)
@@ -177,15 +123,33 @@ class M_questioner extends CI_Model {
     }
 
     // Mendapatkan pertanyaan berdasarkan aspek
-    public function get_questions_by_aspect($aspect_name) {
-        return $this->db->select('q.id, q.code_question, q.name, c.name as criteria_name')
-            ->from('question q')
-            ->join('criteria c', 'c.id = q.criteria_id')
-            ->join('aspect a', 'a.id = c.aspect_id')
-            ->where('a.name', $aspect_name)
-            ->order_by('q.id', 'ASC')
-            ->get()
-            ->result();
+     public function get_questions_by_aspect($aspect) {
+        return $this->db->get_where('questions', ['aspect' => $aspect])->result();
+    }
+
+    // Validasi relasi penilaian rekan kerja: evaluator dan evaluatee harus di divisi dan sub divisi sama
+    public function validate_peer_relation($evaluator_id, $evaluatee_id) {
+        $eval = $this->db->get_where('employee_division', ['employee_id' => $evaluator_id])->row();
+        $evale = $this->db->get_where('employee_division', ['employee_id' => $evaluatee_id])->row();
+
+        if (!$eval || !$evale) return false;
+
+        return ($eval->division_id == $evale->division_id && $eval->sub_division_id == $evale->sub_division_id);
+    }
+
+    // Validasi relasi penilaian atasan: evaluator lebih tinggi level & di divisi sama
+    public function validate_supervisor_relation($evaluator_id, $evaluatee_id) {
+        // Contoh logika: evaluator harus managerial (level 1), evaluatee harus non-managerial (level 2)
+        $eval = $this->db->get_where('employee', ['id' => $evaluator_id])->row();
+        $evale = $this->db->get_where('employee', ['id' => $evaluatee_id])->row();
+
+        if (!$eval || !$evale) return false;
+
+        if ($eval->position_level < $evale->position_level // level kecil = lebih tinggi jabatan
+            && $eval->division_id == $evale->division_id) {
+            return true;
+        }
+        return false;
     }
 
     // Menyimpan hasil kuisioner

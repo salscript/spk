@@ -50,111 +50,84 @@ class Questioner extends CI_Controller {
         $this->template->load('spk/template_user', 'spk/user/questioner/index.php', $data);
     }
 
-    // Form untuk mengisi kuisioner rekan kerja
-    public function peer($evaluatee_id) {
+     public function peer($evaluatee_id) {
         $user_id = $this->session->userdata('user_id');
         $evaluator_id = $this->M_employee->get_employee_id($user_id);
-        
+
+        // Validasi boleh menilai atau tidak (harus di divisi dan sub divisi sama)
         if (!$this->M_questioner->validate_peer_relation($evaluator_id, $evaluatee_id)) {
             $this->session->set_flashdata('error', 'Anda tidak diizinkan menilai karyawan ini');
             redirect('questioner');
         }
-        
-        $data = array(
-            'title' => 'Kuisioner Rekan Kerja',
+
+        $data = [
+            'title' => 'Kuisioner Rekan Kerja (Sikap Kerja)',
             'evaluatee' => $this->M_employee->get_employee_details($evaluatee_id),
             'questions' => $this->M_questioner->get_questions_by_aspect('Sikap Kerja')
-        );
+        ];
 
-        $this->template->load('spk/template_user', 'spk/user/questioner/peer_form', $data);
+        $this->load->view('user/questioner/peer_form', $data);
     }
 
-    // Form untuk mengisi kuisioner atasan
+    // Form kuisioner atasan
     public function supervisor($evaluatee_id) {
         $user_id = $this->session->userdata('user_id');
         $evaluator_id = $this->M_employee->get_employee_id($user_id);
-        
+
+        // Validasi boleh menilai bawahannya atau tidak (bawahan di divisi sama, level lebih rendah)
         if (!$this->M_questioner->validate_supervisor_relation($evaluator_id, $evaluatee_id)) {
             $this->session->set_flashdata('error', 'Anda tidak diizinkan menilai karyawan ini');
             redirect('questioner');
         }
-        
-        $data = array(
-            'title' => 'Kuisioner Atasan',
+
+        $data = [
+            'title' => 'Kuisioner Atasan (Kemampuan)',
             'evaluatee' => $this->M_employee->get_employee_details($evaluatee_id),
             'questions' => $this->M_questioner->get_questions_by_aspect('Kemampuan')
-        );
+        ];
 
-        $this->template->load('spk/template_user', 'spk/user/questioner/supervisor_form', $data);
+        $this->load->view('user/questioner/supervisor_form', $data);
     }
 
-    // Proses submit kuisioner rekan kerja
-    public function submit_peer() {
-        $this->load->library('form_validation');
-        $user_id = $this->session->userdata('user_id');
-        $evaluator_id = $this->M_employee->get_employee_id($user_id);
-        $evaluatee_id = $this->input->post('evaluatee_id');
-        
-        $this->form_validation->set_rules('evaluatee_id', 'ID Dinilai', 'required|numeric');
-        
-        if ($this->form_validation->run() == FALSE) {
-            $this->session->set_flashdata('error', validation_errors());
-            redirect('questioner/peer/'.$evaluatee_id);
-        }
-        
-        if ($this->M_questioner->save_questioner($evaluator_id, $evaluatee_id, 'peer', $this->input->post())) {
-            $this->session->set_flashdata('success', 'Kuisioner rekan kerja berhasil disimpan');
-        } else {
-            $this->session->set_flashdata('error', 'Gagal menyimpan kuisioner');
-        }
-        
-        redirect('questioner');
+   public function submit_peer() {
+    $evaluator_id = $this->M_employee->get_employee_id($this->session->userdata('user_id'));
+    $evaluatee_id = $this->input->post('evaluatee_id');
+    $answers = $this->input->post('answers');
+
+    // Simpan data ke tabel questioner_answer (buat sendiri tabelnya ya)
+    foreach ($answers as $question_id => $answer_value) {
+        $data = [
+            'evaluator_id' => $evaluator_id,
+            'evaluatee_id' => $evaluatee_id,
+            'question_id' => $question_id,
+            'answer' => $answer_value,
+            'aspect' => 'Sikap Kerja'
+        ];
+        $this->db->insert('questioner_answers', $data);
     }
 
-    // Proses submit kuisioner atasan
-    public function submit_supervisor() {
-        $this->load->library('form_validation');
-        $user_id = $this->session->userdata('user_id');
-        $evaluator_id = $this->M_employee->get_employee_id($user_id);
-        $evaluatee_id = $this->input->post('evaluatee_id');
-        
-        $this->form_validation->set_rules('evaluatee_id', 'ID Dinilai', 'required|numeric');
-        
-        if ($this->form_validation->run() == FALSE) {
-            $this->session->set_flashdata('error', validation_errors());
-            redirect('questioner/supervisor/'.$evaluatee_id);
-        }
-        
-        if ($this->M_questioner->save_questioner($evaluator_id, $evaluatee_id, 'supervisor', $this->input->post())) {
-            $this->session->set_flashdata('success', 'Kuisioner atasan berhasil disimpan');
-        } else {
-            $this->session->set_flashdata('error', 'Gagal menyimpan kuisioner');
-        }
-        
-        redirect('questioner');
+    $this->session->set_flashdata('success', 'Penilaian rekan kerja berhasil disimpan');
+    redirect('questioner');
+}
+
+public function submit_supervisor() {
+    $evaluator_id = $this->M_employee->get_employee_id($this->session->userdata('user_id'));
+    $evaluatee_id = $this->input->post('evaluatee_id');
+    $answers = $this->input->post('answers');
+
+    foreach ($answers as $question_id => $answer_value) {
+        $data = [
+            'evaluator_id' => $evaluator_id,
+            'evaluatee_id' => $evaluatee_id,
+            'question_id' => $question_id,
+            'answer' => $answer_value,
+            'aspect' => 'Kemampuan'
+        ];
+        $this->db->insert('questioner_answers', $data);
     }
 
-    // Endpoint tambahan untuk AJAX (untuk kebutuhan JS)
-    public function questioner_user() {
-        if (!$this->input->is_ajax_request()) {
-            show_404();
-        }
+    $this->session->set_flashdata('success', 'Penilaian atasan berhasil disimpan');
+    redirect('questioner');
+}
 
-        $user_id = $this->session->userdata('user_id');
-        if (!$user_id) {
-            echo json_encode(['status' => 'error', 'message' => 'Belum login']);
-            return;
-        }
-
-        $employee_id = $this->M_employee->get_employee_id($user_id);
-
-        $data = array(
-            'peer_questioners' => $this->M_questioner->get_peer_questioners($employee_id),
-            'supervisor_questioners' => $this->M_questioner->get_supervisor_questioners($employee_id),
-            'is_hrd' => $this->M_employee->is_hrd($employee_id),
-            'is_pic' => $this->M_employee->is_pic($employee_id)
-        );
-
-        echo json_encode(['status' => 'success', 'data' => $data]);
-    }
 }
