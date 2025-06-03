@@ -20,6 +20,7 @@
          </div>
       </div>
    </section>
+
    <section class="content">
       <div class="container-fluid">
          <div class="row mt-2">
@@ -32,52 +33,43 @@
                               <th class="col-ms-1 font-weight-normal text-sm">No</th>
                               <th class="font-weight-normal text-sm">Code User</th>
                               <th class="font-weight-normal text-sm">Nama</th>
-                              <!-- <th class="font-weight-normal text-sm">Email</th> -->
                               <th class="font-weight-normal text-sm">Position</th>
                               <th class="font-weight-normal text-sm">Division</th>
-                              <!-- <th class="font-weight-normal text-sm">Alamat</th>
-                              <th class="font-weight-normal text-sm">Nomor Telepon</th> -->
-                              <th class="font-weight-normal text-sm">Role</th> 
-                              <th class="font-weight-normal text-sm">Status</th> 
+                              <th class="font-weight-normal text-sm">Sub Divisi</th>
+                              <th class="font-weight-normal text-sm">Role</th>
+                              <th class="font-weight-normal text-sm">Status</th>
                               <th class="col-ms-2 font-weight-normal text-sm">Action</th>
                            </tr>
                         </thead>
                         <tbody>
                            <?php
                            $no = 1;
-                           foreach ($user as $row) { ?>
+                           foreach ($user as $row) : ?>
                            <tr>
                               <td><?= $no++ ?></td>
-                              <td><?= $row->code_user ?></td>
-                              <td><?= $row->fullname ?></td>
-                              <!-- <td><?= $row->email ?></td> -->
-                              <td><?= $row->position_name ?></td>
+                              <td><?= htmlspecialchars($row->code_user) ?></td>
+                              <td><?= htmlspecialchars($row->fullname) ?></td>
+                              <td><?= htmlspecialchars($row->position_name) ?></td>
                               <td>
-                                 <?php foreach ($row->divisions as $div) { ?>
-                                    <p class="m-0">- <?= $div->name ?></p>
-                                 <?php } ?>
+                                 <?php foreach ($row->divisions as $div) : ?>
+                                    <p class="m-0">- <?= htmlspecialchars($div->name) ?></p>
+                                 <?php endforeach; ?>
                               </td>
-                              <!-- <td><?= $row->alamat ?></td>
-                              <td><?= $row->nomortelepon ?></td> -->
-                              <td><?= $row->role_name ?></td>
+                              <td><?= htmlspecialchars($row->sub_divisi) ?></td>
+                              <td><?= htmlspecialchars($row->role_name) ?></td>
                               <td>
-                                 <?php if ($row->status == '1') {
-                                    echo 'Active';
-                                 } else {
-                                    echo 'Non Active';
-                                 }
-                                 ?>
+                                 <?= ($row->status == '1') ? 'Active' : 'Non Active'; ?>
                               </td>
                               <td>
-                                 <button title="Update" class="btn btn-sm btn-success" onclick="get_user(<?= $row->id ?>);">
+                                 <button title="Update" class="btn btn-sm btn-success" onclick="get_user(<?= (int)$row->id ?>);">
                                     <i class="fa fa-edit"></i>
                                  </button>
-                                 <button title="Delete" onclick="deleteConfirm(<?= $row->id ?>);" class="btn btn-sm btn-danger">
+                                 <button title="Delete" onclick="deleteConfirm(<?= (int)$row->id ?>);" class="btn btn-sm btn-danger">
                                     <i class="fa fa-trash"></i>
                                  </button>
                               </td>
                            </tr>
-                           <?php } ?>
+                           <?php endforeach; ?>
                         </tbody>
                      </table>
                   </div>
@@ -91,30 +83,29 @@
 <script type="text/javascript">
    $(function() {
       $("#example1").DataTable({
-         "responsive": true,
-         "lengthChange": false,
-         "autoWidth": false,
-         "buttons": ["copy", "excel", "pdf", "print", "colvis"]
+         responsive: true,
+         lengthChange: false,
+         autoWidth: false,
+         buttons: ["copy", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
    });
 
    function crtUser() {
-      window.location.href = "<?= base_url('user/new_user') ?>"
+      window.location.href = "<?= base_url('user/new_user') ?>";
    }
 
    function get_user(id) {
-      var id_user = id
-      if (id_user != "") {
-         window.location.href = "<?= base_url('user/edit_user/') ?>" + id_user;
+      if (id) {
+         window.location.href = "<?= base_url('user/edit_user/') ?>" + id;
       } else {
-         alert('Oops.!!');
+         alert('Oops. User ID kosong!');
       }
    }
 
    function deleteConfirm(id) {
       Swal.fire({
          title: 'Are you sure?',
-         text: `You won't be able to revert this`,
+         text: "You won't be able to revert this!",
          icon: 'warning',
          showCancelButton: true,
          confirmButtonColor: '#3085d6',
@@ -122,35 +113,35 @@
          confirmButtonText: 'Yes, delete it!',
          cancelButtonText: 'Cancel'
       }).then((result) => {
-         if (result.value) {
+         if (result.isConfirmed) {
             $.ajax({
-               type: "post",
-               url: "<?php echo base_url('user/delete_user') ?>",
-               data: {
-                  id_user: id,
-               },
+               type: "POST",
+               url: "<?= base_url('user/delete_user') ?>",
+               data: { id_user: id },
                dataType: "json",
                success: function(response) {
                   if (response.error) {
-                        toastr.error(response.error);
+                     toastr.error(response.error);
                   }
-                  
                   if (response.success) {
                      Swal.fire({
                         icon: 'success',
-                        title: 'konfirmasi',
+                        title: 'Deleted',
                         text: response.success,
-                        showCancelButton: false,
+                        timer: 1500,
                         showConfirmButton: false
                      });
                      setTimeout(function() {
                         location.reload();
-                     }, 1000);
+                     }, 1600);
                   }
+               },
+               error: function() {
+                  toastr.error('Terjadi kesalahan saat menghapus user.');
                }
             });
          }
-      })
+      });
    }
 
    function reload() {

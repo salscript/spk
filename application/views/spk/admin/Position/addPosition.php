@@ -24,7 +24,16 @@
                         <label for="position" class="font-weight-normal">position</label>
                         <input type="text" name="position" id="position" class="form-control text-dark font-weight-normal text-sm" placeholder="position">
                      </div>
-                     
+                     <div class="form-group">
+   <label for="level_position" class="font-weight-normal">Level Position</label>
+   <select name="level_position" id="level_position" class="form-control text-dark font-weight-normal text-sm" required>
+      <option value="">-- Pilih Level --</option>
+      <option value="staff">Staff</option>
+      <option value="senior_staff">Senior Staff</option>
+      <option value="managerial">Managerial</option>
+      <option value="hrd">HRD</option>
+   </select>
+</div>
                   </div>
                </div>
             </div>

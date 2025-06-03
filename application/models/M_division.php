@@ -43,4 +43,11 @@ class M_division extends CI_Model
     {
         return $this->db->delete('division', ['id' => $id]);
     }
+    public function get_division_by_employee($employee_id) {
+    $this->db->select('d.id, d.name');
+    $this->db->from('division d');
+    $this->db->join('employee_division ed', 'd.id = ed.division_id');
+    $this->db->where('ed.employee_id', $employee_id);
+    return $this->db->get()->row_array();
+}
 }

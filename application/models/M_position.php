@@ -12,25 +12,24 @@ class M_position extends CI_Model
     $this->db->where('id', $id);
     return $this->db->get('position')->row();
 }
-function save_position( $position, $created_on) {
-    $simpan = [
+public function save_position($position, $level_position, $created_on)
+{
+    return $this->db->insert('position', [
         'name' => $position,
+        'level_position' => $level_position,
         'created_on' => $created_on
-    ];
-
-    // var_dump($simpan);
-    return $this->db->insert('position', $simpan);
+    ]);
 }
-function update_position($id, $position, $updated_on) {
-    $update = [
-        'name' => $position,
+
+public function update_position($id, $name, $level_position, $updated_on)
+{
+    return $this->db->where('id', $id)->update('position', [
+        'name' => $name,
+        'level_position' => $level_position,
         'updated_on' => $updated_on
-    ];
-
-    $this->db->where('id', $id);
-    return $this->db->update('position', $update);
-
+    ]);
 }
+
 
 public function delete_position($id)
 {

@@ -11,21 +11,30 @@
     <section class="content">
         <div class="container-fluid">
             <div class="card">
-                <?php echo form_open('position/update_position', ['class' => 'formEditPosition']) ?>
-                <!-- <form action="<?= base_url('position/update_position') ?>" method="post"> -->
+                <?= form_open('position/update_position', ['class' => 'formEditPosition']) ?>
                 <div class="card-body">
                     <div class="row mt-2">
                         <div class="col-4">
-                            <h5 class="font-weight-normal"> Position Details</h5>
-                            <p class="font-weight-normal text-black-50  text-sm"> This information will be displayed publicly.</p>
+                            <h5 class="font-weight-normal">Position Details</h5>
+                            <p class="font-weight-normal text-black-50 text-sm">This information will be displayed publicly.</p>
                         </div>
                         <div class="col-8 text-sm">
-                            <div class="form-group">
                             <input type="hidden" name="id" id="id" class="form-control" value="<?= $position->id ?>">
-                            </div>
+
                             <div class="form-group">
-                                <label for="name" class="font-weight-normal">Nama position</label>
-                                <input type="text" name="position" id="position" class="form-control text-dark font-weight-normal text-sm" value="<?= $position->name ?>" placeholder="position Name">
+                                <label for="position" class="font-weight-normal">Nama Position</label>
+                                <input type="text" name="position" id="position" class="form-control text-dark font-weight-normal text-sm" value="<?= $position->name ?>" placeholder="Position Name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="level_position" class="font-weight-normal">Level Position</label>
+                                <select name="level_position" id="level_position" class="form-control text-dark font-weight-normal text-sm" required>
+                                    <option value="">-- Pilih Level --</option>
+                                    <option value="staff" <?= $position->level_position == 'staff' ? 'selected' : '' ?>>Staff</option>
+                                    <option value="senior_staff" <?= $position->level_position == 'senior_staff' ? 'selected' : '' ?>>Senior Staff</option>
+                                    <option value="managerial" <?= $position->level_position == 'managerial' ? 'selected' : '' ?>>Managerial</option>
+                                    <option value="hrd" <?= $position->level_position == 'hrd' ? 'selected' : '' ?>>HRD</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -36,32 +45,28 @@
                         <button type="submit" class="btn btn-primary text-sm">Update</button>
                     </div>
                 </div>
-                <!-- </form> -->
-                <?php echo form_close() ?>
+                <?= form_close() ?>
             </div>
         </div>
-
     </section>
 </div>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $("input[data-bootstrap-switch]").each(function() {
-            $(this).bootstrapSwitch('state');
-        });
-        // bsCustomFileInput.init();
-
         $('.formEditPosition').submit(function(e) {
-            $id = $('#id').val();
-            $position = $('#position').val();
+            e.preventDefault();
+
+            const $id = $('#id').val();
+            const $position = $('#position').val();
+            const $level_position = $('#level_position').val();
 
             $.ajax({
                 type: "post",
                 url: $(this).attr('action'),
-                // data: $(this).serialize(),
                 data: {
                     id: $id,
-                    position: $position
+                    position: $position,
+                    level_position: $level_position
                 },
                 dataType: "json",
                 success: function(response) {
@@ -75,22 +80,20 @@
                             text: response.success,
                             showCancelButton: false,
                             showConfirmButton: false
-                        })
+                        });
                         setTimeout(function() {
-                            window.location.href = "<?= base_url('position/position') ?>"
-                        }, 1000)
+                            window.location.href = "<?= base_url('position/position') ?>";
+                        }, 1000);
                     }
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
                 }
             });
-            return false;
         });
-
-    })
+    });
 
     function back() {
-        window.location.href = "<?= base_url('position/position') ?>"
+        window.location.href = "<?= base_url('position/position') ?>";
     }
 </script>

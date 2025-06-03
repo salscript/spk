@@ -17,18 +17,12 @@ class User extends MY_Controller
    public function user()
    {
       $data['user'] = $this->M_user->get_all_users();
-
       foreach ($data['user'] as $key => $user) {
          $division = $this->M_division->get_division_by_user_id($user->id);
          $data['user'][$key]->divisions = $division;
       }
-      
-      $this->template->load('spk/template_admin', 'spk/admin/user/index', $data);
 
-      // echo "<pre>";
-      // print_r($data['user']);
-      // echo "</pre>";
-      // exit;
+      $this->template->load('spk/template_admin', 'spk/admin/user/index', $data);
    }
 
    public function new_user()
@@ -48,10 +42,8 @@ class User extends MY_Controller
       $data['division'] = $this->M_division->get_all_division();
 
       $user_division = $this->M_division->get_division_by_user_id($id_user);
-      $user_division_ids = array_map(function($d) {
-         return $d->id;
-      }, $user_division);
-      $data['user_division_ids'] = $user_division_ids;   
+      $data['user_division_ids'] = array_map(fn($d) => $d->id, $user_division);
+
       $this->template->load('spk/template_admin', 'spk/admin/user/editUser', $data);
    }
 
@@ -64,147 +56,128 @@ class User extends MY_Controller
          $password = $this->input->post('password', true);
          $position = $this->input->post('position');
          $division = $this->input->post('division[]');
+         $sub_divisi = $this->input->post('sub_divisi', true); 
          $address = $this->input->post('address', true);
          $no_telp = $this->input->post('nomortelepon', true);
          $role = $this->input->post('role', true);
          $status = "1";
          $create = date('Y-m-d H:i:s');
 
-         if ($role == 1) {
-            $avatar = '/dist/img/avatar3.png';
-         } elseif ($role == 2) {
-            $avatar = '/dist/img/avatar4.png';
-         }
+         $avatar = $role == 1 ? '/dist/img/avatar3.png' : '/dist/img/avatar4.png';
 
-         $this->form_validation->set_rules('fullname', 'Full Name', 'required', ['required' => '%s tidak boleh kosong']);
-         $this->form_validation->set_rules('email', 'Email', 'trim|required|is_unique[user.email]', ['required' => '%s tidak boleh kosong', 'is_unique' => 'Email sudah ada']);
-         $this->form_validation->set_rules('password', 'Password', 'trim|required', ['required' => '%s tidak boleh kosong']);
-         $this->form_validation->set_rules('position', 'Position', 'required', ['required' => '%s tidak boleh kosong']);
-         // $this->form_validation->set_rules('division', 'Division', 'required', ['required' => '%s tidak boleh kosong']);
-         $this->form_validation->set_rules('address', 'Address', 'required', ['required' => '%s tidak boleh kosong']);
-         $this->form_validation->set_rules('nomortelepon', 'Nomor Telepon', 'required|numeric', [
-           'required' => '%s tidak boleh kosong',
-           'numeric' => '%s harus berupa angka']);
-         $this->form_validation->set_rules('role', 'Role', 'trim|required', ['required' => '%s tidak boleh kosong']);
-         
+         $this->form_validation->set_rules('fullname', 'Full Name', 'required');
+         $this->form_validation->set_rules('email', 'Email', 'trim|required|is_unique[user.email]');
+         $this->form_validation->set_rules('password', 'Password', 'trim|required');
+         $this->form_validation->set_rules('position', 'Position', 'required');
+         $this->form_validation->set_rules('sub_divisi', 'Sub Divisi', 'required'); 
+         $this->form_validation->set_rules('address', 'Address', 'required');
+         $this->form_validation->set_rules('nomortelepon', 'Nomor Telepon', 'required|numeric');
+         $this->form_validation->set_rules('role', 'Role', 'trim|required');
+
          if (empty($division)) {
-            $msg = ['error' => 'Division tidak boleh kosong'];
-            echo json_encode($msg);
+            echo json_encode(['error' => 'Division tidak boleh kosong']);
             return;
          }
 
          if ($this->form_validation->run() == TRUE) {
             $user_id = $this->M_user->save_user($code_user, $email, $password, $role, $status, $avatar, $create);
             if ($user_id) {
-               $employee_id = $this->M_user->save_biodata($user_id, $fullname, $address, $no_telp, $position, $create);
+               $employee_id = $this->M_user->save_biodata($user_id, $fullname, $address, $no_telp, $position, $sub_divisi, $create);
                if($employee_id) {
-                  $insert_batch = [];
-                  foreach($division as $div) {
-                     $insert_batch[] = [
-                        'employee_id' => $employee_id,
-                        'division_id' => $div
-                     ];
-                  }
-                  $save_divisions = $this->M_user->save_division($insert_batch);
+                  $insert_batch = array_map(fn($div) => [
+                     'employee_id' => $employee_id,
+                     'division_id' => $div
+                  ], $division);
 
-                  if ($save_divisions) {
-                     $msg = ['success' => 'User berhasil disimpan'];
+                  if ($this->M_user->save_division($insert_batch)) {
+                     echo json_encode(['success' => 'User berhasil disimpan']);
+                     return;
                   } else {
-                     $msg = ['error' => 'Gagal menyimpan data divisi'];
+                     echo json_encode(['error' => 'Gagal menyimpan data divisi']);
+                     return;
                   }
-               } else {
-                  $msg = ['error' => 'Gagal menyimpan data karyawan'];
                }
-            } else {
-               $msg = ['error' => 'Gagal menyimpan user'];
             }
+            echo json_encode(['error' => 'Gagal menyimpan user']);
          } else {
-            $msg = ['error' => validation_errors()];
+            echo json_encode(['error' => validation_errors()]);
          }
-         
-         echo json_encode($msg);
-       }
-    }
-
-    public function update_user()
-    {
-      if ($this->input->is_ajax_request() == true) {
-         $id_user = $this->input->post('id_user', true);
-         $fullname = $this->input->post('fullname', true);
-         $password = $this->input->post('password', true);
-         $position = $this->input->post('position', true);
-         $division = $this->input->post('division', true);
-         $address = $this->input->post('address', true);
-         $nomortelepon = $this->input->post('nomortelepon', true);
-         $role = $this->input->post('role', true);
-         $status = $this->input->post('status', true);
-         $update = date('Y-m-d H:i:s');
- 
-         $this->form_validation->set_rules('fullname', 'Full Name', 'required', ['required' => '%s tidak boleh kosong']);
-         $this->form_validation->set_rules('password', 'Password', 'trim|required', ['required' => '%s tidak boleh kosong']);
-         $this->form_validation->set_rules('position', 'Position', 'required', ['required' => '%s tidak boleh kosong']);
-         // $this->form_validation->set_rules('division', 'Division', 'required', ['required' => '%s tidak boleh kosong']);
-         $this->form_validation->set_rules('address', 'Address', 'required', ['required' => '%s tidak boleh kosong']);
-         $this->form_validation->set_rules('nomortelepon', 'Nomor Telepon', 'required|numeric', [
-           'required' => '%s tidak boleh kosong',
-           'numeric' => '%s harus berupa angka']);
-         $this->form_validation->set_rules('role', 'Role', 'trim|required', ['required' => '%s tidak boleh kosong']);
-
-         if (empty($division)) {
-            $msg = ['error' => 'Division tidak boleh kosong'];
-            echo json_encode($msg);
-            return;
-         }
-
-         if ($this->form_validation->run() == TRUE) {
-            $update_user = $this->M_user->update_user($id_user, $password, $role, $status, $update);
-            if ($update_user) {
-               $update_employee = $this->M_user->update_employee($id_user, $fullname, $position, $address, $nomortelepon, $update);
-               if($update_employee) {
-                  $employee_id = $this->M_user->get_employee_id_by_user($id_user);
-                  $delete_divisions = $this->M_division->delete_user_divisions($employee_id);
-
-                  if (!empty($division) && $delete_divisions) {
-                     $insert_batch = [];
-                     foreach($division as $div) {
-                        $insert_batch[] = [
-                           'employee_id' => $employee_id,
-                           'division_id' => $div,
-                        ];
-                     }
-                     $save_divisions = $this->M_user->save_division($insert_batch);
-   
-                     if ($save_divisions) {
-                        $msg = ['success' => 'User berhasil diupdate'];
-                     } else {
-                        $msg = ['error' => 'Gagal mengupdat data divisi'];
-                     } 
-                  }
-               } else {
-                  $msg = ['error' => 'Gagal mengupdate data karyawan'];
-               }
-            } else {
-               $msg = ['error' => 'Gagal mengupdate user'];
-            }
-         } else {
-            $msg = ['error' => validation_errors()];
-         }
-         
-         echo json_encode($msg);
-      } 
+      }
    }
- 
-   public function delete_user() {
+
+   public function update_user()
+{
+    if ($this->input->is_ajax_request() == true) {
+        $id_user = $this->input->post('id_user', true);
+        $fullname = $this->input->post('fullname', true);
+        $password = $this->input->post('password', true);
+        $position = $this->input->post('position', true);
+        $division = $this->input->post('division', true);
+        $sub_divisi = $this->input->post('sub_divisi', true);
+        $address = $this->input->post('address', true);
+        $no_telp = $this->input->post('nomortelepon', true);
+        $role = $this->input->post('role', true);
+        $status = $this->input->post('status', true);
+        $update = date('Y-m-d H:i:s');
+
+        $this->form_validation->set_rules('fullname', 'Full Name', 'required');
+        if (!empty($password)) {
+            $this->form_validation->set_rules('password', 'Password', 'required');
+        }
+        $this->form_validation->set_rules('position', 'Position', 'required');
+        $this->form_validation->set_rules('sub_divisi', 'Sub Divisi', 'required');
+        $this->form_validation->set_rules('address', 'Address', 'required');
+        $this->form_validation->set_rules('nomortelepon', 'Nomor Telepon', 'required|numeric');
+        $this->form_validation->set_rules('role', 'Role', 'required');
+
+        if (empty($division)) {
+            echo json_encode(['error' => 'Division tidak boleh kosong']);
+            return;
+        }
+
+        if ($this->form_validation->run() == TRUE) {
+            // ✅ Update tabel user, tapi hanya update password jika diisi
+            if (!empty($password)) {
+                $this->M_user->update_user($id_user, $password, $role, $status, $update);
+            } else {
+                $this->M_user->update_user_without_password($id_user, $role, $status, $update);
+            }
+
+            if ($this->M_user->update_employee($id_user, $fullname, $position, $address, $no_telp, $sub_divisi, $update)) {
+                $employee_id = $this->M_user->get_employee_id_by_user($id_user);
+                $this->M_division->delete_user_divisions($employee_id);
+
+                $insert_batch = array_map(fn($div) => [
+                    'employee_id' => $employee_id,
+                    'division_id' => $div
+                ], $division);
+
+                if ($this->M_user->save_division($insert_batch)) {
+                    echo json_encode(['success' => 'User berhasil diupdate']);
+                    return;
+                } else {
+                    echo json_encode(['error' => 'Gagal menyimpan ulang data divisi']);
+                    return;
+                }
+            } else {
+                echo json_encode(['error' => 'Gagal mengupdate data karyawan']);
+            }
+        } else {
+            echo json_encode(['error' => validation_errors()]);
+        }
+    }
+}
+
+
+   public function delete_user()
+   {
       if ($this->input->is_ajax_request() == true) {
          $id = $this->input->post('id_user', true);
-         $delete_user = $this->M_user->delete_user($id);
-
-         if ($delete_user) {
-            $msg = ['success' => 'User Berhasil Terhapus'];
+         if ($this->M_user->delete_user($id)) {
+            echo json_encode(['success' => 'User Berhasil Terhapus']);
          } else {
-            $msg = ['error' => 'Gagal menghapus user: '. $this->db->error()['message']];
+            echo json_encode(['error' => 'Gagal menghapus user: ' . $this->db->error()['message']]);
          }
-         echo json_encode($msg);
       }
    }
 }

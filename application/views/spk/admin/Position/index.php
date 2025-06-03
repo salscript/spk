@@ -31,27 +31,29 @@
                            <tr>
                               <th class="col-md-1 font-weight-normal text-sm">No</th>
                               <th class="font-weight-normal text-sm">Nama Position</th>
+                              <th class="font-weight-normal text-sm">Level Position</th>
                               <th class="col-md-2 font-weight-normal text-sm">Action</th>
                            </tr>
                         </thead>
-                        <tbody>
-                           <?php
-                           $no = 1;
-                           foreach ($position as $row) { ?>
-                              <tr>
-                                 <td><?= $no++ ?></td>
-                                 <td><?= $row->name ?></td>
-                                 <td>
-                                    <button title="Update" class="btn btn-sm btn-success" onclick="get_position(<?= $row->id ?>);">
-                                       <i class="fa fa-edit"></i>
-                                    </button>
-                                    <button title="Delete" onclick="deleteConfirm(<?= $row->id ?>);" class="btn btn-sm btn-danger">
-                                       <i class="fa fa-trash"></i>
-                                    </button>
-                                 </td>
-                              </tr>
-                           <?php } ?>
-                        </tbody>
+                       <tbody>
+   <?php
+   $no = 1;
+   foreach ($position as $row) { ?>
+      <tr>
+         <td><?= $no++ ?></td>
+         <td><?= $row->name ?></td>
+        <td><?= ucwords(str_replace('_', ' ', $row->level_position)) ?></td>
+         <td>
+            <button title="Update" class="btn btn-sm btn-success" onclick="get_position(<?= $row->id ?>);">
+               <i class="fa fa-edit"></i>
+            </button>
+            <button title="Delete" onclick="deleteConfirm(<?= $row->id ?>);" class="btn btn-sm btn-danger">
+               <i class="fa fa-trash"></i>
+            </button>
+         </td>
+      </tr>
+   <?php } ?>
+</tbody>
                      </table>
                   </div>
                </div>

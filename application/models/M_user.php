@@ -14,6 +14,7 @@ class M_user extends CI_Model
             e.fullname as fullname,
             e.address as alamat,
             e.no_telp as nomortelepon,
+            e.sub_divisi as sub_divisi, 
             p.name as position_name,
             r.name as role_name
         ");
@@ -37,6 +38,7 @@ class M_user extends CI_Model
             e.address as alamat,
             e.position_id as position_id,
             e.no_telp as nomortelepon,
+            e.sub_divisi as sub_divisi 
         ");
         $this->db->from('user u');
         $this->db->join('employee e', 'e.user_id = u.id', 'left');
@@ -45,7 +47,6 @@ class M_user extends CI_Model
         $this->db->where('u.id', $id);
         return $this->db->get()->row();
     }
-
 
     function code_user()
     {
@@ -68,9 +69,7 @@ class M_user extends CI_Model
         $this->db->where('id_user', $id);
         $query = $this->db->get('user');
         if ($query->num_rows() > 0) {
-            foreach ($query->result() as $row) {
-                return $row->password;
-            }
+            return $query->row()->password;
         }
         return null;
     }
@@ -78,7 +77,7 @@ class M_user extends CI_Model
     function get_employee_id_by_user($id_user){
         return $this->db->get_where('employee', ['user_id' => $id_user])->row('id');
     }
-    
+
     function save_user($code_user, $email, $password, $role, $status, $avatar, $create) {
         $data_user = [
             'code_user' => $code_user,
@@ -94,13 +93,14 @@ class M_user extends CI_Model
         return $this->db->insert_id();
     }
 
-    function save_biodata($user_id, $fullname, $address, $no_telp, $position, $create) {
+    function save_biodata($user_id, $fullname, $address, $no_telp, $position, $sub_divisi, $create) {
         $data_employee = [
             'user_id' => $user_id,
             'fullname' => $fullname,
             'address' => $address,
             'no_telp'=> $no_telp,
             'position_id' => $position,
+            'sub_divisi' => $sub_divisi,
             'created_on' => $create
         ];
 
@@ -124,13 +124,14 @@ class M_user extends CI_Model
         return $this->db->update('user', $data_user);
     }
 
-    function update_employee($id_user, $fullname, $position, $address, $nomortelepon, $update) {
+    function update_employee($id_user, $fullname, $position, $address, $nomortelepon, $sub_divisi, $update) {
         $data_employee = [
             'user_id' => $id_user,
             'fullname' => $fullname,
             'address' => $address,
             'no_telp'=> $nomortelepon,
             'position_id' => $position,
+            'sub_divisi' => $sub_divisi,
             'updated_on' => $update
         ];
 
@@ -138,84 +139,14 @@ class M_user extends CI_Model
         return $this->db->update('employee', $data_employee);
     }
 
-    /**function save_user($code_user, $fullname, $email, $password, $position, $division, $address, $nomortelepon, $role, $status, $avatar, $update)
-    {
-        // Simpan ke tabel user
-        $data_user = [
-            'code_user' => $code_user,
-            'email' => $email,
-            'password' => $password,
-            'role_id' => $role,
-            'status' => $status,
-            'avatar' => $avatar,
-            'updated_on' => $update
-        ];
-        $this->db->insert('user', $data_user);
-        $user_id = $this->db->insert_id(); // Ambil ID dari user baru
-    
-        // Simpan ke tabel employee
-        $data_employee = [
-            'user_id' => $user_id,
-            'fullname' => $fullname,
-            'address' => $address,
-            'no_telp' => $nomortelepon
-        ];
-        $this->db->insert('employee', $data_employee);
-        $employee_id = $this->db->insert_id();
-    
-        // Simpan ke tabel employee_division
-        $data_employee_division = [
-            'employee_id' => $employee_id,
-            'division_id' => $division
-        ];
-        $this->db->insert('employee_division', $data_employee_division);
-    } */
-
-    /**function update_user($user_id, $fullname, $email, $password, $position, $division, $address, $nomortelepon, $role, $status, $avatar, $updated_on) 
-    {
-    // Update data di tabel user
-        $data_user = [
-            'email' => $email,
-            'password' => $password,
-            'role_id' => $role,
-            'status' => $status,
-            'avatar' => $avatar,
-            'updated_on' => $updated_on
-        ];
-        $this->db->where('id', $user_id);
-        $this->db->update('user', $data_user);
-
-        // Update data di tabel employee
-        $data_employee = [
-            'fullname' => $fullname,
-            'address' => $address,
-            'no_telp' => $nomortelepon
-        ];
-        $this->db->where('user_id', $user_id);
-        $this->db->update('employee', $data_employee);
-
-    // Ambil employee_id berdasarkan user_id
-        $employee = $this->db->get_where('employee', ['user_id' => $user_id])->row();
-        if ($employee) {
-            $data_employee_division = [
-                'division_id' => $division
-            ];
-            $this->db->where('employee_id', $employee->id);
-            $this->db->update('employee_division', $data_employee_division);
-        }
-    }*/
-
-
     function delete_user($user_id)
     {
-        // Hapus employee_division berdasarkan user_id
         $employee = $this->db->get_where('employee', ['user_id' => $user_id])->row();
         if ($employee) {
             $this->db->delete('employee_division', ['employee_id' => $employee->id]);
             $this->db->delete('employee', ['id' => $employee->id]);
         }
 
-        // Hapus user
         return $this->db->delete('user', ['id' => $user_id]);
     }
 
@@ -229,6 +160,18 @@ class M_user extends CI_Model
         $this->db->where('user_id', $id_user);
         return $this->db->update('employee', $data_name);
     }
+    function update_user_without_password($id_user, $role, $status, $update)
+{
+    $data_user = [
+        'role_id' => $role,
+        'status' => $status,
+        'updated_on' => $update
+    ];
+
+    $this->db->where('id', $id_user);
+    return $this->db->update('user', $data_user);
+}
 
 }
+
 

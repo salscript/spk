@@ -52,3 +52,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $route['default_controller'] = 'auth/login';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+// application/config/routes.php
+$route['questioner'] = 'questioner/index';
+$route['questioner/admin'] = 'questioner/admin';
+$route['questioner/peer/(:num)'] = 'questioner/peer/$1';
+$route['questioner/supervisor/(:num)'] = 'questioner/supervisor/$1';
+$route['questioner/submit_peer'] = 'questioner/submit_peer';
+$route['questioner/submit_supervisor'] = 'questioner/submit_supervisor';

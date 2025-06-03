@@ -1,128 +1,134 @@
 <div class="content-wrapper">
-   <section class="content-header">
-      <div class="container-fluid">
-         <div class="row mb-3 mt-3">
-            <div class="col-sm-6">
-               <h3 class="m-0 font-weight-bolder">Questioner</h3>
+    <section class="content-header">
+        <h1><?= $title ?></h1>
+        <ol class="breadcrumb">
+            <li><a href="<?= site_url('user') ?>"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active"><?= $title ?></li>
+        </ol>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <?php if ($this->session->flashdata('success')): ?>
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <i class="icon fa fa-check"></i> <?= $this->session->flashdata('success') ?>
+                    </div>
+                <?php endif; ?>
+                <?php if ($this->session->flashdata('error')): ?>
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <i class="icon fa fa-ban"></i> <?= $this->session->flashdata('error') ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_peer" data-toggle="tab">Kuisioner Rekan Kerja</a></li>
+                        <?php if ($is_pic || $is_hrd): ?>
+                            <li><a href="#tab_supervisor" data-toggle="tab">Kuisioner Atasan</a></li>
+                        <?php endif; ?>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_peer">
+                            <div class="box">
+                                <div class="box-body">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama</th>
+                                                <th>Jabatan</th>
+                                                <th>Divisi</th>
+                                                <th>Status</th>
+                                                <th>Waktu Penilaian</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($peer_questioners as $peer): ?>
+                                            <tr class="<?= ($peer->status == 'completed') ? 'success' : 'warning' ?>">
+                                                <td><?= $peer->fullname ?></td>
+                                                <td><?= $peer->position_name ?></td>
+                                                <td><?= $peer->division_name ?></td>
+                                                <td>
+                                                    <?php if ($peer->status == 'completed'): ?>
+                                                        <span class="label label-success">Selesai</span>
+                                                    <?php else: ?>
+                                                        <span class="label label-warning">Belum Dinilai</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $peer->created_at ? date('d/m/Y H:i', strtotime($peer->created_at)) : '-' ?>
+                                                </td>
+                                                <td>
+                                                    <?php if ($peer->status != 'completed'): ?>
+                                                        <a href="<?= site_url('questioner/peer/'.$peer->id) ?>" class="btn btn-primary btn-xs">
+                                                            <i class="fa fa-edit"></i> Nilai
+                                                        </a>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-green"><i class="fa fa-check"></i> Selesai</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php if ($is_pic || $is_hrd): ?>
+                            <div class="tab-pane" id="tab_supervisor">
+                                <div class="box">
+                                    <div class="box-body">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nama</th>
+                                                    <th>Jabatan</th>
+                                                    <th>Divisi</th>
+                                                    <th>Status</th>
+                                                    <th>Waktu Penilaian</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($supervisor_questioners as $supervisor): ?>
+                                                <tr class="<?= ($supervisor->status == 'completed') ? 'success' : 'warning' ?>">
+                                                    <td><?= $supervisor->fullname ?></td>
+                                                    <td><?= $supervisor->position_name ?></td>
+                                                    <td><?= $supervisor->division_name ?></td>
+                                                    <td>
+                                                        <?php if ($supervisor->status == 'completed'): ?>
+                                                            <span class="label label-success">Selesai</span>
+                                                        <?php else: ?>
+                                                            <span class="label label-warning">Belum Dinilai</span>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= $supervisor->created_at ? date('d/m/Y H:i', strtotime($supervisor->created_at)) : '-' ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php if ($supervisor->status != 'completed'): ?>
+                                                            <a href="<?= site_url('questioner/supervisor/'.$supervisor->id) ?>" class="btn btn-primary btn-xs">
+                                                                <i class="fa fa-edit"></i> Nilai
+                                                            </a>
+                                                        <?php else: ?>
+                                                            <span class="badge bg-green"><i class="fa fa-check"></i> Selesai</span>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-6">
-               <div class="row">
-                  <div class="col-12">
-                     <button class="btn btn-outline-primary text-sm float-right" onclick="reload()">
-                        <i class="fas fa-sync"></i>
-                     </button>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </section>
-   <section class="content">
-      <div class="container-fluid">
-         <div class="row mt-2">
-            <div class="col-12">
-               <div class="card">
-                  <div class="card-body table-responsive text-sm">
-                     <table id="example1" class="table table-head-fixed text-nowrap">
-                        <thead>
-                           <tr>
-                              <th class="col-md-1 font-weight-normal text-sm">No</th>
-                              <th class="font-weight-normal text-sm">Code</th>
-                              <th class="font-weight-normal text-sm">Title</th>
-                              <th class="font-weight-normal text-sm">Criteria</th>
-                              <th class="col-md-2 font-weight-normal text-sm">Action</th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           <!-- <?php
-                           $no = 1;
-                           foreach ($question as $row) { ?>
-                              <tr>
-                                 <td><?= $no++ ?></td>
-                                 <td><?= $row->code ?></td>
-                                 <td><?= $row->question ?></td>
-                                 <td><?= $row->criteria ?></td>
-                                 <td>
-                                    <button title="Update" class="btn btn-sm btn-success" onclick="get_question(<?= $row->id ?>);">
-                                       <i class="fa fa-edit"></i>
-                                    </button>
-                                    <button title="Delete" onclick="deleteConfirm(<?= $row->id ?>);" class="btn btn-sm btn-danger">
-                                       <i class="fa fa-trash"></i>
-                                    </button>
-                                 </td>
-                              </tr>
-                           <?php } ?> -->
-                        </tbody>
-                     </table>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </section>
+        </div>
+    </section>
 </div>
-
-<script type="text/javascript">
-   $(function() {
-      $("#example1").DataTable({
-         "responsive": true,
-         "lengthChange": false,
-         "autoWidth": false,
-         "buttons": ["copy", "excel", "pdf", "print", "colvis"]
-      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-   });
-
-   function crtQuestion() {
-      window.location.href = "<?= base_url('question/new_question') ?>"
-   }
-
-   function get_question(id) {
-      if (id != "") {
-         window.location.href = "<?= base_url('question/edit_question/') ?>" + id;
-      } else {
-         alert('Oops.!!');
-      }
-   }
-
-   function deleteConfirm(id) {
-      Swal.fire({
-         title: 'Are you sure?',
-         text: `You won't be able to revert this`,
-         icon: 'warning',
-         showCancelButton: true,
-         confirmButtonColor: '#3085d6',
-         cancelButtonColor: '#d33',
-         confirmButtonText: 'Yes, delete it!',
-         cancelButtonText: 'Cancel'
-      }).then((result) => {
-         if (result.value) {
-            $.ajax({
-               type: "post",
-               url: "<?php echo base_url('question/delete_question') ?>",
-               data: {
-                  id_question: id,
-               },
-               dataType: "json",
-               success: function(response) {
-                  if (response.success) {
-                     Swal.fire({
-                        icon: 'success',
-                        title: 'konfirmasi',
-                        text: response.success,
-                        showCancelButton: false,
-                        showConfirmButton: false
-                     });
-                     setTimeout(function() {
-                        location.reload();
-                     }, 1000);
-                  }
-               }
-            });
-         }
-      })
-   }
-
-   function reload() {
-      location.reload();
-   }
-</script>
