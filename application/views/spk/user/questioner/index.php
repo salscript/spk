@@ -77,7 +77,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <?php if ($is_pic || $is_hrd): ?>
                             <div class="tab-pane" id="tab_supervisor">
                                 <div class="box">

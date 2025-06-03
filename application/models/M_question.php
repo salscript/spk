@@ -61,6 +61,7 @@ class M_question extends CI_Model
     {
         return $this->db->delete('question', ['id' => $id]);
     }
+
     public function get_questions_grouped_by_aspect()
     {
         $this->db->select('
@@ -148,5 +149,19 @@ class M_question extends CI_Model
 
     return $grouped;
 }
+
+    public function get_questions_by_aspect($aspect){
+        $this->db->select("
+            q.id as id,
+            q.name as question_text,
+            q.criteria_id as criteria_id,
+            c.name as criteria_name
+        ");
+        $this->db->from("question q");
+        $this->db->join("criteria c", "c.id=q.criteria_id", "left");
+        $this->db->join("aspect a", "a.id=c.aspect_id", "left");
+        $this->db->where("a.name", $aspect);
+        return $this->db->get()->result();
+    }
 
 }

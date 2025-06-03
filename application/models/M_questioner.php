@@ -67,7 +67,7 @@ class M_questioner extends CI_Model {
             ->join('questioner_status qs', "qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id AND qs.type = 'peer'", 'left')
             ->where('d.id', $employee->division_id)
             ->where('e.sub_divisi', $employee->sub_divisi)
-            ->where('e.id !=', $employee_id)
+            ->where('e.id !=', $employee_id) 
             ->get()
             ->result();
     }
@@ -127,10 +127,10 @@ class M_questioner extends CI_Model {
             ->count_all_results('questioner_status') > 0;
     }
 
-    // Mendapatkan pertanyaan berdasarkan aspek
-     public function get_questions_by_aspect($aspect) {
-        return $this->db->get_where('questions', ['aspect' => $aspect])->result();
-    }
+    // // Mendapatkan pertanyaan berdasarkan aspek
+    //  public function get_questions_by_aspect($aspect) {
+    //     return $this->db->get_where('question', ['aspect' => $aspect])->result();
+    // }
 
     // Validasi relasi penilaian rekan kerja: evaluator dan evaluatee harus di divisi dan sub divisi sama
     public function validate_peer_relation($evaluator_id, $evaluatee_id) {
@@ -139,7 +139,10 @@ class M_questioner extends CI_Model {
 
         if (!$eval || !$evale) return false;
 
-        return ($eval->division_id == $evale->division_id && $eval->sub_division_id == $evale->sub_division_id);
+        $eval_sub_division = $this->db->get_where('employee', ['id' => $evaluator_id])->row();
+        $evale_sub_division = $this->db->get_where('employee', ['id' => $evaluatee_id])->row();
+        
+        return ($eval->division_id == $evale->division_id && $eval_sub_division->sub_divisi == $evale_sub_division->sub_divisi);
     }
 
     // Validasi relasi penilaian atasan: evaluator lebih tinggi level & di divisi sama

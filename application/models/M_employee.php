@@ -74,16 +74,15 @@ public function is_pic($user_id)
     return false;
 }
 
-    public function get_sub_divisi($user_id){
-        $this->db->select('e.sub_divisi');
-        $this->db->from('employee e');   
-        $this->db->where('e.user_id', $user_id);
-        $query = $this->db->get();
-
-        if ($query->num_rows() > 0) {
-            $sub_divisi = $query->row()->sub_divisi;
-            return $sub_divisi;
-        }
+    public function get_employee_details($evaluatee_id){
+        $this->db->select("
+            e.user_id as id,
+            e.fullname as fullname
+        ");
+        $this->db->from("employee e");
+        $this->db->join("user u", "u.id = e.user_id", 'left');
+        $this->db->where("u.id", $evaluatee_id);
+        return $this->db->get()->row();
     }
     
 }

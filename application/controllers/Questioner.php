@@ -6,6 +6,7 @@ class Questioner extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('M_questioner');
+        $this->load->model('M_question');
         $this->load->model('M_employee');
 
         // Cek login
@@ -48,13 +49,13 @@ class Questioner extends CI_Controller {
             'is_pic' => $this->M_employee->is_pic($employee_id)
         );
 
-        var_dump("user_id:", $user_id, "employee_id", $employee_id, $data);
+        // var_dump("user_id:", $user_id, "employee_id", $employee_id, $data);
 
-        // $this->template->load('spk/template_user', 'spk/user/questioner/index.php', $data);
+        $this->template->load('spk/template_user', 'spk/user/questioner/index.php', $data);
     }
 
      public function peer($evaluatee_id) {
-        $user_id = $this->session->userdata('user_id');
+        $user_id = $this->session->userdata('id_user');
         $evaluator_id = $this->M_employee->get_employee_id($user_id);
         
 
@@ -67,10 +68,10 @@ class Questioner extends CI_Controller {
         $data = [
             'title' => 'Kuisioner Rekan Kerja (Sikap Kerja)',
             'evaluatee' => $this->M_employee->get_employee_details($evaluatee_id),
-            'questions' => $this->M_questioner->get_questions_by_aspect('Sikap Kerja')
+            'questions' => $this->M_question->get_questions_by_aspect('Sikap Kerja')
         ];
 
-        $this->load->view('user/questioner/peer_form', $data);
+        $this->template->load('spk/template_user', 'spk/user/questioner/peer_form.php', $data);
     }
 
     // Form kuisioner atasan
@@ -93,22 +94,21 @@ class Questioner extends CI_Controller {
         $this->load->view('user/questioner/supervisor_form', $data);
     }
 
-   public function submit_peer() {
-    $evaluator_id = $this->M_employee->get_employee_id($this->session->userdata('user_id'));
-    $evaluatee_id = $this->input->post('evaluatee_id');
-    $answers = $this->input->post('answers');
+    public function submit_peer() {
+        $evaluator_id = $this->M_employee->get_employee_id($this->session->userdata('id_user'));
+        $evaluatee_id = $this->input->post('evaluatee_id');
+        $answers = $this->input->post('answers');
 
-    // Simpan data ke tabel questioner_answer (buat sendiri tabelnya ya)
-    foreach ($answers as $question_id => $answer_value) {
-        $data = [
-            'evaluator_id' => $evaluator_id,
-            'evaluatee_id' => $evaluatee_id,
-            'question_id' => $question_id,
-            'answer' => $answer_value,
-            'aspect' => 'Sikap Kerja'
-        ];
-        $this->db->insert('questioner_answers', $data);
-    }
+        // Simpan data ke tabel questioner_answer (buat sendiri tabelnya ya)
+        foreach ($answers as $question_id => $answer_value) {
+            $data = [
+                'evaluator_id' => $evaluator_id,
+                'evaluatee_id' => $evaluatee_id,
+                'question_id' => $question_id,
+                'answer' => $answer_value
+            ];
+            $this->db->insert('questioner_answers', $data);
+        }
 
     $this->session->set_flashdata('success', 'Penilaian rekan kerja berhasil disimpan');
     redirect('questioner');
