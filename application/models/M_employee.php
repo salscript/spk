@@ -74,5 +74,16 @@ public function is_pic($user_id)
     return false;
 }
 
+    public function get_sub_divisi($user_id){
+        $this->db->select('e.sub_divisi');
+        $this->db->from('employee e');   
+        $this->db->where('e.user_id', $user_id);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            $sub_divisi = $query->row()->sub_divisi;
+            return $sub_divisi;
+        }
+    }
     
 }

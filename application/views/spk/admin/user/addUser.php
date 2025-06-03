@@ -55,13 +55,13 @@
                             </div>
                             <div class="form-group">
                                  <label for="level_position" class="font-weight-normal">Sub Divisi</label>
-   <select name="level_position" id="level_position" class="form-control text-dark font-weight-normal text-sm" required>
-      <option value="">-- Pilih Level --</option>
-      <option value="staff">Umum</option>
-      <option value="senior_staff">Layanan</option>
-      <option value="managerial">KItchen</option>
-   </select>
-</div>
+                                <select name="level_position" id="level_position" class="form-control text-dark font-weight-normal text-sm" required>
+                                    <option value="">-- Pilih Level --</option>
+                                    <option value="staff">Umum</option>
+                                    <option value="senior_staff">Layanan</option>
+                                    <option value="managerial">KItchen</option>
+                                </select>
+                            </div>
                             <div class="form-group">
                                 <label for="address" class="font-weight-normal">Alamat</label>
                                 <input type="text" name="address" id="address" class="form-control text-dark" placeholder="Address">

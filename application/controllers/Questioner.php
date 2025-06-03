@@ -36,8 +36,9 @@ class Questioner extends CI_Controller {
 
     // Tampilan user untuk mengisi kuisioner
     public function index() {
-        $user_id = $this->session->userdata('user_id');
+        $user_id = $this->session->userdata('id_user');
         $employee_id = $this->M_employee->get_employee_id($user_id);
+        // $sub_divisi = $this->M_employee->get_sub_divisi($user_id);
         
         $data = array(
             'title' => 'Kuisioner Penilaian',
@@ -47,12 +48,15 @@ class Questioner extends CI_Controller {
             'is_pic' => $this->M_employee->is_pic($employee_id)
         );
 
-        $this->template->load('spk/template_user', 'spk/user/questioner/index.php', $data);
+        var_dump("user_id:", $user_id, "employee_id", $employee_id, $data);
+
+        // $this->template->load('spk/template_user', 'spk/user/questioner/index.php', $data);
     }
 
      public function peer($evaluatee_id) {
         $user_id = $this->session->userdata('user_id');
         $evaluator_id = $this->M_employee->get_employee_id($user_id);
+        
 
         // Validasi boleh menilai atau tidak (harus di divisi dan sub divisi sama)
         if (!$this->M_questioner->validate_peer_relation($evaluator_id, $evaluatee_id)) {

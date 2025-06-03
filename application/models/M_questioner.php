@@ -53,8 +53,13 @@ class M_questioner extends CI_Model {
         
         if (!$employee) return array();
         
-        return $this->db->select('e.id, e.fullname, p.name as position_name, 
-                                d.name as division_name, qs.status, qs.created_at')
+        return $this->db->select(
+            'e.id, e.fullname, 
+            p.name as position_name,   
+            d.name as division_name,
+            qs.status, 
+            qs.created_at'
+            )
             ->from('employee e')
             ->join('employee_division ed', 'ed.employee_id = e.id')
             ->join('division d', 'd.id = ed.division_id')
