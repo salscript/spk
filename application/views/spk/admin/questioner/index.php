@@ -1,112 +1,134 @@
 <div class="content-wrapper">
-    <section class="content-header">
-        <h1><?= $title ?></h1>
-        <ol class="breadcrumb">
-            <li><a href="<?= site_url('admin') ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active"><?= $title ?></li>
-        </ol>
-    </section>
-
-    <section class="content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Kuisioner yang Belum Lengkap</h3>
-                    </div>
-                    <div class="box-body">
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nama Karyawan</th>
-                                    <th>Jabatan</th>
-                                    <th>Divisi</th>
-                                    <th>Sudah Dinilai</th>
-                                    <th>Total Harus Dinilai</th>
-                                    <th>Progress</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($incomplete_questioners as $q): ?>
-                                <tr>
-                                    <td><?= $q->fullname ?></td>
-                                    <td><?= $q->position ?></td>
-                                    <td><?= $q->division ?></td>
-                                    <td><?= $q->completed_count ?></td>
-                                    <td><?= $q->total_count ?></td>
-                                    <td>
-                                        <div class="progress progress-xs">
-                                            <div class="progress-bar progress-bar-<?= ($q->completed_count/$q->total_count*100 >= 50) ? 'success' : 'danger' ?>" 
-                                                 style="width: <?= ($q->completed_count/$q->total_count*100) ?>%"></div>
-                                        </div>
-                                        <span class="badge bg-<?= ($q->completed_count/$q->total_count*100 >= 50) ? 'green' : 'red' ?>">
-                                            <?= round($q->completed_count/$q->total_count*100, 2) ?>%
-                                        </span>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Semua Kuisioner</h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <table id="questionerTable" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Penilai</th>
-                                    <th>Jabatan</th>
-                                    <th>Divisi</th>
-                                    <th>Dinilai</th>
-                                    <th>Jabatan</th>
-                                    <th>Divisi</th>
-                                    <th>Jenis</th>
-                                    <th>Status</th>
-                                    <th>Tanggal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($all_questioners as $q): ?>
-                                <tr>
-                                    <td><?= $q->evaluator_name ?></td>
-                                    <td><?= $q->evaluator_position ?></td>
-                                    <td><?= $q->evaluator_division ?></td>
-                                    <td><?= $q->evaluatee_name ?></td>
-                                    <td><?= $q->evaluatee_position ?></td>
-                                    <td><?= $q->evaluatee_division ?></td>
-                                    <td><?= ($q->type == 'peer') ? 'Rekan Kerja' : 'Atasan' ?></td>
-                                    <td>
-                                        <span class="label label-<?= ($q->status == 'completed') ? 'success' : 'warning' ?>">
-                                            <?= ($q->status == 'completed') ? 'Selesai' : 'Pending' ?>
-                                        </span>
-                                    </td>
-                                    <td><?= date('d/m/Y H:i', strtotime($q->created_at)) ?></td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+   <section class="content-header">
+      <div class="container-fluid">
+         <div class="row mb-3 mt-3">
+            <div class="col-sm-6">
+               <h3 class="m-0 font-weight-bolder">Questioner</h3>
             </div>
-        </div>
-    </section>
+            <div class="col-sm-6">
+               <div class="row">
+                  <div class="col-11">
+                     <button class="btn btn-primary text-sm float-right mr-2" onclick="crtQuestioner()">Create Questioner</button>
+                  </div>
+                  <div class="col-1">
+                     <button class="btn btn-outline-primary text-sm float-right" onclick="reload()">
+                        <i class="fas fa-sync"></i>
+                     </button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   <section class="content">
+      <div class="container-fluid">
+         <div class="row mt-2">
+            <div class="col-12">
+               <div class="card">
+                  <div class="card-body table-responsive text-sm">
+                     <table id="example1" class="table table-head-fixed text-nowrap">
+                        <thead>
+                        <tr>
+                              <th class="col-md-1 font-weight-normal text-sm">No</th>
+                              <th class="font-weight-normal text-sm">Code</th>
+                              <th class="font-weight-normal text-sm">Deadline</th>
+                              <th class="font-weight-normal text-sm">Status</th>
+                              <th class="col-md-2 font-weight-normal text-sm">Action</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <?php
+                           $no = 1;
+                           foreach ($questioner as $row) { ?>
+                              <tr>
+                                 <td><?= $no++ ?></td>
+                                 <td><?= $row->code_questioner ?></td>
+                                 <td><?= $row->deadline ?></td>
+                                 <td></td>
+                                 <td>
+                                    <button title="Show" class="btn btn-sm btn-primary" onclick="show_questioner(<?= $row->id ?>);">
+                                       <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button title="Update" class="btn btn-sm btn-success" onclick="get_questioner(<?= $row->id ?>);">
+                                       <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button title="Delete" onclick="deleteConfirm(<?= $row->id ?>);" class="btn btn-sm btn-danger">
+                                       <i class="fa fa-trash"></i>
+                                    </button>
+                                 </td>
+                              </tr>
+                           <?php } ?>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
 </div>
 
-<script>
-    $(function () {
-        $('#questionerTable').DataTable({
-            "responsive": true,
-            "autoWidth": false,
-            "order": [[8, "desc"]]
-        });
-    });
+<script type="text/javascript">
+   $(function() {
+      $("#example1").DataTable({
+         "responsive": true,
+         "lengthChange": false,
+         "autoWidth": false,
+         "buttons": ["copy", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+   });
+
+   function crtQuestion() {
+      window.location.href = "<?= base_url('question/new_question') ?>"
+   }
+
+   function get_question(id) {
+      if (id != "") {
+         window.location.href = "<?= base_url('question/edit_question/') ?>" + id;
+      } else {
+         alert('Oops.!!');
+      }
+   }
+
+   function deleteConfirm(id) {
+      Swal.fire({
+         title: 'Are you sure?',
+         text: `You won't be able to revert this`,
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Yes, delete it!',
+         cancelButtonText: 'Cancel'
+      }).then((result) => {
+         if (result.value) {
+            $.ajax({
+               type: "post",
+               url: "<?php echo base_url('question/delete_question') ?>",
+               data: {
+                  id_question: id,
+               },
+               dataType: "json",
+               success: function(response) {
+                  if (response.success) {
+                     Swal.fire({
+                        icon: 'success',
+                        title: 'konfirmasi',
+                        text: response.success,
+                        showCancelButton: false,
+                        showConfirmButton: false
+                     });
+                     setTimeout(function() {
+                        location.reload();
+                     }, 1000);
+                  }
+               }
+            });
+         }
+      })
+   }
+
+   function reload() {
+      location.reload();
+   }
 </script>

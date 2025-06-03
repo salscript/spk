@@ -7,6 +7,26 @@ class M_questioner extends CI_Model {
         parent::__construct();
     }
 
+    public function get_all_questioners(){
+        return $this->db->get('questioner')->result();
+    }
+
+    function code_question()
+    {
+        $q = $this->db->query("SELECT MAX(RIGHT(code_questioner,4)) AS code_questioner FROM questioner");
+        $kd = "";
+        if ($q->num_rows() > 0) {
+            foreach ($q->result() as $k) {
+                $tmp = ((int) $k->code_question) + 1;
+                $kd = sprintf("%04s", $tmp);
+            }
+        } else {
+            $kd = "0001";
+        }
+        // date_default_timezone_set('Asia/Jakarta');
+        return "QUE" . $kd;
+    }
+
     // Mendapatkan semua status kuisioner (untuk admin)
     public function get_all_questioners_status() {
         return $this->db->select('qs.*, e1.fullname as evaluator_name, e2.fullname as evaluatee_name, 

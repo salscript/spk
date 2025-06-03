@@ -20,6 +20,64 @@ class Questioner extends CI_Controller {
         }
     }
 
+    public function questioner()
+    {
+       $data['questioner'] = $this->M_questioner->get_all_questioners();
+       $this->template->load('spk/template_admin', 'spk/admin/questioner/index', $data);
+    }
+    
+    public function questioner_user()
+    {
+       $data['questioner'] = $this->M_questioner->get_all_questioners();
+       $this->template->load('spk/template_user', 'spk/user/questioner/index', $data);
+    }
+ 
+    public function new_questioner()
+    {
+       $data['code_questioner'] = $this->M_questioner->code_questioner();  
+       $this->template->load('spk/template_admin', 'spk/admin/questioner/addQuestioner', $data);
+    }
+ 
+    public function save_questioner() {
+        if($this->input->is_ajax_request() == TRUE) {
+          $code = $this->input->post('code_questioner', true);
+          $deadline_unformated = urldecode($this->input->post('deadline-data'));
+          $created_on = date("Y-m-d H:i:s");
+ 
+          // $deadline_formated = new DateTime($deadline_unformated);
+          // $deadline = $deadline_formated->format('Y-m-d H:i:s');
+ 
+          if (!preg_match('/^\d{2}-\d{2}-\d{4} \d{2}:\d{2}$/', $deadline_unformated)) {
+             echo json_encode(['error' => 'Format deadline tidak valid. Gunakan format DD-MM-YYYY HH:MM']);
+             return;
+          }
+ 
+          $deadline_formated = DateTime::createFromFormat('d-m-Y H:i', $deadline_unformated);
+          if (!$deadline_formated) {
+             echo json_encode(['error' => 'Nilai tanggal tidak valid.']);
+             return;
+          }
+ 
+          $deadline = $deadline_formated->format('Y-m-d H:i:s');
+ 
+          $data = array(
+             'code_questioner' => $code,
+             'deadline' => $deadline,
+             'created_on' => $created_on
+          );
+ 
+          $save = $this->M_questioner->save_questioner($data);
+ 
+          if ($save) {
+             $msg = ['success' => 'Questioner berhasil disimpan'];
+          } else {
+             $msg = ['error' => 'Gagal menyimpan questioner'];
+          } 
+          
+          echo json_encode($msg);
+       }
+    }
+
     // Tampilan admin untuk monitoring kuisioner
     public function admin() {
         if ($this->session->userdata('role_id') != 1) {
