@@ -44,7 +44,7 @@
                                  <td><?= $no++ ?></td>
                                  <td><?= $row->code_questioner ?></td>
                                  <td><?= $row->deadline ?></td>
-                                 <td></td>
+                                 <td><?= ($row->status == '1') ? 'Active' : 'Non Active'; ?></td>
                                  <td>
                                     <button title="Show" class="btn btn-sm btn-primary" onclick="show_questioner(<?= $row->id ?>);">
                                        <i class="fa fa-eye"></i>

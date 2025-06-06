@@ -24,7 +24,7 @@
                         <input type="text" name="code_questioner" id="code_questioner" value="<?= $code_questioner ?>" class="form-control" readonly>
                      </div>
                      <div class="form-group">
-                        <label class="font-weight-normal">Date and time:</label>
+                        <label class="font-weight-normal">Deadline</label>
                         <div class="input-group date" id="reservationdatetime" data-target-input="nearest">
                               <input type="text" id="deadline-data" name="deadline-data" onkeydown="return false;" class="form-control datetimepicker-input" placeholder="DD/MM/YYYY HH:mm" data-target="#reservationdatetime"/>
                               <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
@@ -53,7 +53,11 @@
    $(document).ready(function() {
       $('#questioner').focus();
 
-      $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+      $('#reservationdatetime').datetimepicker({ 
+         icons: { time: 'far fa-clock' },
+         format: 'DD-MM-YYYY HH:mm',
+         defaultDate: new Date()
+      });
 
       $("input[data-bootstrap-switch]").each(function() {
          $(this).bootstrapSwitch('state');

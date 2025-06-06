@@ -27,6 +27,10 @@ class M_questioner extends CI_Model {
         return "QUE" . $kd;
     }
 
+    function save_new_questioner($data){
+        return $this->db->insert('questioner', $data);
+    }
+
     // Mendapatkan semua status kuisioner (untuk admin)
     public function get_all_questioners_status() {
         return $this->db->select('qs.*, e1.fullname as evaluator_name, e2.fullname as evaluatee_name, 
@@ -179,6 +183,8 @@ class M_questioner extends CI_Model {
         }
         return false;
     }
+
+
 
     // Menyimpan hasil kuisioner
     public function save_questioner($evaluator_id, $evaluatee_id, $type, $post_data) {

@@ -43,6 +43,8 @@ class Questioner extends CI_Controller {
           $code = $this->input->post('code_questioner', true);
           $deadline_unformated = urldecode($this->input->post('deadline-data'));
           $created_on = date("Y-m-d H:i:s");
+
+        //   var_dump($deadline_unformated);
             
           // $deadline_formated = new DateTime($deadline_unformated);
           // $deadline = $deadline_formated->format('Y-m-d H:i:s');
@@ -67,9 +69,9 @@ class Questioner extends CI_Controller {
              'created_on' => $created_on
           );
 
-         
+        //  var_dump($data);
  
-          $save = $this->M_questioner->save_questioner($data);
+          $save = $this->M_questioner->save_new_questioner($data);
  
           if ($save) {
              $msg = ['success' => 'Questioner berhasil disimpan'];
