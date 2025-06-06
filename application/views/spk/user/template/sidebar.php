@@ -30,7 +30,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                   <a href="<?php echo base_url('questioner/index') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'questioner') echo 'active' ?>">
+                   <a href="<?php echo base_url('questioner/questioner_user') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'questioner') echo 'active' ?>">
                      <i class="nav-icon fas fa-tachometer-alt"></i>
                          <p>
                             Questioner

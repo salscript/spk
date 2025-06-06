@@ -29,6 +29,7 @@ class Questioner extends CI_Controller {
     public function questioner_user()
     {
        $data['questioner'] = $this->M_questioner->get_all_questioners();
+    //    var_dump($data);
        $this->template->load('spk/template_user', 'spk/user/questioner/index', $data);
     }
  
@@ -99,12 +100,13 @@ class Questioner extends CI_Controller {
     }
 
     // Tampilan user untuk mengisi kuisioner
-    public function index() {
+    public function index($id) {
+        $questioner_id = $id;
         $user_id = $this->session->userdata('id_user');
         $employee_id = $this->M_employee->get_employee_id($user_id);
-        // $sub_divisi = $this->M_employee->get_sub_divisi($user_id);
         
         $data = array(
+            'questioner_id' => $questioner_id,
             'title' => 'Kuisioner Penilaian',
             'peer_questioners' => $this->M_questioner->get_peer_questioners($employee_id),
             'supervisor_questioners' => $this->M_questioner->get_supervisor_questioners($employee_id),
@@ -114,10 +116,15 @@ class Questioner extends CI_Controller {
 
         // var_dump("user_id:", $user_id, "employee_id", $employee_id, $data);
 
-        $this->template->load('spk/template_user', 'spk/user/questioner/index.php', $data);
+        $this->template->load('spk/template_user', 'spk/user/questioner/evaluatee_list.php', $data);
     }
 
      public function peer($evaluatee_id) {
+        if ($this->input->is_ajax_request == TRUE) {
+            $questioner_id = $this->input->post('questioner_id', true);
+            $evaluatee_id = $this->input->post('evaluatee_id', true);
+        }
+        ¬
         $user_id = $this->session->userdata('id_user');
         $evaluator_id = $this->M_employee->get_employee_id($user_id);
         
