@@ -3,12 +3,12 @@
       <div class="container-fluid">
          <div class="row mb-3 mt-3">
             <div class="col-sm-6">
-               <h3 class="m-0 font-weight-bolder">User</h3>
+               <h3 class="m-0 font-weight-bolder"><?= $title ?></h3>
             </div>
-            <!-- <div class="col-sm-6">
+            <div class="col-sm-6">
                <div class="row">
                   <div class="col-11">
-                     <button class="btn btn-primary text-sm float-right mr-2" onclick="crtUser()">Create User</button>
+                     <button class="btn btn-primary text-sm float-right mr-2" onclick="cancel()">Cancel</button>
                   </div>
                   <div class="col-1">
                      <button class="btn btn-outline-primary text-sm float-right" onclick="reload()">
@@ -16,7 +16,7 @@
                      </button>
                   </div>
                </div>
-            </div> -->
+            </div>
          </div>
       </div>
    </section>
@@ -27,9 +27,10 @@
             <div class="col-12">
                <div class="card">
                   <div class="card-body table-responsive text-sm">
-                    <h3><?= $title ?> untuk <?= $evaluatee->fullname ?></h3>
-
+                    <h5 class="mb-3">Menilai untuk <?= $evaluatee->fullname ?></h5>
+                    <hr>
                     <form action="<?= site_url('questioner/submit_peer') ?>" method="POST">
+                     <input type="hidden" name="questioner_id" value="<?= $questioner_id ?>">
                      <input type="hidden" name="evaluatee_id" value="<?= $evaluatee->id ?>">
 
                      <?php
@@ -38,13 +39,13 @@
                         $grouped[$q->criteria_name][] = $q;
                      }
 
-                     $options = [
-                        1 => '1 - Sangat Tidak Setuju',
-                        2 => '2 - Tidak Setuju',
-                        3 => '3 - Netral',
-                        4 => '4 - Setuju',
-                        5 => '5 - Sangat Setuju',
-                     ];
+                        $options = [
+                           1 => '1 - Sangat Tidak Setuju',
+                           2 => '2 - Tidak Setuju',
+                           3 => '3 - Netral',
+                           4 => '4 - Setuju',
+                           5 => '5 - Sangat Setuju',
+                        ];
                      ?>
 
                      <?php foreach ($grouped as $criteria_name => $questions_group): ?>
@@ -89,3 +90,12 @@
       </div>
    </section>
 </div>
+<script type="text/javascript">
+   function cancel() {
+      window.location.href = "<?= base_url('questioner/index/'). $questioner_id ?>";
+   }
+
+   function reload() {
+      location.reload();
+   }
+</script>

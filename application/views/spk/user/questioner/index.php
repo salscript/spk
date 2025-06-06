@@ -43,8 +43,8 @@
                                  <?php 
                                     setlocale(LC_TIME, 'id_ID.utf8');
                                     $deadline = DateTime::createFromFormat('Y-m-d H:i:s', $row->deadline);
-                                    $nama_bulan = strftime('%B', $deadline->getTimestamp()); // Contoh: Juni
-                                    $nama_hari  = strftime('%A', $deadline->getTimestamp()); // Contoh: Jumat
+                                    $nama_bulan = $deadline->format('F'); // Full month name
+                                    $nama_hari  = $deadline->format('l');
                                     $tanggal    = $deadline->format('d');                   // 20
                                     $jam        = $deadline->format('H:i');
                                  ?>

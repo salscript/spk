@@ -57,14 +57,11 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <?= $peer->created_at ? date('d/m/Y H:i', strtotime($peer->created_at)) : '-' ?>
+                                                <?= $peer->created_on ? date('d/m/Y H:i', strtotime($peer->created_on)) : '-' ?>
                                             </td>
                                             <td>
                                                 <?php if ($peer->status != 'completed'): ?>
-                                                    <!-- <a href="<?= site_url('questioner/peer/'.$peer->id) ?>" class="btn btn-primary btn-xs">
-                                                        <i class="fa fa-edit"></i> Nilai
-                                                    </a> -->
-                                                    <button class="btn btn-primary btn-sm" onclick="nilai_questioner($peer->id, $questioner_id)">
+                                                    <button class="btn btn-primary btn-sm" onclick="nilai_questioner(<?=$peer->id?>, <?=$questioner_id?>)">
                                                         <i class="fa fa-edit"></i> Nilai
                                                     </button>
                                                 <?php else: ?>
@@ -148,17 +145,8 @@
    });
 
    function nilai_questioner($evaluatee_id, $questioner_id){
-    $.ajax({
-        type:"POST",
-        url:"<?php echo base_url('questioner/peer')?>",
-        data: {
-            evaluatee_id: $evaluatee_id,
-            questioner_id: $questioner_id 
-        }
-        success: (response) => {
-
-        }   
-    })
+    url = `questioner/peer?evaluatee_id=${$evaluatee_id}&questioner_id=${$questioner_id}`;
+    window.location.href= "<?= base_url() ?>" + url;
    }
 
    function back(){

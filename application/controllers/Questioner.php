@@ -119,12 +119,10 @@ class Questioner extends CI_Controller {
         $this->template->load('spk/template_user', 'spk/user/questioner/evaluatee_list.php', $data);
     }
 
-     public function peer($evaluatee_id) {
-        if ($this->input->is_ajax_request == TRUE) {
-            $questioner_id = $this->input->post('questioner_id', true);
-            $evaluatee_id = $this->input->post('evaluatee_id', true);
-        }
-        ¬
+     public function peer() {
+        
+        $evaluatee_id = $this->input->get('evaluatee_id');
+        $questioner_id = $this->input->get('questioner_id');
         $user_id = $this->session->userdata('id_user');
         $evaluator_id = $this->M_employee->get_employee_id($user_id);
         
@@ -136,11 +134,12 @@ class Questioner extends CI_Controller {
         }
 
         $data = [
+            'questioner_id' => $questioner_id,
             'title' => 'Kuisioner Rekan Kerja (Sikap Kerja)',
             'evaluatee' => $this->M_employee->get_employee_details($evaluatee_id),
             'questions' => $this->M_question->get_questions_by_aspect('Sikap Kerja')
         ];
-
+        // var_dump($data);
         $this->template->load('spk/template_user', 'spk/user/questioner/peer_form.php', $data);
     }
 
@@ -165,6 +164,7 @@ class Questioner extends CI_Controller {
     }
 
     public function submit_peer() {
+        $questioner_id = $this->input->post('questioner_id');
         $evaluator_id = $this->M_employee->get_employee_id($this->session->userdata('id_user'));
         $evaluatee_id = $this->input->post('evaluatee_id');
         $answers = $this->input->post('answers');
@@ -172,17 +172,32 @@ class Questioner extends CI_Controller {
         // Simpan data ke tabel questioner_answer (buat sendiri tabelnya ya)
         foreach ($answers as $question_id => $answer_value) {
             $data = [
+                'questioner_id' => $questioner_id,
                 'evaluator_id' => $evaluator_id,
                 'evaluatee_id' => $evaluatee_id,
                 'question_id' => $question_id,
-                'answer' => $answer_value
+                'nilai' => $answer_value
             ];
             $this->db->insert('questioner_answers', $data);
         }
 
-    $this->session->set_flashdata('success', 'Penilaian rekan kerja berhasil disimpan');
-    redirect('questioner');
-}
+        $data_qs = [
+            'questioner_id' => $questioner_id,
+            'evaluator_id' => $evaluator_id,
+            'evaluatee_id' => $evaluatee_id,
+            'type' => 'peer',
+            'status' => 'completed'
+        ];
+
+        $save = $this->db->insert('questioner_status', $data_qs);
+        if ($save) {
+            $this->session->set_flashdata('success', 'Penilaian rekan kerja berhasil disimpan');
+            redirect('questioner/index/'. $questioner_id);
+        }
+        
+        $this->session->set_flashdata('error', 'Penilaian rekan kerja Gagal');
+        redirect('questioner/index/'. $questioner_id);
+    }
 
 public function submit_supervisor() {
     $evaluator_id = $this->M_employee->get_employee_id($this->session->userdata('user_id'));

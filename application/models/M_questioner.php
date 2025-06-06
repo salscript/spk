@@ -82,7 +82,7 @@ class M_questioner extends CI_Model {
             p.name as position_name,   
             d.name as division_name,
             qs.status, 
-            qs.created_at'
+            qs.created_on'
             )
             ->from('employee e')
             ->join('employee_division ed', 'ed.employee_id = e.id')
@@ -111,7 +111,7 @@ class M_questioner extends CI_Model {
         // HRD menilai semua PIC/Managerial (tanpa memandang divisi)
         if ($evaluator->level_position == 'hrd') {
             return $this->db->select('e.id, e.fullname, p.name as position_name, 
-                                    d.name as division_name, qs.status, qs.created_at')
+                                    d.name as division_name, qs.status, qs.created_on')
                 ->from('employee e')
                 ->join('position p', 'p.id = e.position_id')
                 ->join('employee_division ed', 'ed.employee_id = e.id')
@@ -125,7 +125,7 @@ class M_questioner extends CI_Model {
         // PIC/Managerial menilai staff dalam divisi yang sama
         elseif (in_array($evaluator->level_position, ['managerial', 'senior_staff'])) {
             return $this->db->select('e.id, e.fullname, p.name as position_name, 
-                                    d.name as division_name, qs.status, qs.created_at')
+                                    d.name as division_name, qs.status, qs.created_on')
                 ->from('employee e')
                 ->join('position p', 'p.id = e.position_id')
                 ->join('employee_division ed', 'ed.employee_id = e.id')
