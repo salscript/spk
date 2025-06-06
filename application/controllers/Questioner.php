@@ -43,7 +43,7 @@ class Questioner extends CI_Controller {
           $code = $this->input->post('code_questioner', true);
           $deadline_unformated = urldecode($this->input->post('deadline-data'));
           $created_on = date("Y-m-d H:i:s");
- 
+            
           // $deadline_formated = new DateTime($deadline_unformated);
           // $deadline = $deadline_formated->format('Y-m-d H:i:s');
  
@@ -63,8 +63,11 @@ class Questioner extends CI_Controller {
           $data = array(
              'code_questioner' => $code,
              'deadline' => $deadline,
+             'status' => true,
              'created_on' => $created_on
           );
+
+         
  
           $save = $this->M_questioner->save_questioner($data);
  

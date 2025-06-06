@@ -11,13 +11,13 @@ class M_questioner extends CI_Model {
         return $this->db->get('questioner')->result();
     }
 
-    function code_question()
+    function code_questioner()
     {
         $q = $this->db->query("SELECT MAX(RIGHT(code_questioner,4)) AS code_questioner FROM questioner");
         $kd = "";
         if ($q->num_rows() > 0) {
             foreach ($q->result() as $k) {
-                $tmp = ((int) $k->code_question) + 1;
+                $tmp = ((int) $k->code_questioner) + 1;
                 $kd = sprintf("%04s", $tmp);
             }
         } else {

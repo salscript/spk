@@ -78,13 +78,13 @@
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
    });
 
-   function crtQuestion() {
-      window.location.href = "<?= base_url('question/new_question') ?>"
+   function crtQuestioner() {
+      window.location.href = "<?= base_url('questioner/new_questioner') ?>"
    }
 
-   function get_question(id) {
+   function get_questioner(id) {
       if (id != "") {
-         window.location.href = "<?= base_url('question/edit_question/') ?>" + id;
+         window.location.href = "<?= base_url('questioner/edit_questioner/') ?>" + id;
       } else {
          alert('Oops.!!');
       }
@@ -104,7 +104,7 @@
          if (result.value) {
             $.ajax({
                type: "post",
-               url: "<?php echo base_url('question/delete_question') ?>",
+               url: "<?php echo base_url('questioner/delete_questioner') ?>",
                data: {
                   id_question: id,
                },
