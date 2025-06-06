@@ -42,7 +42,9 @@ class User extends MY_Controller
       $data['division'] = $this->M_division->get_all_division();
 
       $user_division = $this->M_division->get_division_by_user_id($id_user);
-      $data['user_division_ids'] = array_map(fn($d) => $d->id, $user_division);
+      $data['user_division_ids'] = array_map(function($d) {
+         return $d->id;
+      }, $user_division);
 
       $this->template->load('spk/template_admin', 'spk/admin/user/editUser', $data);
    }
@@ -84,10 +86,12 @@ class User extends MY_Controller
             if ($user_id) {
                $employee_id = $this->M_user->save_biodata($user_id, $fullname, $address, $no_telp, $position, $sub_divisi, $create);
                if($employee_id) {
-                  $insert_batch = array_map(fn($div) => [
-                     'employee_id' => $employee_id,
-                     'division_id' => $div
-                  ], $division);
+                  $insert_batch = array_map(function($div) use ($employee_id) {
+                     return [
+                         'employee_id' => $employee_id,
+                         'division_id' => $div
+                     ];
+                 }, $division);
 
                   if ($this->M_user->save_division($insert_batch)) {
                      echo json_encode(['success' => 'User berhasil disimpan']);
@@ -147,10 +151,16 @@ class User extends MY_Controller
                 $employee_id = $this->M_user->get_employee_id_by_user($id_user);
                 $this->M_division->delete_user_divisions($employee_id);
 
-                $insert_batch = array_map(fn($div) => [
-                    'employee_id' => $employee_id,
-                    'division_id' => $div
-                ], $division);
+               //  $insert_batch = array_map(fn($div) => [
+               //      'employee_id' => $employee_id,
+               //      'division_id' => $div
+               //  ], $division);
+               $insert_batch = array_map(function($div) use ($employee_id) {
+                  return [
+                      'employee_id' => $employee_id,
+                      'division_id' => $div
+                  ];
+              }, $division);
 
                 if ($this->M_user->save_division($insert_batch)) {
                     echo json_encode(['success' => 'User berhasil diupdate']);
