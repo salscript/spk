@@ -35,4 +35,12 @@ public function delete_position($id)
 {
     return $this->db->delete('position', ['id' => $id]);
 }
+
+    public function get_position_employee($id){
+        $this->db->select('p.level_position');
+        $this->db->from('position p');
+        $this->db->join('employee e', 'e.position_id=p.id', 'left');
+        $this->db->where('e.id', $id);
+        return $this->db->get()->row();
+    }
 }

@@ -110,29 +110,35 @@ class M_questioner extends CI_Model {
         
         // HRD menilai semua PIC/Managerial (tanpa memandang divisi)
         if ($evaluator->level_position == 'hrd') {
-            return $this->db->select('e.id, e.fullname, p.name as position_name, 
-                                    d.name as division_name, qs.status, qs.created_on')
+            return $this->db->select('
+                    e.id, e.fullname, 
+                    p.name as position_name, 
+                    d.name as division_name, qs.status, qs.created_on
+                ')
                 ->from('employee e')
                 ->join('position p', 'p.id = e.position_id')
                 ->join('employee_division ed', 'ed.employee_id = e.id')
                 ->join('division d', 'd.id = ed.division_id')
                 ->join('questioner_status qs', "qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id AND qs.type = 'supervisor'", 'left')
-                ->where_in('p.level_position', ['managerial', 'senior_staff'])
+                ->where('p.level_position', 'managerial')
                 ->where('e.id !=', $employee_id)
                 ->get()
                 ->result();
         }
         // PIC/Managerial menilai staff dalam divisi yang sama
-        elseif (in_array($evaluator->level_position, ['managerial', 'senior_staff'])) {
-            return $this->db->select('e.id, e.fullname, p.name as position_name, 
-                                    d.name as division_name, qs.status, qs.created_on')
+        elseif ($evaluator->level_position == 'managerial') {
+            return $this->db->select('
+                    e.id, e.fullname, 
+                    p.name as position_name, 
+                    d.name as division_name, qs.status, qs.created_on
+                ')
                 ->from('employee e')
                 ->join('position p', 'p.id = e.position_id')
                 ->join('employee_division ed', 'ed.employee_id = e.id')
                 ->join('division d', 'd.id = ed.division_id')
                 ->join('questioner_status qs', "qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id AND qs.type = 'supervisor'", 'left')
                 ->where('ed.division_id', $evaluator->division_id)
-                ->where('p.level_position', 'staff')
+                ->where('p.level_position !=', 'hrd')
                 ->where('e.id !=', $employee_id)
                 ->get()
                 ->result();
@@ -172,16 +178,12 @@ class M_questioner extends CI_Model {
     // Validasi relasi penilaian atasan: evaluator lebih tinggi level & di divisi sama
     public function validate_supervisor_relation($evaluator_id, $evaluatee_id) {
         // Contoh logika: evaluator harus managerial (level 1), evaluatee harus non-managerial (level 2)
-        $eval = $this->db->get_where('employee', ['id' => $evaluator_id])->row();
-        $evale = $this->db->get_where('employee', ['id' => $evaluatee_id])->row();
+        $eval = $this->db->get_where('employee_division', ['employee_id' => $evaluator_id])->row();
+        $evale = $this->db->get_where('employee_division', ['employee_id' => $evaluatee_id])->row();
 
         if (!$eval || !$evale) return false;
 
-        if ($eval->position_level < $evale->position_level // level kecil = lebih tinggi jabatan
-            && $eval->division_id == $evale->division_id) {
-            return true;
-        }
-        return false;
+        return ($eval->division_id == $evale->division_id);
     }
 
 

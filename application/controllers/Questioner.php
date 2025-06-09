@@ -8,6 +8,7 @@ class Questioner extends CI_Controller {
         $this->load->model('M_questioner');
         $this->load->model('M_question');
         $this->load->model('M_employee');
+        $this->load->model('M_position');
 
         // Cek login
         if (!$this->session->userdata('logged_in')) {
@@ -119,8 +120,7 @@ class Questioner extends CI_Controller {
         $this->template->load('spk/template_user', 'spk/user/questioner/evaluatee_list.php', $data);
     }
 
-     public function peer() {
-        
+    public function peer() {
         $evaluatee_id = $this->input->get('evaluatee_id');
         $questioner_id = $this->input->get('questioner_id');
         $user_id = $this->session->userdata('id_user');
@@ -130,7 +130,7 @@ class Questioner extends CI_Controller {
         // Validasi boleh menilai atau tidak (harus di divisi dan sub divisi sama)
         if (!$this->M_questioner->validate_peer_relation($evaluator_id, $evaluatee_id)) {
             $this->session->set_flashdata('error', 'Anda tidak diizinkan menilai karyawan ini');
-            redirect('questioner');
+            redirect('questioner/index/'. $questioner_id);
         }
 
         $data = [
@@ -144,23 +144,39 @@ class Questioner extends CI_Controller {
     }
 
     // Form kuisioner atasan
-    public function supervisor($evaluatee_id) {
-        $user_id = $this->session->userdata('user_id');
+    public function supervisor() {
+        $evaluatee_id = $this->input->get('evaluatee_id');
+        $questioner_id = $this->input->get('questioner_id');
+        $user_id = $this->session->userdata('id_user');
         $evaluator_id = $this->M_employee->get_employee_id($user_id);
 
         // Validasi boleh menilai bawahannya atau tidak (bawahan di divisi sama, level lebih rendah)
         if (!$this->M_questioner->validate_supervisor_relation($evaluator_id, $evaluatee_id)) {
             $this->session->set_flashdata('error', 'Anda tidak diizinkan menilai karyawan ini');
-            redirect('questioner');
+            redirect('questioner/index/'. $questioner_id);
         }
 
-        $data = [
-            'title' => 'Kuisioner Atasan (Kemampuan)',
-            'evaluatee' => $this->M_employee->get_employee_details($evaluatee_id),
-            'questions' => $this->M_questioner->get_questions_by_aspect('Kemampuan')
-        ];
+        $position_eval = $this->M_position->get_position_employee($evaluatee_id);
+        $data = [];
+        // var_dump($position_eval);
 
-        $this->load->view('user/questioner/supervisor_form', $data);
+        if ($position_eval->level_position == 'managerial') {
+            $data = [
+                'questioner_id' => $questioner_id,
+                'title' => 'Kuisioner Rekan Kerja (Sikap Kerja)',
+                'evaluatee' => $this->M_employee->get_employee_details($evaluatee_id),
+                'questions' => $this->M_question->get_questions_by_aspect('Sikap Kerja')
+            ];
+        } else if($position_eval->level_position == 'staff' || $position_eval == 'senior_staff') {
+            $data = [
+                'questioner_id' => $questioner_id,
+                'title' => 'Kuisioner Atasan (Kemampuan)',
+                'evaluatee' => $this->M_employee->get_employee_details($evaluatee_id),
+                'questions' => $this->M_question->get_questions_by_aspect('Kemampuan')
+            ];
+        }
+
+        $this->template->load('spk/template_user', 'spk/user/questioner/supervisor_form.php', $data);
     }
 
     public function submit_peer() {
@@ -199,24 +215,42 @@ class Questioner extends CI_Controller {
         redirect('questioner/index/'. $questioner_id);
     }
 
-public function submit_supervisor() {
-    $evaluator_id = $this->M_employee->get_employee_id($this->session->userdata('user_id'));
-    $evaluatee_id = $this->input->post('evaluatee_id');
-    $answers = $this->input->post('answers');
+    public function submit_supervisor() {
+        $questioner_id = $this->input->post('questioner_id');
+        $evaluator_id = $this->M_employee->get_employee_id($this->session->userdata('id_user'));
+        $evaluatee_id = $this->input->post('evaluatee_id');
+        $answers = $this->input->post('answers');
 
-    foreach ($answers as $question_id => $answer_value) {
-        $data = [
+        foreach ($answers as $question_id => $answer_value) {
+            $data = [
+                'questioner_id' => $questioner_id,
+                'evaluator_id' => $evaluator_id,
+                'evaluatee_id' => $evaluatee_id,
+                'question_id' => $question_id,
+                'nilai' => $answer_value
+            ];
+            $this->db->insert('questioner_answers', $data);
+        }
+
+        $data_qs = [
+            'questioner_id' => $questioner_id,
             'evaluator_id' => $evaluator_id,
             'evaluatee_id' => $evaluatee_id,
-            'question_id' => $question_id,
-            'answer' => $answer_value,
-            'aspect' => 'Kemampuan'
+            'type' => 'supervisor',
+            'status' => 'completed'
         ];
-        $this->db->insert('questioner_answers', $data);
-    }
 
-    $this->session->set_flashdata('success', 'Penilaian atasan berhasil disimpan');
-    redirect('questioner');
-}
+        $save = $this->db->insert('questioner_status', $data_qs);
+        if ($save) {
+            $this->session->set_flashdata('success', 'Penilaian Atasan berhasil disimpan');
+            redirect('questioner/index/'. $questioner_id);
+        }
+        
+        $this->session->set_flashdata('error', 'Penilaian Atasan Gagal');
+        redirect('questioner/index/'. $questioner_id);
+
+        // $this->session->set_flashdata('success', 'Penilaian atasan berhasil disimpan');
+        // redirect('questioner');
+    }
 
 }

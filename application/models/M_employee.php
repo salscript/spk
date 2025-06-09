@@ -68,7 +68,7 @@ public function is_pic($user_id)
 
     if ($query->num_rows() > 0) {
         $position_name = strtolower($query->row()->name);
-        return $position_name === 'pic'; // atau sesuaikan jika nama posisi di tabel bukan 'PIC'
+        return $position_name === 'supervisor'; // atau sesuaikan jika nama posisi di tabel bukan 'PIC'
     }
 
     return false;
@@ -77,10 +77,12 @@ public function is_pic($user_id)
     public function get_employee_details($evaluatee_id){
         $this->db->select("
             e.user_id as id,
-            e.fullname as fullname
+            e.fullname as fullname,
+            p.name as position_name
         ");
         $this->db->from("employee e");
         $this->db->join("user u", "u.id = e.user_id", 'left');
+        $this->db->join("position p", "p.id = e.position_id", "left");
         $this->db->where("u.id", $evaluatee_id);
         return $this->db->get()->row();
     }

@@ -81,7 +81,7 @@
                      <?php endforeach; ?>
 
                      <button type="submit" class="btn btn-success">Kirim Penilaian</button>
-                     <a href="<?= site_url('questioner') ?>" class="btn btn-secondary">Batal</a>
+                     <!-- <a href="<?= site_url('questioner') ?>" class="btn btn-secondary">Batal</a> -->
                   </form>
                  </div>
                </div>

@@ -31,13 +31,14 @@ class Auth extends CI_Controller
             $msg = ['error' => 'User Not Active'];
          } else {
            $session = array(
-   'id_user'   => $user->id_user,
-   'code_user' => $user->code_user,
-   'email'     => $user->email,
-   'fullname'  => $user->fullname,
-   'role_id'   => $user->role_id,
-   'avatar'    => $user->avatar,
-   'logged_in' => TRUE // <--- ini yang penting!
+            'id_user'   => $user->id_user,
+            'code_user' => $user->code_user,
+            'email'     => $user->email,
+            'fullname'  => $user->fullname,
+            'role_id'   => $user->role_id,
+            'avatar'    => $user->avatar,
+            'position'  => $user->position_name,
+            'logged_in' => TRUE // <--- ini yang penting!
 );
             $this->session->set_userdata($session);
             if ($user->role_id === '1') {

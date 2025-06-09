@@ -12,10 +12,12 @@ class M_auth extends CI_Model
             u.role_id as role_id,
             u.avatar as avatar,
             u.status as status,
-            e.fullname as fullname
+            e.fullname as fullname,
+            p.position_name as position_name
       ");
       $this->db->from('user u');
       $this->db->join('employee e', 'e.user_id = u.id');
+      $this->db->join('position p', 'p.id = e.position_id', 'left');
       $this->db->where('u.email', $email);
       $this->db->where('u.password', $password);
       return $this->db->get()->row();

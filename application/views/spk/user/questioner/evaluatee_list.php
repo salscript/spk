@@ -25,58 +25,60 @@
          <div class="row mt-2">
             <div class="col-12">
                 <div class="tab-content">
-                    <div class="tab-pane active" id="tab_peer">
-                        <div class="card">
-                           <div class="card-body table-responsive text-sm">
-                              <table id="example1" class="table table-head-fixed text-nowrap">
-                                 <thead>
-                                    <tr>
-                                       <th class="col-md-1 font-weight-normal text-sm">No</th>
-                                       <th class="font-weight-normal text-sm">Nama</th>
-                                       <th class="font-weight-normal text-sm">Jabatan</th>
-                                       <th class="font-weight-normal text-sm">Divisi</th>
-                                       <th class="font-weight-normal text-sm">Status</th>
-                                       <th class="font-weight-normal text-sm">Waktu Penilaian</th>
-                                       <th class="col-md-2 font-weight-normal text-sm">Action</th>
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                     <?php 
-                                     $no = 1;
-                                     foreach ($peer_questioners as $peer): ?>
-                                        <tr class="<?= ($peer->status == 'completed') ? 'success' : 'warning' ?>">
-                                            <td><?= $no++ ?></td>
-                                            <td><?= $peer->fullname ?></td>
-                                            <td><?= $peer->position_name ?></td>
-                                            <td><?= $peer->division_name ?></td>
-                                            <td>
-                                                <?php if ($peer->status == 'completed'): ?>
-                                                    <span class="label label-success">Selesai</span>
-                                                <?php else: ?>
-                                                    <span class="label label-warning">Belum Dinilai</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                                <?= $peer->created_on ? date('d/m/Y H:i', strtotime($peer->created_on)) : '-' ?>
-                                            </td>
-                                            <td>
-                                                <?php if ($peer->status != 'completed'): ?>
-                                                    <button class="btn btn-primary btn-sm" onclick="nilai_questioner(<?=$peer->id?>, <?=$questioner_id?>)">
-                                                        <i class="fa fa-edit"></i> Nilai
-                                                    </button>
-                                                <?php else: ?>
-                                                    <span class="badge bg-green"><i class="fa fa-check"></i> Selesai</span>
-                                                <?php endif; ?>
-                                            </td>
-                                        </tr>   
-                                    <?php endforeach; ?>
-                                 </tbody>
-                              </table>
-                           </div>
+                    <?php if(!$is_pic && !$is_hrd) :?> 
+                        <div class="tab-pane <?= (!$is_pic && !$is_hrd) ? 'active' : '' ?>" id="tab_peer">
+                            <div class="card">
+                               <div class="card-body table-responsive text-sm">
+                                  <table id="example1" class="table table-head-fixed text-nowrap">
+                                     <thead>
+                                        <tr>
+                                           <th class="col-md-1 font-weight-normal text-sm">No</th>
+                                           <th class="font-weight-normal text-sm">Nama</th>
+                                           <th class="font-weight-normal text-sm">Jabatan</th>
+                                           <th class="font-weight-normal text-sm">Divisi</th>
+                                           <th class="font-weight-normal text-sm">Status</th>
+                                           <th class="font-weight-normal text-sm">Waktu Penilaian</th>
+                                           <th class="col-md-2 font-weight-normal text-sm">Action</th>
+                                        </tr>
+                                     </thead>
+                                     <tbody>
+                                         <?php 
+                                         $no = 1;
+                                         foreach ($peer_questioners as $peer): ?>
+                                            <tr class="<?= ($peer->status == 'completed') ? 'success' : 'warning' ?>">
+                                                <td><?= $no++ ?></td>
+                                                <td><?= $peer->fullname ?></td>
+                                                <td><?= $peer->position_name ?></td>
+                                                <td><?= $peer->division_name ?></td>
+                                                <td>
+                                                    <?php if ($peer->status == 'completed'): ?>
+                                                        <span class="label label-success">Selesai</span>
+                                                    <?php else: ?>
+                                                        <span class="label label-warning">Belum Dinilai</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $peer->created_on ? date('d/m/Y H:i', strtotime($peer->created_on)) : '-' ?>
+                                                </td>
+                                                <td>
+                                                    <?php if ($peer->status != 'completed'): ?>
+                                                        <button class="btn btn-primary btn-sm" onclick="peer_questioner(<?=$peer->id?>, <?=$questioner_id?>)">
+                                                            <i class="fa fa-edit"></i> Nilai
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-green"><i class="fa fa-check"></i> Selesai</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                            </tr>   
+                                        <?php endforeach; ?>
+                                     </tbody>
+                                  </table>
+                               </div>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif;?>
                     <?php if($is_pic || $is_hrd): ?>
-                        <div class="tab-pane" id="tab_supervisor">
+                        <div class="tab-pane <?= ($is_pic || $is_hrd) ? 'active' : '' ?>" id="tab_supervisor">
                             <div class="card">
                                 <div class="card-body table-responsive text-sm">
                                     <table id="example1" class="table table-head-fixed text-nowrap">
@@ -108,13 +110,13 @@
                                                         <?php endif; ?>
                                                     </td>
                                                     <td>
-                                                        <?= $supervisor->created_at ? date('d/m/Y H:i', strtotime($supervisor->created_at)) : '-' ?>
+                                                        <?= $supervisor->created_on ? date('d/m/Y H:i', strtotime($supervisor->created_on)) : '-' ?>
                                                     </td>
                                                     <td>
                                                         <?php if ($supervisor->status != 'completed'): ?>
-                                                            <a href="<?= site_url('questioner/supervisor/'.$supervisor->id) ?>" class="btn btn-primary btn-xs">
+                                                            <button class="btn btn-primary btn-sm" onclick="supervisor_questioner(<?=$supervisor->id?>, <?=$questioner_id?>)">
                                                                 <i class="fa fa-edit"></i> Nilai
-                                                            </a>
+                                                            </button>
                                                         <?php else: ?>
                                                             <span class="badge bg-green"><i class="fa fa-check"></i> Selesai</span>
                                                         <?php endif; ?>
@@ -144,8 +146,13 @@
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
    });
 
-   function nilai_questioner($evaluatee_id, $questioner_id){
+   function peer_questioner($evaluatee_id, $questioner_id){
     url = `questioner/peer?evaluatee_id=${$evaluatee_id}&questioner_id=${$questioner_id}`;
+    window.location.href= "<?= base_url() ?>" + url;
+   }
+
+   function supervisor_questioner($evaluatee_id, $questioner_id){
+    url = `questioner/supervisor?evaluatee_id=${$evaluatee_id}&questioner_id=${$questioner_id}`;
     window.location.href= "<?= base_url() ?>" + url;
    }
 
