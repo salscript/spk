@@ -39,7 +39,7 @@ class Auth extends CI_Controller
             'avatar'    => $user->avatar,
             'position'  => $user->position_name,
             'logged_in' => TRUE // <--- ini yang penting!
-);
+         );
             $this->session->set_userdata($session);
             if ($user->role_id === '1') {
                $msg = [

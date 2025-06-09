@@ -116,7 +116,7 @@ class Questioner extends CI_Controller {
         );
 
         // var_dump("user_id:", $user_id, "employee_id", $employee_id, $data);
-
+        // var_dump($data['supervisor_questioners']);
         $this->template->load('spk/template_user', 'spk/user/questioner/evaluatee_list.php', $data);
     }
 

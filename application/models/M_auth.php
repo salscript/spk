@@ -13,7 +13,7 @@ class M_auth extends CI_Model
             u.avatar as avatar,
             u.status as status,
             e.fullname as fullname,
-            p.position_name as position_name
+            p.name as position_name
       ");
       $this->db->from('user u');
       $this->db->join('employee e', 'e.user_id = u.id');
