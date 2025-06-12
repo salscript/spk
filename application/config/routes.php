@@ -59,3 +59,8 @@ $route['questioner/peer/(:num)'] = 'questioner/peer/$1';
 $route['questioner/supervisor/(:num)'] = 'questioner/supervisor/$1';
 $route['questioner/submit_peer'] = 'questioner/submit_peer';
 $route['questioner/submit_supervisor'] = 'questioner/submit_supervisor';
+$route['questioner/toggle_status/(:num)'] = 'questioner/toggle_status/$1';
+
+
+
+

@@ -20,6 +20,7 @@
          </div>
       </div>
    </section>
+
    <section class="content">
       <div class="container-fluid">
          <div class="row mt-2">
@@ -28,36 +29,58 @@
                   <div class="card-body table-responsive text-sm">
                      <table id="example1" class="table table-head-fixed text-nowrap">
                         <thead>
-                        <tr>
-                              <th class="col-md-1 font-weight-normal text-sm">No</th>
-                              <th class="font-weight-normal text-sm">Code</th>
-                              <th class="font-weight-normal text-sm">Deadline</th>
-                              <th class="font-weight-normal text-sm">Status</th>
-                              <th class="col-md-2 font-weight-normal text-sm">Action</th>
+                           <tr>
+                              <th>No</th>
+                              <th>Code</th>
+                              <th>Deadline</th>
+                              <th>Status</th>
+                              <th>Action</th>
+                              <th>Rekap Nilai</th>
                            </tr>
                         </thead>
                         <tbody>
-                           <?php
-                           $no = 1;
-                           foreach ($questioner as $row) { ?>
+                           <?php $no = 1; foreach ($questioner as $row): ?>
                               <tr>
                                  <td><?= $no++ ?></td>
                                  <td><?= $row->code_questioner ?></td>
-                                 <td><?= $row->deadline ?></td>
-                                 <td><?= ($row->status == '1') ? 'Active' : 'Non Active'; ?></td>
+                                 <td><?= date('d-m-Y H:i', strtotime($row->deadline)) ?></td>
                                  <td>
-                                    <button title="Show" class="btn btn-sm btn-primary" onclick="show_questioner(<?= $row->id ?>);">
+                                    <?php if ($row->status == '1'): ?>
+                                       <span class="badge badge-success">Active</span>
+                                    <?php else: ?>
+                                       <span class="badge badge-secondary">Non Active</span>
+                                    <?php endif; ?>
+                                 </td>
+                                 <td>
+                                    <a href="<?= base_url('questioner/monitoring/'.$row->id) ?>" 
+                                       class="btn btn-sm btn-primary" 
+                                       title="Monitoring Belum Mengisi">
                                        <i class="fa fa-eye"></i>
-                                    </button>
-                                    <button title="Update" class="btn btn-sm btn-success" onclick="get_questioner(<?= $row->id ?>);">
-                                       <i class="fa fa-edit"></i>
-                                    </button>
+                                    </a>
+
+                                    <a href="<?= base_url('questioner/toggle_status/'.$row->id) ?>" 
+                                       class="btn btn-sm <?= $row->status == 1 ? 'btn-success' : 'btn-secondary' ?>" 
+                                       title="<?= $row->status == 1 ? 'Nonaktifkan Kuisioner' : 'Aktifkan Kuisioner' ?>">
+                                       <i class="fas <?= $row->status == 1 ? 'fa-toggle-on' : 'fa-toggle-off' ?>"></i>
+                                    </a>
+
+                                    <button onclick="window.location.href='<?= base_url('questioner/edit_questioner/'.$row->id) ?>'" class="btn btn-sm btn-warning">
+                                    <i class="fa fa-edit"></i>
+                                     </button>
                                     <button title="Delete" onclick="deleteConfirm(<?= $row->id ?>);" class="btn btn-sm btn-danger">
                                        <i class="fa fa-trash"></i>
                                     </button>
                                  </td>
+                                    <td>
+                                    <a href="<?= base_url('questioner/rekap_format_sederhana/'.$row->id) ?>"
+                                       class="btn btn-sm btn-info"
+                                       title="Lihat Rekap Nilai">
+                                       <i class="fa fa-chart-bar"></i> Rekap
+                                    </a>
+                                 </td>
+
                               </tr>
-                           <?php } ?>
+                           <?php endforeach; ?>
                         </tbody>
                      </table>
                   </div>
@@ -79,21 +102,21 @@
    });
 
    function crtQuestioner() {
-      window.location.href = "<?= base_url('questioner/new_questioner') ?>"
+      window.location.href = "<?= base_url('questioner/new_questioner') ?>";
    }
 
    function get_questioner(id) {
-      if (id != "") {
+      if (id) {
          window.location.href = "<?= base_url('questioner/edit_questioner/') ?>" + id;
       } else {
-         alert('Oops.!!');
+         alert('Oops.!! ID tidak ditemukan');
       }
    }
 
    function deleteConfirm(id) {
       Swal.fire({
          title: 'Are you sure?',
-         text: `You won't be able to revert this`,
+         text: "You won't be able to revert this!",
          icon: 'warning',
          showCancelButton: true,
          confirmButtonColor: '#3085d6',
@@ -101,31 +124,34 @@
          confirmButtonText: 'Yes, delete it!',
          cancelButtonText: 'Cancel'
       }).then((result) => {
-         if (result.value) {
+         if (result.isConfirmed) {
             $.ajax({
                type: "post",
-               url: "<?php echo base_url('questioner/delete_questioner') ?>",
-               data: {
-                  id_question: id,
-               },
+               url: "<?= base_url('questioner/delete_questioner') ?>",
+               data: { id_question: id },
                dataType: "json",
                success: function(response) {
                   if (response.success) {
                      Swal.fire({
                         icon: 'success',
-                        title: 'konfirmasi',
+                        title: 'Deleted!',
                         text: response.success,
-                        showCancelButton: false,
-                        showConfirmButton: false
+                        showConfirmButton: false,
+                        timer: 1000
                      });
                      setTimeout(function() {
                         location.reload();
                      }, 1000);
+                  } else {
+                     Swal.fire('Error', response.error || 'Gagal menghapus data.', 'error');
                   }
+               },
+               error: function() {
+                  Swal.fire('Error', 'Terjadi kesalahan saat menghapus data.', 'error');
                }
             });
          }
-      })
+      });
    }
 
    function reload() {

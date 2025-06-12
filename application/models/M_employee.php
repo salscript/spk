@@ -74,17 +74,41 @@ public function is_pic($user_id)
     return false;
 }
 
-    public function get_employee_details($evaluatee_id){
-        $this->db->select("
-            e.user_id as id,
-            e.fullname as fullname,
-            p.name as position_name
-        ");
-        $this->db->from("employee e");
-        $this->db->join("user u", "u.id = e.user_id", 'left');
-        $this->db->join("position p", "p.id = e.position_id", "left");
-        $this->db->where("u.id", $evaluatee_id);
-        return $this->db->get()->row();
-    }
+  public function get_employee_details($employee_id){
+    $this->db->select("
+        e.id,
+        e.user_id,
+        e.fullname,
+        e.sub_divisi,
+        p.name as position_name,
+        p.level_position,
+        d.name as division_name
+    ");
+    $this->db->from("employee e");
+    $this->db->join("user u", "u.id = e.user_id", 'left');
+    $this->db->join("position p", "p.id = e.position_id", "left");
+    $this->db->join("employee_division ed", "ed.employee_id = e.id", "left");
+    $this->db->join("division d", "d.id = ed.division_id", "left");
+    $this->db->where("e.id", $employee_id);
+    return $this->db->get()->row();
+}
+
+
+
+    public function get_all_employees() {
+    $this->db->select('employee.*, position.level_position');
+    $this->db->from('employee');
+    $this->db->join('position', 'employee.position_id = position.id', 'left');
+    return $this->db->get()->result();
+}
+
+public function get_division_id($employee_id) {
+    $this->db->select('division_id');
+    $this->db->from('employee_division');
+    $this->db->where('employee_id', $employee_id);
+    $res = $this->db->get()->row();
+    return $res ? $res->division_id : null;
+}
+
     
 }

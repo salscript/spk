@@ -178,12 +178,34 @@ class M_questioner extends CI_Model {
     // Validasi relasi penilaian atasan: evaluator lebih tinggi level & di divisi sama
     public function validate_supervisor_relation($evaluator_id, $evaluatee_id) {
         // Contoh logika: evaluator harus managerial (level 1), evaluatee harus non-managerial (level 2)
-        $eval = $this->db->get_where('employee_division', ['employee_id' => $evaluator_id])->row();
-        $evale = $this->db->get_where('employee_division', ['employee_id' => $evaluatee_id])->row();
+        // $eval = $this->db->get_where('employee_division', ['employee_id' => $evaluator_id])->row();
+        // $evale = $this->db->get_where('employee_division', ['employee_id' => $evaluatee_id])->row();
 
-        if (!$eval || !$evale) return false;
+        // if (!$eval || !$evale) return false;
 
-        return ($eval->division_id == $evale->division_id);
+        // return ($eval->division_id == $evale->division_id); 
+
+        $this->db->select('e.id, e.position_id, p.name as position_name');
+        $this->db->from('employee e');
+        $this->db->join('position p', 'e.position_id = p.id');
+        $this->db->where('e.id', $evaluator_id);
+        $evaluator = $this->db->get()->row();
+
+        if (!$evaluator) return false;
+
+        // Jika evaluator adalah HRD (berdasarkan nama posisi)
+        if (strtolower($evaluator->position_name) == 'hrd') {
+            return true;
+        }
+
+        // Jika bukan HRD, cek divisinya
+        $eval_div = $this->db->get_where('employee_division', ['employee_id' => $evaluator_id])->row();
+        $evale_div = $this->db->get_where('employee_division', ['employee_id' => $evaluatee_id])->row();
+
+        if (!$eval_div || !$evale_div) return false;
+
+        return ($eval_div->division_id == $evale_div->division_id);
+
     }
 
 
@@ -217,4 +239,118 @@ class M_questioner extends CI_Model {
         $this->db->trans_complete();
         return $this->db->trans_status();
     }
+
+ public function get_monitoring_kuisioner($questioner_id)
+{
+    $this->load->model('M_employee');
+    $this->load->model('M_position');
+
+    $employees = $this->M_employee->get_all_employees();
+    $result = [];
+
+    foreach ($employees as $evaluator) {
+        $evaluator_pos = $this->M_position->get_position_employee($evaluator->id);
+        $evaluator_div = $this->M_employee->get_division_id($evaluator->id);
+
+        if (!$evaluator_pos || !$evaluator_div) continue;
+
+        foreach ($employees as $evaluatee) {
+            if ($evaluator->id == $evaluatee->id) continue;
+
+            $evaluatee_pos = $this->M_position->get_position_employee($evaluatee->id);
+            $evaluatee_div = $this->M_employee->get_division_id($evaluatee->id);
+
+            if (!$evaluatee_pos || !$evaluatee_div) continue;
+
+            $relation_type = null;
+
+            // === HRD menilai semua MANAGERIAL ===
+            if (
+                $evaluator_pos->level_position == 'hrd' &&
+                $evaluatee_pos->level_position == 'managerial'
+            ) {
+                $relation_type = 'supervisor';
+            }
+            // === SESAMA MANAGERIAL di divisi sama => PEER ===
+            elseif (
+                $evaluator_pos->level_position == 'managerial' &&
+                $evaluatee_pos->level_position == 'managerial' &&
+                $evaluator_div == $evaluatee_div
+            ) {
+                $relation_type = 'peer';
+            }
+            // === MANAGERIAL menilai SENIOR/STAFF di divisi sama => SUPERVISOR ===
+            elseif (
+                $evaluator_pos->level_position == 'managerial' &&
+                in_array($evaluatee_pos->level_position, ['senior_staff', 'staff']) &&
+                $evaluator_div == $evaluatee_div
+            ) {
+                $relation_type = 'supervisor';
+            }
+            // === REKAN KERJA di divisi & sub divisi sama => PEER ===
+            elseif (
+                $evaluator_div == $evaluatee_div &&
+                $evaluator->sub_divisi != null &&
+                $evaluator->sub_divisi == $evaluatee->sub_divisi
+            ) {
+                $relation_type = 'peer';
+            }
+
+            // Jika ada hubungan valid, cek apakah sudah ada di questioner_status
+            if ($relation_type) {
+                $this->db->where([
+                    'questioner_id' => $questioner_id,
+                    'evaluator_id' => $evaluator->id,
+                    'evaluatee_id' => $evaluatee->id,
+                    'type' => $relation_type
+                ]);
+                $status_row = $this->db->get('questioner_status')->row();
+
+                $result[] = [
+                    'evaluator' => $this->M_employee->get_employee_details($evaluator->id),
+                    'evaluatee' => $this->M_employee->get_employee_details($evaluatee->id),
+                    'type' => $relation_type,
+                    'status' => $status_row ? $status_row->status : 'pending'
+                ];
+            }
+        }
+    }
+
+    return $result;
+}
+
+public function auto_deactivate_expired_questioners()
+{
+    $now = date('Y-m-d H:i:s');
+    $this->db->where('deadline <', $now);
+    $this->db->where('status', 1); // hanya yang masih aktif
+    $this->db->update('questioner', ['status' => 0]);
+}
+
+public function get_by_id($id)
+{
+    return $this->db->get_where('questioner', ['id' => $id])->row();
+}
+
+public function get_latest_active_questioner()
+{
+    $this->db->where('status', 1);
+    $this->db->where('deadline >=', date('Y-m-d H:i:s'));
+    $this->db->order_by('deadline', 'ASC');
+    $this->db->limit(1);
+    return $this->db->get('questioner')->row();
+}
+
+
+public function get_questioner_by_Id($id)
+{
+    return $this->db->get_where('questioner', ['id' => $id])->row();
+}
+
+public function updateQuestioner($id, $data)
+{
+    $this->db->where('id', $id);
+    return $this->db->update('questioner', $data);
+}
+
 }
