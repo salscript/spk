@@ -353,4 +353,25 @@ public function updateQuestioner($id, $data)
     return $this->db->update('questioner', $data);
 }
 
+public function get_rekap_rata_rata_kriteria($questioner_id) {
+    $this->db->select("
+        e.fullname AS employee_name,
+        c.name AS criteria_name,
+        a.name AS aspect_name,
+        qs.type AS penilaian_type,
+        ROUND(AVG(qa.nilai), 0) AS avg_score
+    ");
+    $this->db->from("questioner_answers qa");
+    $this->db->join("employee e", "e.user_id = qa.evaluatee_id");
+    $this->db->join("question q", "q.id = qa.question_id");
+    $this->db->join("criteria c", "c.id = q.criteria_id");
+    $this->db->join("aspect a", "a.id = c.aspect_id");
+    $this->db->join("questioner_status qs", "qs.questioner_id = qa.questioner_id AND qs.evaluator_id = qa.evaluator_id AND qs.evaluatee_id = qa.evaluatee_id");
+    $this->db->where("qa.questioner_id", $questioner_id);
+    $this->db->group_by(["qa.evaluatee_id", "c.id", "qs.type"]);
+    $this->db->order_by("e.fullname, a.name, c.name");
+    return $this->db->get()->result();
+}
+
+
 }

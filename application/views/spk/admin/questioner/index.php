@@ -72,11 +72,11 @@
                                     </button>
                                  </td>
                                     <td>
-                                    <a href="<?= base_url('questioner/rekap_format_sederhana/'.$row->id) ?>"
-                                       class="btn btn-sm btn-info"
-                                       title="Lihat Rekap Nilai">
-                                       <i class="fa fa-chart-bar"></i> Rekap
-                                    </a>
+                                   <a href="<?= base_url('questioner/rekap_nilai/' . $row->id) ?>" 
+                                    class="btn btn-sm btn-info" 
+                                    title="Rekap Nilai Rata-rata">
+                                    <i class="fa fa-chart-bar"></i>
+                                 </a>
                                  </td>
 
                               </tr>

@@ -363,10 +363,16 @@ public function toggle_status($id)
         }
      }
 
-     public function rekap_format_sederhana($questioner_id) {
-    $data['title'] = "Rekap Penilaian Kuisioner";
-    $data['rekap'] = $this->M_questioner->get_rekap_format_sederhana($questioner_id);
-    $this->template->load('spk/template_admin', 'spk/admin/questioner/rekap_sederhana', $data);
+    public function rekap_nilai($questioner_id) {
+    $this->load->model('M_questioner');
+
+    $data['title'] = 'Rekap Nilai Rata-Rata Kuisioner';
+    $data['questioner_id'] = $questioner_id;
+    $data['rekap'] = $this->M_questioner->get_rekap_rata_rata_kriteria($questioner_id);
+
+    $this->template->load('spk/template_admin', 'spk/admin/questioner/rekap_nilai', $data);
 }
+
+
 
 }
