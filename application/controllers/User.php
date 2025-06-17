@@ -7,8 +7,6 @@ class User extends MY_Controller
    {
       parent::__construct();
       cek_login();
-      check_admin();
-      check_operator();
       $this->load->model('M_user');
       $this->load->model('M_userrole');
       $this->load->model('M_position');
@@ -16,42 +14,67 @@ class User extends MY_Controller
    }
 
    public function user()
-   {
-      $data['user'] = $this->M_user->get_all_users();
-      foreach ($data['user'] as $key => $user) {
-         $division = $this->M_division->get_division_by_user_id($user->id);
-         $data['user'][$key]->divisions = $division;
-      }
+{
+    $data['user'] = $this->M_user->get_all_users();
+    foreach ($data['user'] as $key => $user) {
+        $division = $this->M_division->get_division_by_user_id($user->id);
+        $data['user'][$key]->divisions = $division;
+    }
 
-      $this->template->load('spk/template_admin', 'spk/admin/user/index', $data);
-      $this->template->load('spk/template_operator', 'spk/operator/user/index', $data);
-   }
+    $role = $this->session->userdata('role');
+
+    if ($role == 'admin') {
+        $this->template->load('spk/template_admin', 'spk/admin/user/index', $data);
+    } elseif ($role == 'operator') {
+        $this->template->load('spk/template_operator', 'spk/operator/user/index', $data);
+    } else {
+        show_error('Access Denied', 403, 'Unauthorized Role');
+    }
+}
+
 
    public function new_user()
-   {
-      $data['code_user'] = $this->M_user->code_user();
-      $data['role'] = $this->M_userrole->get_all_roles();
-      $data['position'] = $this->M_position->get_all_position();
-      $data['division'] = $this->M_division->get_all_division();
-      $this->template->load('spk/template_admin', 'spk/admin/user/addUser', $data);
-      $this->template->load('spk/template_operator', 'spk/operator/user/addUser', $data);
-   }
+{
+    $data['code_user'] = $this->M_user->code_user();
+    $data['role'] = $this->M_userrole->get_all_roles();
+    $data['position'] = $this->M_position->get_all_position();
+    $data['division'] = $this->M_division->get_all_division();
+
+    $role = $this->session->userdata('role');
+
+    if ($role == 'admin') {
+        $this->template->load('spk/template_admin', 'spk/admin/user/addUser', $data);
+    } elseif ($role == 'operator') {
+        $this->template->load('spk/template_operator', 'spk/operator/user/addUser', $data);
+    } else {
+        show_error('Access Denied', 403, 'Unauthorized Role');
+    }
+}
+
 
    public function edit_user($id_user)
-   {
-      $data['user'] = $this->M_user->get_user_by_id($id_user);
-      $data['role'] = $this->M_userrole->get_all_roles();
-      $data['position'] = $this->M_position->get_all_position();
-      $data['division'] = $this->M_division->get_all_division();
+{
+    $data['user'] = $this->M_user->get_user_by_id($id_user);
+    $data['role'] = $this->M_userrole->get_all_roles();
+    $data['position'] = $this->M_position->get_all_position();
+    $data['division'] = $this->M_division->get_all_division();
 
-      $user_division = $this->M_division->get_division_by_user_id($id_user);
-      $data['user_division_ids'] = array_map(function($d) {
-         return $d->id;
-      }, $user_division);
+    $user_division = $this->M_division->get_division_by_user_id($id_user);
+    $data['user_division_ids'] = array_map(function($d) {
+        return $d->id;
+    }, $user_division);
 
-      $this->template->load('spk/template_admin', 'spk/admin/user/editUser', $data);
-      $this->template->load('spk/template_operator', 'spk/operator/user/editUser', $data);
-   }
+    $role = $this->session->userdata('role');
+
+    if ($role == 'admin') {
+        $this->template->load('spk/template_admin', 'spk/admin/user/editUser', $data);
+    } elseif ($role == 'operator') {
+        $this->template->load('spk/template_operator', 'spk/operator/user/editUser', $data);
+    } else {
+        show_error('Access Denied', 403, 'Unauthorized Role');
+    }
+}
+
 
    public function save_user()
    {

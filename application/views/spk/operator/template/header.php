@@ -24,11 +24,11 @@
                     </div>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="<?php echo base_url('dashboard/admin') ?>" class="dropdown-item text-sm">
+                <a href="<?php echo base_url('dashboard/operator') ?>" class="dropdown-item text-sm">
                     Dashboard
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="<?php echo base_url('account/account_admin') ?>" class="dropdown-item text-sm">
+                <a href="<?php echo base_url('account/account_operator') ?>" class="dropdown-item text-sm">
                     Account Settings
                 </a>
                 <div class="dropdown-divider"></div>

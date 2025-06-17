@@ -1,11 +1,11 @@
-<?php $this->load->view('spk/admin/template/meta'); ?>
+<?php $this->load->view('spk/operator/template/meta'); ?>
 <div class="wrapper">
-    <?php $this->load->view('spk/admin/template/header'); ?>
-    <?php $this->load->view('spk/admin/template/sidebar'); ?>
+    <?php $this->load->view('spk/operator/template/header'); ?>
+    <?php $this->load->view('spk/operator/template/sidebar'); ?>
         <script src="<?= base_url() ?>assets/back/plugins/jquery/jquery.min.js"></script>
 
     <?php echo $contents; ?>
-    <!-- <?php $this->load->view('spk/admin/template/footer'); ?> -->
+    <!-- <?php $this->load->view('spk/operator/template/footer'); ?> -->
      
 </div>
-<?php $this->load->view('spk/admin/template/script'); ?>
+<?php $this->load->view('spk/operator/template/script'); ?>
