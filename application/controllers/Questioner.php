@@ -387,6 +387,7 @@ public function toggle_status($id)
            echo json_encode($msg);
         }
      }
+
      public function create()
 {
     $this->load->model('M_questioner');
