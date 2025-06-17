@@ -136,7 +136,7 @@ class M_questioner extends CI_Model {
                 ->join('position p', 'p.id = e.position_id')
                 ->join('employee_division ed', 'ed.employee_id = e.id')
                 ->join('division d', 'd.id = ed.division_id')
-                ->join('questioner_status qs', "qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id", 'left')
+                ->join('questioner_status qs', "qs.questioner_id = $id AND qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id", 'left')
                 ->where('ed.division_id', $evaluator->division_id)
                 ->where('p.level_position !=', 'hrd')
                 ->where('e.id !=', $employee_id)
