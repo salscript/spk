@@ -110,5 +110,17 @@ public function get_division_id($employee_id) {
     return $res ? $res->division_id : null;
 }
 
-    
+public function get_all_aktif()
+{
+    $this->db->select('e.id, e.fullname, p.name as position_name, p.level_position');
+    $this->db->from('employee e');
+    $this->db->join('position p', 'e.position_id = p.id', 'left');
+    $this->db->join('user u', 'u.id = e.user_id', 'left');
+    $this->db->where_not_in('u.role_id', [1, 3]); // ❌ role_id admin dan operator
+     $this->db->where_not_in('p.level_position', ['admin', 'operator', 'hrd']);
+    return $this->db->get()->result();
+}
+
+
+
 }

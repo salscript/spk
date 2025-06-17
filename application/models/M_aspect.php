@@ -58,4 +58,10 @@ class M_aspect extends CI_Model
     {
         return $this->db->delete('aspect', ['id' => $id]);
     }
+
+public function get_all()
+    {
+        return $this->db->get('aspect')->result();
+    }
 }
+

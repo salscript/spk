@@ -353,13 +353,34 @@ public function updateQuestioner($id, $data)
     return $this->db->update('questioner', $data);
 }
 
-public function get_rekap_rata_rata_kriteria($questioner_id) {
+public function get_rekap_rata_rata_kriteria($questioner_id)
+{
     $this->db->select("
+        e.id AS employee_id,
         e.fullname AS employee_name,
+        c.id AS criteria_id,
         c.name AS criteria_name,
         a.name AS aspect_name,
         qs.type AS penilaian_type,
+
+        COUNT(DISTINCT qa.evaluator_id) AS jumlah_penilai,
+
+        (
+            SELECT COUNT(*) FROM question q2 
+            WHERE q2.criteria_id = c.id
+        ) AS jumlah_pertanyaan,
+
+        (
+            SELECT COUNT(*) 
+            FROM questioner_status qs2 
+            WHERE qs2.questioner_id = $questioner_id 
+              AND qs2.evaluatee_id = qa.evaluatee_id 
+              AND qs2.type = qs.type
+        ) AS expected_evaluator_count,
+
+        SUM(qa.nilai) AS total_nilai,
         ROUND(AVG(qa.nilai), 0) AS avg_score
+
     ");
     $this->db->from("questioner_answers qa");
     $this->db->join("employee e", "e.user_id = qa.evaluatee_id");
@@ -370,8 +391,29 @@ public function get_rekap_rata_rata_kriteria($questioner_id) {
     $this->db->where("qa.questioner_id", $questioner_id);
     $this->db->group_by(["qa.evaluatee_id", "c.id", "qs.type"]);
     $this->db->order_by("e.fullname, a.name, c.name");
+
     return $this->db->get()->result();
 }
 
+public function get_all()
+{
+    $this->db->order_by('created_on', 'DESC');
+    return $this->db->get('questioner')->result();
+}
+
+public function generate_code_questioner()
+{
+    $bulan = date('n'); // angka bulan (1–12)
+    $tahun = date('Y'); // tahun sekarang
+
+    // Daftar nama bulan
+    $nama_bulan = [
+        1 => 'JANUARI', 2 => 'FEBRUARI', 3 => 'MARET', 4 => 'APRIL',
+        5 => 'MEI', 6 => 'JUNI', 7 => 'JULI', 8 => 'AGUSTUS',
+        9 => 'SEPTEMBER', 10 => 'OKTOBER', 11 => 'NOVEMBER', 12 => 'DESEMBER'
+    ];
+
+    return 'Q-' . $nama_bulan[$bulan] . '-' . $tahun;
+}
 
 }

@@ -29,14 +29,15 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="<?php echo base_url('result/admin') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'result') echo 'active' ?>">
-                        <i class="nav-icon fas fa-file-alt"></i>
-                        <p>
-                            Result
-                        </p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+           <a href="<?= base_url('perhitungan/laporan_hasil') ?>" class="nav-link">
+    <i class="nav-icon fas fa-print"></i>
+    <p>Laporan Bonus</p>
+</a>
+
+        </li>
+
+            </li>
                 <hr>
                 <li class="nav-header">ADMINISTRATION</li>
                 <li class="nav-item">
@@ -119,22 +120,19 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="<?php echo base_url('factor/factor') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'factor') echo 'active' ?>">
-                        <i class="nav-icon far fa-id-card"></i>
-                        <p>
-                            Proses Penilaian
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?php echo base_url('calculation/calculation') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'calculation') echo 'active' ?>">
-                        <i class="nav-icon fas fa-calculator"></i>
-                        <p>
-                            Proses Perhitungan
-                        </p>
-                    </a>
-                </li>
+              <li class="nav-item">
+                            <a href="<?= base_url('penilaian') ?>" class="nav-link <?= ($this->uri->segment(1) == 'penilaian') ? 'active' : '' ?>">
+                                <i class="nav-icon fas fa-tasks"></i>
+                                <p>Proses Penilaian</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('perhitungan/select') ?>" 
+                            class="nav-link <?= $this->uri->segment(2) == 'select' ? 'active' : '' ?>">
+                                <i class="nav-icon fas fa-calculator"></i>
+                                <p>Perhitungan Bonus</p>
+                            </a>
+                        </li>
             </ul>
                     </nav>
     </div>

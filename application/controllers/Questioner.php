@@ -362,17 +362,33 @@ public function toggle_status($id)
            echo json_encode($msg);
         }
      }
-
-    public function rekap_nilai($questioner_id) {
+     public function create()
+{
     $this->load->model('M_questioner');
 
-    $data['title'] = 'Rekap Nilai Rata-Rata Kuisioner';
+    $code = $this->M_questioner->generate_code_questioner();
+
+    $data = [
+        'code_questioner' => $code,
+        'created_on' => date('Y-m-d H:i:s'),
+        'deadline' => $this->input->post('deadline'), // kalau pakai deadline
+        'status' => 1
+    ];
+
+    $this->db->insert('questioner', $data);
+    $this->session->set_flashdata('success', 'Periode penilaian berhasil ditambahkan.');
+    redirect('questioner'); // atau halaman sesuai
+}
+
+
+   public function rekap_nilai($questioner_id) {
+    $this->load->model('M_questioner');
+
+    $data['title'] = 'Rekap Nilai Kuisioner';
     $data['questioner_id'] = $questioner_id;
     $data['rekap'] = $this->M_questioner->get_rekap_rata_rata_kriteria($questioner_id);
 
     $this->template->load('spk/template_admin', 'spk/admin/questioner/rekap_nilai', $data);
 }
-
-
 
 }

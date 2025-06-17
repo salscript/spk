@@ -69,4 +69,10 @@ class M_criteria extends CI_Model
     {
         return $this->db->delete('criteria', ['id' => $id]);
     }
+    
+    public function get_by_aspect($aspect_id)
+{
+    return $this->db->get_where('criteria', ['aspect_id' => $aspect_id])->result();
+}
+
 }

@@ -32,6 +32,8 @@
       <option value="senior_staff">Senior Staff</option>
       <option value="managerial">Managerial</option>
       <option value="hrd">HRD</option>
+       <option value="admin">Admin</option>
+      <option value="operator">Operator</option>
    </select>
 </div>
                   </div>

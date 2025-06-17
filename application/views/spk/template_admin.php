@@ -6,5 +6,6 @@
 
     <?php echo $contents; ?>
     <!-- <?php $this->load->view('spk/admin/template/footer'); ?> -->
+     
 </div>
 <?php $this->load->view('spk/admin/template/script'); ?>

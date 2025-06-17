@@ -79,4 +79,31 @@ class M_subkriteria extends CI_Model
     {
         return $this->db->delete('sub_criteria', ['id' => $id]);
     }
+
+    public function get_grouped()
+{
+    $result = [];
+    $query = $this->db->order_by('criteria_id', 'ASC')->order_by('value', 'DESC')->get('sub_criteria')->result();
+
+    foreach ($query as $row) {
+        $result[$row->criteria_id][] = $row;
+    }
+
+    return $result;
+}
+public function get_subkriteria_by_value($criteria_id, $value)
+{
+    $this->db->where('criteria_id', $criteria_id);
+    $this->db->where('value', $value); // nilai harus sama
+    return $this->db->get('sub_criteria')->row();
+}
+
+public function get_subkriteria_by_name($criteria_id, $name)
+{
+    $this->db->where('criteria_id', $criteria_id);
+    $this->db->where('name', $name); // cocokkan tepat dengan nama seperti "Staff"
+    return $this->db->get('sub_criteria')->row();
+}
+
+
 }
