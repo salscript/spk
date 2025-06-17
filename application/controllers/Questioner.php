@@ -36,7 +36,7 @@ class Questioner extends CI_Controller {
     
     public function questioner_user()
     {
-       $data['questioner'] = $this->M_questioner->get_all_questioners();
+    //    $data['questioner'] = $this->M_questioner->get_all_questioners();
        $data['questioner'] = $this->M_questioner->get_latest_active_questioner();
 
     //    var_dump($data);
@@ -138,8 +138,8 @@ class Questioner extends CI_Controller {
     $data = array(
         'questioner_id' => $id,
         'title' => 'Kuisioner Penilaian',
-        'peer_questioners' => $this->M_questioner->get_peer_questioners($employee_id),
-        'supervisor_questioners' => $this->M_questioner->get_supervisor_questioners($employee_id),
+        'peer_questioners' => $this->M_questioner->get_peer_questioners($employee_id, $id),
+        'supervisor_questioners' => $this->M_questioner->get_supervisor_questioners($employee_id, $id),
         'is_hrd' => $this->M_employee->is_hrd($employee_id),
         'is_pic' => $this->M_employee->is_pic($employee_id)
     );

@@ -35,46 +35,35 @@
                            </tr>
                         </thead>
                         <tbody>
-                          <?php if ($questioner): ?>
-                            <?php
-                           $row = $questioner;
+                           <?php
+                           $no = 1;
+                           foreach ($questioner as $row) { 
                               setlocale(LC_TIME, 'id_ID.utf8');
                               $deadline = DateTime::createFromFormat('Y-m-d H:i:s', $row->deadline);
                               $nama_bulan = $deadline->format('F');
                               $nama_hari  = $deadline->format('l');
                               $tanggal    = $deadline->format('d');
-                              $jam        = $deadline->format('H:i');
-                              ?>
-                               <tr>
-                                 <td>1</td>
+                              $jam        = $deadline->format('H:i'); 
+                           ?>
+                              <tr>
+                                 <td><?= $no++ ?></td>
                                  <td>
-                                       <div>Questioner <?= $nama_bulan ?></div>
-                                       <div>Deadline: <?= $nama_hari ?>, <?= $tanggal ?> <?= $nama_bulan ?> <?= $deadline->format('Y') ?> <?= $jam ?> WIB</div>
-                                       <div class="text-danger font-weight-bold" data-deadline="<?= str_replace(' ', 'T', $row->deadline) ?>" id="countdown-<?= $row->id ?>">
-                                          ⏳ Menghitung waktu tersisa...
-                                       </div>
+                                    <div>Questioner <?= $nama_bulan ?></div>
+                                    <div>Deadline: <?= $nama_hari ?>, <?= $tanggal ?> <?= $nama_bulan ?> <?= $deadline->format('Y') ?> <?= $jam ?> WIB</div>
+                                    <div class="text-danger font-weight-bold" data-deadline="<?= str_replace(' ', 'T', $row->deadline) ?>" id="countdown-<?= $row->id ?>">
+                                       ⏳ Menghitung waktu tersisa...
+                                    </div>
                                  </td>
                                  <td>
-                                       <span class="badge badge-success">Aktif</span>
+                                     <span class="badge badge-success">Aktif</span>
                                  </td>
                                  <td>
-                                  <button title="Isi Kuisioner" class="btn btn-sm btn-primary" onclick="show_questioner(<?= $row->id ?>);">
-                                 <i class="fa fa-eye"></i>
-                                 </button>
-                                 </td>
-                                 </tr>
-                                 <?php else: ?>
-                                    <tr>
-                                       <td colspan="4" class="text-center">
-                                             <div class="alert alert-warning m-0">
-                                                <i class="fas fa-info-circle"></i> Tidak ada kuisioner aktif saat ini. Mungkin telah ditutup oleh admin atau melewati batas waktu.
-                                             </div>
-                                       </td>
-                                    </tr>
-                                    <?php endif; ?>
+                                    <button title="Isi Kuisioner" class="btn btn-sm btn-primary" onclick="show_questioner(<?= $row->id ?>);">
+                                       <i class="fa fa-eye"></i>  
+                                    </button>
                                  </td>
                               </tr>
-                           <?php  ?>
+                           <?php } ?>
                         </tbody>
                      </table>
                   </div>

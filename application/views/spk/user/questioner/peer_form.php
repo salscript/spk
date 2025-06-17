@@ -80,7 +80,7 @@
                         </div>
                      <?php endforeach; ?>
 
-                     <button type="submit" class="btn btn-success">Kirim Penilaian</button>
+                     <button type="submit" class="btn btn-success" id="submitBtn">Kirim Penilaian</button>
                      <!-- <a href="<?= site_url('questioner') ?>" class="btn btn-secondary">Batal</a> -->
                   </form>
                  </div>
@@ -91,6 +91,16 @@
    </section>
 </div>
 <script type="text/javascript">
+//    function disableSubmit(btn) {
+//    btn.disabled = true;
+//    btn.innerText = "⏳ Mengirim...";
+//    btn.form.submit();
+// }
+
+   $('form').on('submit', function () {
+      $('#submitBtn').prop('disabled', true).text('⏳ Mengirim...');
+   });
+
    function cancel() {
       window.location.href = "<?= base_url('questioner/index/'). $questioner_id ?>";
    }

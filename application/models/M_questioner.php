@@ -67,7 +67,7 @@ class M_questioner extends CI_Model {
     }
 
     // Mendapatkan daftar rekan kerja yang perlu dinilai
-    public function get_peer_questioners($employee_id) {
+    public function get_peer_questioners($employee_id, $id) {
         $employee = $this->db->select('ed.division_id, e.sub_divisi')
             ->from('employee e')
             ->join('employee_division ed', 'ed.employee_id = e.id')
@@ -88,7 +88,7 @@ class M_questioner extends CI_Model {
             ->join('employee_division ed', 'ed.employee_id = e.id')
             ->join('division d', 'd.id = ed.division_id')
             ->join('position p', 'p.id = e.position_id')
-            ->join('questioner_status qs', "qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id AND qs.type = 'peer'", 'left')
+            ->join('questioner_status qs', "qs.questioner_id = $id AND qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id AND qs.type = 'peer'", 'left')
             ->where('d.id', $employee->division_id)
             ->where('e.sub_divisi', $employee->sub_divisi)
             ->where('e.id !=', $employee_id) 
@@ -97,7 +97,7 @@ class M_questioner extends CI_Model {
     }
 
     // Mendapatkan daftar bawahan yang perlu dinilai (otomatis berdasarkan divisi dan level)
-    public function get_supervisor_questioners($employee_id) {
+    public function get_supervisor_questioners($employee_id,$id) {
         $evaluator = $this->db->select('p.level_position, ed.division_id')
             ->from('employee e')
             ->join('position p', 'p.id = e.position_id')
@@ -119,7 +119,7 @@ class M_questioner extends CI_Model {
                 ->join('position p', 'p.id = e.position_id')
                 ->join('employee_division ed', 'ed.employee_id = e.id')
                 ->join('division d', 'd.id = ed.division_id')
-                ->join('questioner_status qs', "qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id AND qs.type = 'supervisor'", 'left')
+                ->join('questioner_status qs', "qs.questioner_id = $id AND qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id AND qs.type = 'supervisor'", 'left')
                 ->where('p.level_position', 'managerial')
                 ->where('e.id !=', $employee_id)
                 ->get()
@@ -337,8 +337,8 @@ public function get_latest_active_questioner()
     $this->db->where('status', 1);
     $this->db->where('deadline >=', date('Y-m-d H:i:s'));
     $this->db->order_by('deadline', 'ASC');
-    $this->db->limit(1);
-    return $this->db->get('questioner')->row();
+    // $this->db->limit(1);
+    return $this->db->get('questioner')->result();
 }
 
 
