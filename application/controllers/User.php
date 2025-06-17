@@ -8,6 +8,7 @@ class User extends MY_Controller
       parent::__construct();
       cek_login();
       check_admin();
+      check_operator();
       $this->load->model('M_user');
       $this->load->model('M_userrole');
       $this->load->model('M_position');
@@ -23,6 +24,7 @@ class User extends MY_Controller
       }
 
       $this->template->load('spk/template_admin', 'spk/admin/user/index', $data);
+      $this->template->load('spk/template_operator', 'spk/operator/user/index', $data);
    }
 
    public function new_user()
@@ -32,6 +34,7 @@ class User extends MY_Controller
       $data['position'] = $this->M_position->get_all_position();
       $data['division'] = $this->M_division->get_all_division();
       $this->template->load('spk/template_admin', 'spk/admin/user/addUser', $data);
+      $this->template->load('spk/template_operator', 'spk/operator/user/addUser', $data);
    }
 
    public function edit_user($id_user)
@@ -47,6 +50,7 @@ class User extends MY_Controller
       }, $user_division);
 
       $this->template->load('spk/template_admin', 'spk/admin/user/editUser', $data);
+      $this->template->load('spk/template_operator', 'spk/operator/user/editUser', $data);
    }
 
    public function save_user()

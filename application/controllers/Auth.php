@@ -51,6 +51,11 @@ class Auth extends CI_Controller
                   'role' => '2',
                   'success' => 'Hallo User'
                ];
+            } else if ($user->role_id === '3') {
+               $msg = [
+                  'role' => '3',
+                  'success' => 'Hallo Operator'
+               ];
             }
          }
       } else {

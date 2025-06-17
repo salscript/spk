@@ -15,5 +15,6 @@ class UserRole extends MY_Controller
       check_admin();
       $data['role'] = $this->M_userrole->get_all_roles();
       $this->template->load('spk/template_admin', 'spk/admin/user_roles/index', $data);
+      $this->template->load('spk/template_operator', 'spk/operator/user_roles/index', $data);
    }
 }

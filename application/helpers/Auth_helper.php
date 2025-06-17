@@ -37,3 +37,14 @@ if (!function_exists('check_user')) {
         }
     }
 }
+if (!function_exists('check_operator')) {
+    function check_operator()
+    {
+        cek_login();
+        $CI = &get_instance();
+        if ($CI->session->userdata('role_id') != '3') {
+            $CI->session->set_flashdata('message', '<div class="alert alert-danger"> Access Denied: Users only.</div>');
+            redirect('auth/login');
+        }
+    }
+}

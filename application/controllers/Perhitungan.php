@@ -86,60 +86,23 @@ class Perhitungan extends CI_Controller
     redirect('perhitungan/select');
 }
 
-public function get_tanggal_hasil()
+public function result()
 {
-    return $this->db->select('DISTINCT(tanggal_perhitungan) as tanggal')
-                    ->order_by('tanggal_perhitungan', 'DESC')
-                    ->get('hasil_profile_matching')
-                    ->result();
-}
-
-
-
-    // Tampilkan hasil perhitungan yang sudah disimpan sebelumnya
-  public function hasil()
-{
-    $tanggal = $this->input->get('tanggal');
-    $data['title'] = 'Hasil Perhitungan Profile Matching';
-    $data['tanggal'] = $tanggal;
-
+    $data['title'] = 'Pilih Tanggal Laporan Bonus';
     $data['tanggal_list'] = $this->M_perhitungan->get_tanggal_hasil();
-
-    $data['hasil'] = [];
-    if ($tanggal) {
-        $data['hasil'] = $this->db->select('h.*, e.fullname')
-            ->from('hasil_profile_matching h')
-            ->join('employee e', 'e.id = h.employee_id')
-            ->where('DATE(h.tanggal_perhitungan)', $tanggal)
-            ->order_by('h.ranking')
-            ->get()->result();
-    }
-
-    $this->template->load('spk/template_admin', 'spk/admin/perhitungan/hasil', $data);
+    $this->template->load('spk/template_admin', 'spk/admin/perhitungan/result', $data);
 }
 
 public function laporan_hasil()
 {
     $tanggal = $this->input->get('tanggal');
-
-    $data['title'] = 'Laporan Hasil Penentuan Bonus';
+    $data['title'] = 'Laporan Bonus Karyawan';
     $data['tanggal'] = $tanggal;
     $data['tanggal_list'] = $this->M_perhitungan->get_tanggal_hasil();
+    $data['hasil'] = ($tanggal) ? $this->M_perhitungan->get_hasil_by_tanggal($tanggal) : [];
 
-    if ($tanggal) {
-        $data['hasil'] = $this->db->select('h.*, e.fullname')
-            ->from('hasil_profile_matching h')
-            ->join('employee e', 'e.id = h.employee_id')
-            ->where('h.periode_input', $tanggal)
-            ->order_by('h.ranking', 'ASC')
-            ->get()->result();
-    } else {
-        $data['hasil'] = [];
-    }
-
-    $this->load->view('spk/admin/perhitungan/laporan_hasil', $data);
+    $this->template->load('spk/template_admin', 'spk/admin/perhitungan/laporan_hasil', $data);
 }
-
 
 
 }

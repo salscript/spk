@@ -19,6 +19,10 @@ class Account extends MY_Controller
       check_user();
       $this->template->load('spk/template_user', 'spk/user/account');
    }
+   function account_operator() {
+      check_operator();
+      $this->template->load('spk/template_operator', 'spk/operator/account');
+   }
 
    function update_account() {
       $response = array('error' => '', 'success' => '');

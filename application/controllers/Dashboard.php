@@ -22,4 +22,11 @@ class Dashboard extends MY_Controller
       $data = array();
       $this->template->load('spk/template_user', 'spk/user/dashboard', $data);
    }
+
+   public function operator()
+   {
+      check_operator();
+      $data = array();
+      $this->template->load('spk/template_operator', 'spk/operator/dashboard', $data);
+   }
 }

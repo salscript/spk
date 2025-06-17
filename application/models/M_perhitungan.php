@@ -278,14 +278,7 @@ class M_perhitungan extends CI_Model
     return $hasil;
 }
 
-public function get_tanggal_hasil()
-{
-   return $this->db->select('DATE(tanggal_perhitungan) as tanggal_input')
-                ->group_by('DATE(tanggal_perhitungan)')
-                ->order_by('tanggal_perhitungan', 'DESC')
-                ->get('hasil_profile_matching')
-                ->result();
-}
+
 
 public function get_list_aspek($tanggal)
 {
@@ -323,5 +316,26 @@ public function simpan_hasil_profile_matching($tanggal)
     $this->db->insert_batch('hasil_profile_matching', $data);
     return true;
 }
+
+public function get_tanggal_hasil()
+{
+    return $this->db->select('DATE(tanggal_perhitungan) as tanggal')
+        ->group_by('DATE(tanggal_perhitungan)')
+        ->order_by('tanggal_perhitungan', 'DESC')
+        ->get('hasil_profile_matching')
+        ->result();
+}
+
+public function get_hasil_by_tanggal($tanggal)
+{
+    return $this->db->select('h.*, e.fullname')
+        ->from('hasil_profile_matching h')
+        ->join('employee e', 'e.id = h.employee_id')
+        ->where('DATE(h.tanggal_perhitungan)', $tanggal)
+        ->order_by('h.ranking', 'ASC')
+        ->get()
+        ->result();
+}
+
 
 }

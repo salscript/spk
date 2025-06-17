@@ -134,6 +134,19 @@
                               window.location.href = "<?php echo base_url('dashboard/user') ?>";
                            });
                      }
+                      if (response.role == '3') {
+                        Swal.fire({
+                              icon: 'success',
+                              title: 'Login Berhasil',
+                              text: response.success,
+                              showCancelButton: false,
+                              showConfirmButton: false,
+                              timer: '1000'
+                           })
+                           .then(function() {
+                              window.location.href = "<?php echo base_url('dashboard/operator') ?>";
+                           });
+                     }
                      if (response.error) {
                         Swal.fire({
                            icon: 'error',
