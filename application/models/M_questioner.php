@@ -67,85 +67,88 @@ class M_questioner extends CI_Model {
     }
 
     // Mendapatkan daftar rekan kerja yang perlu dinilai
-    public function get_peer_questioners($employee_id) {
-        $employee = $this->db->select('ed.division_id, e.sub_divisi')
+  public function get_peer_questioners($employee_id, $questioner_id) {
+    $employee = $this->db->select('ed.division_id, e.sub_divisi')
+        ->from('employee e')
+        ->join('employee_division ed', 'ed.employee_id = e.id')
+        ->where('e.id', $employee_id)
+        ->get()
+        ->row();
+
+    if (!$employee) return array();
+
+    return $this->db->select(
+        'e.id, e.fullname, 
+        p.name as position_name,   
+        d.name as division_name,
+        qs.status, 
+        qs.created_on'
+    )
+    ->from('employee e')
+    ->join('employee_division ed', 'ed.employee_id = e.id')
+    ->join('division d', 'd.id = ed.division_id')
+    ->join('position p', 'p.id = e.position_id')
+    ->join('questioner_status qs', "qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id AND qs.type = 'peer' AND qs.questioner_id = $questioner_id", 'left')
+    ->where('d.id', $employee->division_id)
+    ->where('e.sub_divisi', $employee->sub_divisi)
+    ->where('e.id !=', $employee_id)
+    ->get()
+    ->result();
+}
+
+
+    // Mendapatkan daftar bawahan yang perlu dinilai (otomatis berdasarkan divisi dan level)
+    public function get_supervisor_questioners($employee_id, $questioner_id) {
+    $evaluator = $this->db->select('p.level_position, ed.division_id')
+        ->from('employee e')
+        ->join('position p', 'p.id = e.position_id')
+        ->join('employee_division ed', 'ed.employee_id = e.id')
+        ->where('e.id', $employee_id)
+        ->get()
+        ->row();
+
+    if (!$evaluator) return array();
+
+    if ($evaluator->level_position == 'hrd') {
+        return $this->db->select('
+                e.id, e.fullname, 
+                p.name as position_name, 
+                d.name as division_name, 
+                qs.status, 
+                qs.created_on
+            ')
             ->from('employee e')
-            ->join('employee_division ed', 'ed.employee_id = e.id')
-            ->where('e.id', $employee_id)
-            ->get()
-            ->row();
-        
-        if (!$employee) return array();
-        
-        return $this->db->select(
-            'e.id, e.fullname, 
-            p.name as position_name,   
-            d.name as division_name,
-            qs.status, 
-            qs.created_on'
-            )
-            ->from('employee e')
+            ->join('position p', 'p.id = e.position_id')
             ->join('employee_division ed', 'ed.employee_id = e.id')
             ->join('division d', 'd.id = ed.division_id')
+            ->join('questioner_status qs', "qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id AND qs.type = 'supervisor' AND qs.questioner_id = $questioner_id", 'left')
+            ->where('p.level_position', 'managerial')
+            ->where('e.id !=', $employee_id)
+            ->get()
+            ->result();
+    } elseif ($evaluator->level_position == 'managerial') {
+        return $this->db->select('
+                e.id, e.fullname, 
+                p.name as position_name, 
+                d.name as division_name, 
+                qs.status, 
+                qs.created_on
+            ')
+            ->from('employee e')
             ->join('position p', 'p.id = e.position_id')
-            ->join('questioner_status qs', "qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id AND qs.type = 'peer'", 'left')
-            ->where('d.id', $employee->division_id)
-            ->where('e.sub_divisi', $employee->sub_divisi)
-            ->where('e.id !=', $employee_id) 
+            ->join('employee_division ed', 'ed.employee_id = e.id')
+            ->join('division d', 'd.id = ed.division_id')
+            ->join('questioner_status qs', "qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id AND qs.questioner_id = $questioner_id", 'left')
+            ->where('ed.division_id', $evaluator->division_id)
+            ->where('p.level_position !=', 'hrd')
+            ->where('e.id !=', $employee_id)
             ->get()
             ->result();
     }
 
-    // Mendapatkan daftar bawahan yang perlu dinilai (otomatis berdasarkan divisi dan level)
-    public function get_supervisor_questioners($employee_id) {
-        $evaluator = $this->db->select('p.level_position, ed.division_id')
-            ->from('employee e')
-            ->join('position p', 'p.id = e.position_id')
-            ->join('employee_division ed', 'ed.employee_id = e.id')
-            ->where('e.id', $employee_id)
-            ->get()
-            ->row();
-        
-        if (!$evaluator) return array();
-        
-        // HRD menilai semua PIC/Managerial (tanpa memandang divisi)
-        if ($evaluator->level_position == 'hrd') {
-            return $this->db->select('
-                    e.id, e.fullname, 
-                    p.name as position_name, 
-                    d.name as division_name, qs.status, qs.created_on
-                ')
-                ->from('employee e')
-                ->join('position p', 'p.id = e.position_id')
-                ->join('employee_division ed', 'ed.employee_id = e.id')
-                ->join('division d', 'd.id = ed.division_id')
-                ->join('questioner_status qs', "qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id AND qs.type = 'supervisor'", 'left')
-                ->where('p.level_position', 'managerial')
-                ->where('e.id !=', $employee_id)
-                ->get()
-                ->result();
-        }
-        // PIC/Managerial menilai staff dalam divisi yang sama
-        elseif ($evaluator->level_position == 'managerial') {
-            return $this->db->select('
-                    e.id, e.fullname, 
-                    p.name as position_name, 
-                    d.name as division_name, qs.status, qs.created_on
-                ')
-                ->from('employee e')
-                ->join('position p', 'p.id = e.position_id')
-                ->join('employee_division ed', 'ed.employee_id = e.id')
-                ->join('division d', 'd.id = ed.division_id')
-                ->join('questioner_status qs', "qs.evaluatee_id = e.id AND qs.evaluator_id = $employee_id", 'left')
-                ->where('ed.division_id', $evaluator->division_id)
-                ->where('p.level_position !=', 'hrd')
-                ->where('e.id !=', $employee_id)
-                ->get()
-                ->result();
-        }
-        
-        return array();
-    }
+    return array();
+}
+
 
     
     // Cek apakah sudah pernah menilai

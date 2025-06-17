@@ -138,8 +138,8 @@ class Questioner extends CI_Controller {
     $data = array(
         'questioner_id' => $id,
         'title' => 'Kuisioner Penilaian',
-        'peer_questioners' => $this->M_questioner->get_peer_questioners($employee_id),
-        'supervisor_questioners' => $this->M_questioner->get_supervisor_questioners($employee_id),
+        'peer_questioners' => $this->M_questioner->get_peer_questioners($employee_id, $id),
+        'supervisor_questioners' => $this->M_questioner->get_supervisor_questioners($employee_id, $id),
         'is_hrd' => $this->M_employee->is_hrd($employee_id),
         'is_pic' => $this->M_employee->is_pic($employee_id)
     );
@@ -387,6 +387,7 @@ public function toggle_status($id)
            echo json_encode($msg);
         }
      }
+
      public function create()
 {
     $this->load->model('M_questioner');
