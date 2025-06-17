@@ -21,53 +21,13 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="<?php echo base_url('dashboard/admin') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'dashboard') echo 'active' ?>">
+                    <a href="<?php echo base_url('dashboard/operator') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'dashboard') echo 'active' ?>">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
                         </p>
                     </a>
-              
-                <li class="nav-item" id="datakaryawan-menu">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-users""></i>
-                        <p>
-                            Data Karyawan
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                    <a href="<?php echo base_url('user/user') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'user') echo 'active' ?>">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            Tambah User
-                        </p>
-                    </a>
                 </li>
-                </ul>
-                <ul class="nav nav-treeview">
-                     <li class="nav-item">
-                    <a href="<?php echo base_url('division/division') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'division') echo 'active' ?>">
-                        <i class="nav-icon far fa-id-card"></i>
-                        <p>
-                            Division
-                        </p>
-                    </a>
-                </li>   
-                </ul>  
-                <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="<?php echo base_url('position/position') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'position') echo 'active' ?>">
-                        <i class="nav-icon far fa-id-card"></i>
-                        <p>
-                            Position
-                        </p>
-                    </a>
-                </li>    
-                </ul>
-                </li>
-             
                 <li class="nav-item" id="questioner-menu">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-clipboard-list"></i>
@@ -92,89 +52,36 @@
                             </a>
                         </li>
                     </ul>
-
-                     <li class="nav-item" id="datakriteria-menu">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-id-card"></i>
-                        <p>
-                            Data Kriteria
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                    <a href="<?php echo base_url('aspect/aspect') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'aspect') echo 'active' ?>">
-                        <i class="nav-icon far fa-id-card"></i>
-                        <p>
-                            Aspect
-                        </p>
-                    </a>
                 </li>
-                 </ul>
-                 <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                    <a href="<?php echo base_url('criteria/criteria') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'criteria') echo 'active' ?>">
-                        <i class="nav-icon far fa-id-card"></i>
-                        <p>
-                            Criteria
-                        </p>
-                    </a>
-                </li>
-             </ul>
-             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="<?php echo base_url('subkriteria/subkriteria') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'subkriteria') echo 'active' ?>">
-                        <i class="nav-icon far fa-id-card"></i>
-                        <p>
-                           Sub Criteria
-                        </p>
+                    <a href="<?= base_url('penilaian') ?>" class="nav-link <?= ($this->uri->segment(1) == 'penilaian') ? 'active' : '' ?>">
+                        <i class="nav-icon fas fa-tasks"></i>
+                        <p>Proses Penilaian</p>
                     </a>
                 </li>
-                 </ul>
-                  <ul class="nav nav-treeview">
-                 <li class="nav-item">
-                    <a href="<?php echo base_url('factor/factor') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'factor') echo 'active' ?>">
-                        <i class="nav-icon far fa-id-card"></i>
-                        <p>
-                            Factor
-                        </p>
+                <li class="nav-item">
+                    <a href="<?= base_url('perhitungan/select') ?>" class="nav-link <?= $this->uri->segment(2) == 'select' ? 'active' : '' ?>">
+                        <i class="nav-icon fas fa-calculator"></i>
+                        <p>Perhitungan Bonus</p>
                     </a>
                 </li>
-                </ul>
+                    <li class="nav-item">
+                    <a href="<?= base_url('perhitungan/result') ?>" class="nav-link">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>Laporan Bonus</p>
+                    </a>
                 </li>
-              
-              <li class="nav-item">
-                            <a href="<?= base_url('penilaian') ?>" class="nav-link <?= ($this->uri->segment(1) == 'penilaian') ? 'active' : '' ?>">
-                                <i class="nav-icon fas fa-tasks"></i>
-                                <p>Proses Penilaian</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= base_url('perhitungan/select') ?>" 
-                            class="nav-link <?= $this->uri->segment(2) == 'select' ? 'active' : '' ?>">
-                                <i class="nav-icon fas fa-calculator"></i>
-                                <p>Perhitungan Bonus</p>
-                            </a>
-                        </li>
-                         <li class="nav-item">
-    <a href="<?= base_url('perhitungan/result') ?>" class="nav-link">
-        <i class="nav-icon fas fa-file-alt"></i>
-        <p>Laporan Bonus</p>
-    </a>
-</li>
             </ul>
-                    </nav>
+        </nav>
     </div>
 </aside>
 <script type="text/javascript">
     $(document).ready(function() {
         let pathname = window.location.pathname;
+        // console.log(pathname);
         if (
             pathname.includes('question') ||
-            pathname.includes('aspect') ||
-            pathname.includes('factor') ||
-            pathname.includes('criteria') ||
-            pathname.includes('subcriteria')
+            pathname.includes('questioner')
         ) {
             $('#questioner-menu').addClass('menu-open');
             $('#questioner-menu').removeClass('menu');

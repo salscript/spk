@@ -7,6 +7,7 @@ class User extends MY_Controller
    {
       parent::__construct();
       cek_login();
+      check_admin();
       $this->load->model('M_user');
       $this->load->model('M_userrole');
       $this->load->model('M_position');
@@ -21,15 +22,7 @@ class User extends MY_Controller
         $data['user'][$key]->divisions = $division;
     }
 
-    $role = $this->session->userdata('role');
-
-    if ($role == 'admin') {
-        $this->template->load('spk/template_admin', 'spk/admin/user/index', $data);
-    } elseif ($role == 'operator') {
-        $this->template->load('spk/template_operator', 'spk/operator/user/index', $data);
-    } else {
-        show_error('Access Denied', 403, 'Unauthorized Role');
-    }
+    $this->template->load('spk/template_admin', 'spk/admin/user/index', $data);
 }
 
 

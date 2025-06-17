@@ -26,7 +26,12 @@ class Questioner extends CI_Controller {
     public function questioner()
     {
        $data['questioner'] = $this->M_questioner->get_all_questioners();
-       $this->template->load('spk/template_admin', 'spk/admin/questioner/index', $data);
+       $role = $this->session->userdata('role_id');
+       if($role == 1){
+           $this->template->load('spk/template_admin', 'spk/admin/questioner/index', $data);
+        } else if($role == 3){
+           $this->template->load('spk/template_operator', 'spk/operator/questioner/index', $data);
+       }
     }
     
     public function questioner_user()
