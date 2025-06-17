@@ -26,7 +26,7 @@ class Penilaian extends CI_Controller
         // ✅ Tambahan: cek apakah semua aspek sudah diisi
         $q->sudah_diisi_semua_aspek = $this->M_penilaian->is_all_aspect_completed($q->id);
     }
- $role = $this->session->userdata('role_id');
+        $role = $this->session->userdata('role_id');
        if($role == 1){
            $this->template->load('spk/template_admin', 'spk/admin/penilaian/index', $data);
         } else if($role == 3){
@@ -97,6 +97,7 @@ class Penilaian extends CI_Controller
             $data['auto_subkriteria'] = $auto_subkriteria;
         }
 
+        $role = $this->session->userdata('role_id');
          if($role == 1){
            $this->template->load('spk/template_admin', 'spk/admin/penilaian/addNilai', $data);
         } else if($role == 3){

@@ -33,15 +33,7 @@ class User extends MY_Controller
     $data['position'] = $this->M_position->get_all_position();
     $data['division'] = $this->M_division->get_all_division();
 
-    $role = $this->session->userdata('role');
-
-    if ($role == 'admin') {
-        $this->template->load('spk/template_admin', 'spk/admin/user/addUser', $data);
-    } elseif ($role == 'operator') {
-        $this->template->load('spk/template_operator', 'spk/operator/user/addUser', $data);
-    } else {
-        show_error('Access Denied', 403, 'Unauthorized Role');
-    }
+    $this->template->load('spk/template_admin', 'spk/admin/user/addUser', $data);
 }
 
 
@@ -57,15 +49,7 @@ class User extends MY_Controller
         return $d->id;
     }, $user_division);
 
-    $role = $this->session->userdata('role');
-
-    if ($role == 'admin') {
-        $this->template->load('spk/template_admin', 'spk/admin/user/editUser', $data);
-    } elseif ($role == 'operator') {
-        $this->template->load('spk/template_operator', 'spk/operator/user/editUser', $data);
-    } else {
-        show_error('Access Denied', 403, 'Unauthorized Role');
-    }
+    $this->template->load('spk/template_admin', 'spk/admin/user/editUser', $data);
 }
 
 
