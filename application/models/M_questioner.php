@@ -416,4 +416,8 @@ public function generate_code_questioner()
     return 'Q-' . $nama_bulan[$bulan] . '-' . $tahun;
 }
 
+ public function delete_questioner($id)
+    {
+        return $this->db->delete('questioner', ['id' => $id]);
+    }
 }

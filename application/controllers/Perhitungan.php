@@ -14,7 +14,13 @@ class Perhitungan extends CI_Controller
     {
         $data['title'] = 'Pilih Periode Perhitungan';
         $data['periodes'] = $this->M_perhitungan->get_periode_penilaian();
-        $this->template->load('spk/template_admin', 'spk/admin/perhitungan/select_periode', $data);
+        $role = $this->session->userdata('role_id');
+         if($role == 1){
+           $this->template->load('spk/template_admin', 'spk/admin/perhitungan/select_periode', $data);
+        } else if($role == 3){
+           $this->template->load('spk/template_operator', 'spk/operator/perhitungan/select_periode', $data);
+       }
+        // $this->template->load('spk/template_admin', 'spk/admin/perhitungan/select_periode', $data);
     }
 
     // Halaman detail perhitungan berdasarkan nilai aktual
@@ -37,9 +43,14 @@ class Perhitungan extends CI_Controller
    $data['is_hasil_sudah_disimpan'] = $this->db
     ->where('periode_input', $tanggal)
     ->count_all_results('hasil_profile_matching') > 0;
+     $role = $this->session->userdata('role_id');
+     if($role == 1){
+           $this->template->load('spk/template_admin', 'spk/admin/perhitungan/detail', $data);
+        } else if($role == 3){
+           $this->template->load('spk/template_operator', 'spk/operator/perhitungan/detail', $data);
+       }
 
-
-    $this->template->load('spk/template_admin', 'spk/admin/perhitungan/detail', $data);
+    // $this->template->load('spk/template_admin', 'spk/admin/perhitungan/detail', $data);
 }
 
     // Simpan hasil profile matching ke tabel hasil_profile_matching
@@ -90,7 +101,12 @@ public function result()
 {
     $data['title'] = 'Pilih Tanggal Laporan Bonus';
     $data['tanggal_list'] = $this->M_perhitungan->get_tanggal_hasil();
-    $this->template->load('spk/template_admin', 'spk/admin/perhitungan/result', $data);
+    $role = $this->session->userdata('role_id');
+    if($role == 1){
+           $this->template->load('spk/template_admin', 'spk/admin/perhitungan/result', $data);
+        } else if($role == 3){
+           $this->template->load('spk/template_operator', 'spk/operator/perhitungan/result', $data);
+       }
 }
 
 public function laporan_hasil()
@@ -100,8 +116,12 @@ public function laporan_hasil()
     $data['tanggal'] = $tanggal;
     $data['tanggal_list'] = $this->M_perhitungan->get_tanggal_hasil();
     $data['hasil'] = ($tanggal) ? $this->M_perhitungan->get_hasil_by_tanggal($tanggal) : [];
-
-    $this->template->load('spk/template_admin', 'spk/admin/perhitungan/laporan_hasil', $data);
+ $role = $this->session->userdata('role_id');
+   if($role == 1){
+           $this->template->load('spk/template_admin', 'spk/admin/perhitungan/laporan_hasil', $data);
+        } else if($role == 3){
+           $this->template->load('spk/template_operator', 'spk/operator/perhitungan/laporan_hasil', $data);
+       }
 }
 
 

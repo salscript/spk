@@ -46,7 +46,12 @@ class Questioner extends CI_Controller {
     public function new_questioner()
     {
        $data['code_questioner'] = $this->M_questioner->code_questioner();  
-       $this->template->load('spk/template_admin', 'spk/admin/questioner/addQuestioner', $data);
+       $role = $this->session->userdata('role_id');
+       if($role == 1){
+           $this->template->load('spk/template_admin', 'spk/admin/questioner/addQuestioner', $data);
+        } else if($role == 3){
+           $this->template->load('spk/template_operator', 'spk/operator/questioner/addQuestioner', $data);
+       }
     }
  
     public function save_questioner() {
@@ -106,7 +111,12 @@ class Questioner extends CI_Controller {
             'incomplete_questioners' => $this->M_questioner->get_incomplete_questioners()
         );
 
-        $this->template->load('spk/template_admin', 'spk/admin/questioner/index.php', $data);
+       $role = $this->session->userdata('role_id');
+       if($role == 1){
+           $this->template->load('spk/template_admin', 'spk/admin/questioner/index', $data);
+        } else if($role == 3){
+           $this->template->load('spk/template_operator', 'spk/operator/questioner/index', $data);
+       }
     }
 
     // Tampilan user untuk mengisi kuisioner
@@ -274,16 +284,21 @@ class Questioner extends CI_Controller {
 
     public function monitoring($questioner_id)
 {
-    if ($this->session->userdata('role_id') != 1) {
-        redirect('auth/login');
-    }
+    // if ($this->session->userdata('role_id') != 1) {
+    //     redirect('auth/login');
+    // }
 
     $data = [
         'title' => 'Monitoring Kuisioner',
         'monitoring_data' => $this->M_questioner->get_monitoring_kuisioner($questioner_id)
     ];
-
-    $this->template->load('spk/template_admin', 'spk/admin/questioner/monitoring', $data);
+  $role = $this->session->userdata('role_id');
+       if($role == 1){
+           $this->template->load('spk/template_admin', 'spk/admin/questioner/monitoring', $data);
+        } else if($role == 3){
+           $this->template->load('spk/template_operator', 'spk/operator/questioner/monitoring', $data);
+       }
+    // $this->template->load('spk/template_admin', 'spk/admin/questioner/monitoring', $data);
 }
 
 public function toggle_status($id)
@@ -310,7 +325,12 @@ public function toggle_status($id)
      public function edit_questioner($id)
      {
          $data['questioner'] = $this->M_questioner->get_questioner_by_id($id);
-         $this->template->load('spk/template_admin', 'spk/admin/questioner/editQuestioner', $data);
+           $role = $this->session->userdata('role_id');
+       if($role == 1){
+           $this->template->load('spk/template_admin', 'spk/admin/questioner/editQuestioner', $data);
+        } else if($role == 3){
+           $this->template->load('spk/template_operator', 'spk/operator/questioner/editQuestioner', $data);
+       }
      }
  
     public function update_questioner()
@@ -393,7 +413,12 @@ public function toggle_status($id)
     $data['questioner_id'] = $questioner_id;
     $data['rekap'] = $this->M_questioner->get_rekap_rata_rata_kriteria($questioner_id);
 
-    $this->template->load('spk/template_admin', 'spk/admin/questioner/rekap_nilai', $data);
+     $role = $this->session->userdata('role_id');
+       if($role == 1){
+           $this->template->load('spk/template_admin', 'spk/admin/questioner/rekap_nilai', $data);
+        } else if($role == 3){
+           $this->template->load('spk/template_operator', 'spk/operator/questioner/rekap_nilai', $data);
+       }
 }
 
 }

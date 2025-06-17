@@ -26,8 +26,13 @@ class Penilaian extends CI_Controller
         // ✅ Tambahan: cek apakah semua aspek sudah diisi
         $q->sudah_diisi_semua_aspek = $this->M_penilaian->is_all_aspect_completed($q->id);
     }
-
-    $this->template->load('spk/template_admin', 'spk/admin/penilaian/index', $data);
+ $role = $this->session->userdata('role_id');
+       if($role == 1){
+           $this->template->load('spk/template_admin', 'spk/admin/penilaian/index', $data);
+        } else if($role == 3){
+           $this->template->load('spk/template_operator', 'spk/operator/penilaian/index', $data);
+       }
+    // $this->template->load('spk/template_admin', 'spk/admin/penilaian/index', $data);
 }
 
 
@@ -92,7 +97,11 @@ class Penilaian extends CI_Controller
             $data['auto_subkriteria'] = $auto_subkriteria;
         }
 
-        $this->template->load('spk/template_admin', 'spk/admin/penilaian/addNilai', $data);
+         if($role == 1){
+           $this->template->load('spk/template_admin', 'spk/admin/penilaian/addNilai', $data);
+        } else if($role == 3){
+           $this->template->load('spk/template_operator', 'spk/operator/penilaian/addNilai', $data);
+       }
     }
 
     public function simpan()
