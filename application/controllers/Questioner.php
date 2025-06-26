@@ -374,19 +374,21 @@ public function toggle_status($id)
 }
 
     
-      public function delete_questioner() {
-        if ($this->input->is_ajax_request() == true) {
-           $id = $this->input->post('id', true);
-           $delete = $this->M_questioner->delete_questioner($id);
-  
-           if ($delete) {
-              $msg = ['success' => 'Questioner Berhasil Terhapus'];
-           } else {
-              $msg = ['error' => 'Gagal menghapus questioner: '. $this->db->error()['message']];
-           }
-           echo json_encode($msg);
+     public function delete_questioner()
+{
+    if ($this->input->is_ajax_request() == true) {
+        $id = $this->input->post('id', true);
+        $delete = $this->M_questioner->delete_questioner($id);
+
+        if ($delete) {
+            $msg = ['success' => 'Questioner Berhasil Terhapus'];
+        } else {
+            $msg = ['error' => 'Gagal menghapus questioner: ' . $this->db->error()['message']];
         }
-     }
+        echo json_encode($msg);
+    }
+}
+
 
      public function create()
 {
@@ -409,7 +411,7 @@ public function toggle_status($id)
 
    public function rekap_nilai($questioner_id) {
     $this->load->model('M_questioner');
-
+    
     $data['title'] = 'Rekap Nilai Kuisioner';
     $data['questioner_id'] = $questioner_id;
     $data['rekap'] = $this->M_questioner->get_rekap_rata_rata_kriteria($questioner_id);

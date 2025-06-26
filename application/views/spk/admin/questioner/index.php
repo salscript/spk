@@ -128,7 +128,7 @@
             $.ajax({
                type: "post",
                url: "<?= base_url('questioner/delete_questioner') ?>",
-               data: { id_question: id },
+               data: { id: id },
                dataType: "json",
                success: function(response) {
                   if (response.success) {

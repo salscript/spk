@@ -14,23 +14,27 @@ class Auth extends CI_Controller
       $this->load->view('spk/login');
    }
 
-   function login_aksi()
-   {
-      // print_r("login aksi loaded");
-      $this->form_validation->set_rules('email', 'Email', 'trim|required', ['required' => '%s tidak boleh kosong']);
-      $this->form_validation->set_rules('password', 'Password', 'trim|required', ['required' => '%s tidak boleh kosong']);
+  public function login_aksi()
+{
+   // Validasi input
+   $this->form_validation->set_rules('email', 'Email', 'trim|required', ['required' => '%s tidak boleh kosong']);
+   $this->form_validation->set_rules('password', 'Password', 'trim|required', ['required' => '%s tidak boleh kosong']);
 
-      $email = $this->input->post('email', true);
-      $password = $this->input->post('password', true);
+   // Ambil data dari form
+   $email = $this->input->post('email', true);
+   $password = $this->input->post('password', true);
 
-      if ($this->form_validation->run() == TRUE) {
-         $user = $this->M_auth->validate($email, $password);
-         if (!$user) {
-            $msg = ['error' => 'Invailed Email or Password'];
-         } else if ($user->status == '0') {
-            $msg = ['error' => 'User Not Active'];
-         } else {
-           $session = array(
+   // Cek validasi
+   if ($this->form_validation->run() == TRUE) {
+      $user = $this->M_auth->validate($email, $password);
+
+      if (!$user) {
+         $msg = ['error' => 'Email atau password salah'];
+      } else if ($user->status == '0') {
+         $msg = ['error' => 'Akun belum aktif'];
+      } else {
+         // Simpan data ke session
+         $session = array(
             'id_user'   => $user->id_user,
             'code_user' => $user->code_user,
             'email'     => $user->email,
@@ -38,34 +42,30 @@ class Auth extends CI_Controller
             'role_id'   => $user->role_id,
             'avatar'    => $user->avatar,
             'position'  => $user->position_name,
-            'logged_in' => TRUE // <--- ini yang penting!
+            'logged_in' => TRUE
          );
-            $this->session->set_userdata($session);
-            if ($user->role_id === '1') {
-               $msg = [
-                  'role' => '1',
-                  'success' => 'Hallo Admin'
-               ];
-            } else if ($user->role_id === '2') {
-               $msg = [
-                  'role' => '2',
-                  'success' => 'Hallo User'
-               ];
-            } else if ($user->role_id === '3') {
-               $msg = [
-                  'role' => '3',
-                  'success' => 'Hallo Operator'
-               ];
-            }
-         }
-      } else {
+         $this->session->set_userdata($session);
+
+         // Kirim pesan sukses ke JavaScript
          $msg = [
-            'error' => validation_errors()
+            'role' => $user->role_id,
+            'success' => 'Login berhasil sebagai ' . $user->fullname
          ];
       }
-      // print_r($this->session->userdata());
-      echo json_encode($msg);
+   } else {
+      $msg = [
+         'error' => validation_errors()
+      ];
    }
+
+   // Penting: hanya kirim JSON, jangan kirim HTML apa pun
+   header('Content-Type: application/json');
+   ob_clean();
+   echo json_encode($msg);
+   exit;
+}
+
+
 
    function logout()
    {

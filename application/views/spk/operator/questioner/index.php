@@ -8,7 +8,7 @@
             <div class="col-sm-6">
                <div class="row">
                   <div class="col-11">
-                     <button class="btn btn-primary text-sm float-right mr-2" onclick="crtQuestioner()">Create Questioner</button>
+
                   </div>
                   <div class="col-1">
                      <button class="btn btn-outline-primary text-sm float-right" onclick="reload()">
@@ -63,13 +63,6 @@
                                        title="<?= $row->status == 1 ? 'Nonaktifkan Kuisioner' : 'Aktifkan Kuisioner' ?>">
                                        <i class="fas <?= $row->status == 1 ? 'fa-toggle-on' : 'fa-toggle-off' ?>"></i>
                                     </a>
-
-                                    <button onclick="window.location.href='<?= base_url('questioner/edit_questioner/'.$row->id) ?>'" class="btn btn-sm btn-warning">
-                                    <i class="fa fa-edit"></i>
-                                     </button>
-                                    <button title="Delete" onclick="deleteConfirm(<?= $row->id ?>);" class="btn btn-sm btn-danger">
-                                       <i class="fa fa-trash"></i>
-                                    </button>
                                  </td>
                                     <td>
                                    <a href="<?= base_url('questioner/rekap_nilai/' . $row->id) ?>" 

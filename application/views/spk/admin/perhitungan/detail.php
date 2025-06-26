@@ -73,47 +73,55 @@
                             <?php endforeach; ?>
 
 
-                                <!-- 2. Perhitungan CF, SF, dan Total Nilai Aspek Berdasarkan Bobot Kriteria -->
-                            <h5 class="mt-4">2. Perhitungan CF, SF, dan Total Nilai Aspek Berdasarkan Bobot Kriteria</h5>
-                            <?php foreach ($cf_sf_bobot as $aspek): ?>
-                                <div class="card mb-4">
-                                    <div class="card-header bg-primary text-white font-weight-bold">
-                                        <?= $aspek['aspect_name'] ?>
-                                    </div>
-                                    <div class="card-body table-responsive">
-                                        <table class="table table-bordered table-sm text-center">
-                                            <thead class="bg-light">
-                                                <tr>
-                                                    <th rowspan="2">Nama Karyawan</th>
-                                                    <?php foreach ($aspek['kriteria'] as $k): ?>
-                                                        <th><?= $k['name'] ?><br><small><?= ucfirst($k['type']) ?></small></th>
-                                                    <?php endforeach; ?>
-                                                    <th rowspan="2">CF</th>
-                                                    <th rowspan="2">SF</th>
-                                                    <th rowspan="2">CF Weight</th>
-                                                    <th rowspan="2">SF Weight</th>
-                                                    <th rowspan="2">Total Nilai Aspek</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php foreach ($aspek['karyawan'] as $k): ?>
-                                                    <tr>
-                                                        <td class="text-left"><?= $k['fullname'] ?></td>
-                                                        <?php foreach ($k['nilai_kriteria'] as $nk): ?>
-                                                            <td><?= $nk['bobot_gap'] ?></td>
-                                                        <?php endforeach; ?>
-                                                        <td><?= $k['cf_nilai'] ?></td>
-                                                        <td><?= $k['sf_nilai'] ?></td>
-                                                        <td><?= $k['cf_weight'] ?></td>
-                                                        <td><?= $k['sf_weight'] ?></td>
-                                                        <td class="bg-success text-white font-weight-bold"><?= $k['total_aspek'] ?></td>
-                                                    </tr>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                <h5 class="mt-4">2. Perhitungan CF, SF, dan Total Nilai Aspek Berdasarkan Bobot Kriteria</h5>
+<?php foreach ($cf_sf_bobot as $aspek): ?>
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white font-weight-bold">
+            <?= $aspek['aspect_name'] ?>
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-sm text-center">
+                <thead class="bg-light">
+                    <tr>
+                        <th rowspan="2">Nama Karyawan</th>
+                        <?php foreach ($aspek['kriteria'] as $k): ?>
+                            <th rowspan="2"><?= $k['name'] ?><br><small><?= ucfirst($k['type']) ?></small></th>
+                        <?php endforeach; ?>
+                        <th rowspan="2">NCF</th>
+                        <th rowspan="2">NSF</th>
+                        <th colspan="2">Kontribusi</th>
+                        <th rowspan="2">Total Nilai Aspek</th>
+                    </tr>
+                    <tr>
+                        <th>NCF (<?= $k['cf_weight'] ?? '0.60' ?>)</th>
+                        <th>NSF (<?= $k['sf_weight'] ?? '0.40' ?>)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($aspek['karyawan'] as $k): ?>
+                        <tr>
+                            <td class="text-left"><?= $k['fullname'] ?></td>
+                            <?php foreach ($k['nilai_kriteria'] as $nk): ?>
+                                <td><?= $nk['bobot_gap'] ?></td>
                             <?php endforeach; ?>
+                            <td><?= $k['cf_nilai'] ?></td>
+                            <td><?= $k['sf_nilai'] ?></td>
+                            <td><?= round($k['cf_nilai'] * $k['cf_weight'], 4) ?></td>
+                            <td><?= round($k['sf_nilai'] * $k['sf_weight'], 4) ?></td>
+                            <td class="bg-success text-white font-weight-bold"><?= $k['total_aspek'] ?></td>
+                        </tr>
+                        <!-- <tr class="text-muted text-center bg-light">
+                            <td colspan="<?= count($aspek['kriteria']) + 3 ?>"><small>Bobot CF</small></td>
+                            <td colspan="1"><?= $k['cf_weight'] ?></td>
+                            <td colspan="1"><?= $k['sf_weight'] ?></td>
+                            <td colspan="1"></td>
+                        </tr> -->
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php endforeach; ?>
 
                                     <h5 class="mt-4">3. Kontribusi Aspek dan Total Nilai Akhir</h5>
                             <div class="card">

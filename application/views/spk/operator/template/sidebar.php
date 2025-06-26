@@ -28,31 +28,12 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item" id="questioner-menu">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-clipboard-list"></i>
-                        <p>
-                            Questioner
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="<?php echo base_url('questioner/questioner') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'questioner') echo 'active' ?>">
-                                <i class="far fa-question-circle nav-icon"></i>
-                                <p>Form Questioner</p>
+                                <i class="nav-icon fas fa-clipboard-list"></i>
+                                <p>Questioner</p>
                             </a>
                         </li>
-                    </ul>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="<?php echo base_url('question/question') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'question') echo 'active' ?>">
-                                <i class="far fa-question-circle nav-icon"></i>
-                                <p>Question</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
                 <li class="nav-item">
                     <a href="<?= base_url('penilaian') ?>" class="nav-link <?= ($this->uri->segment(1) == 'penilaian') ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-tasks"></i>

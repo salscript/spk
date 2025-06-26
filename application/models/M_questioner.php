@@ -417,7 +417,40 @@ public function generate_code_questioner()
 }
 
  public function delete_questioner($id)
-    {
-        return $this->db->delete('questioner', ['id' => $id]);
-    }
+{
+    // Hapus data terkait terlebih dahulu
+    $this->db->where('questioner_id', $id);
+    $this->db->delete('questioner_answers');
+
+    $this->db->where('questioner_id', $id);
+    $this->db->delete('questioner_status');
+
+    $this->db->where('questioner_id', $id);
+    $this->db->delete('nilai_aktual');
+
+    // Setelah data terkait dihapus, hapus data utama
+    return $this->db->delete('questioner', ['id' => $id]);
+}
+
+public function count_sudah_dinilai()
+{
+    // Hitung jumlah karyawan unik (evaluatee_id) yang seluruh penilaian sudah "completed"
+    $this->db->select('qs.evaluatee_id');
+    $this->db->from('questioner_status qs');
+    $this->db->join('employee e', 'e.id = qs.evaluatee_id');
+    $this->db->join('user u', 'u.id = e.user_id');
+    $this->db->where_not_in('u.role_id', [1, 3, 4]); // Kecualikan admin, operator, hrd
+    $this->db->where('qs.status', 'completed');
+    $this->db->group_by('qs.evaluatee_id');
+
+    return $this->db->get()->num_rows(); // jumlah karyawan yang sudah dinilai
+}
+
+
+public function get_periode_aktif()
+{
+    return $this->db->where('status', 1)->order_by('id', 'desc')->limit(1)->get('questioner')->row();
+}
+
+
 }

@@ -121,6 +121,25 @@ public function get_all_aktif()
     return $this->db->get()->result();
 }
 
+public function count_all()
+{
+    // Role yang dikecualikan: 1 = Admin, 3 = Operator, 4 = HRD (misalnya role_id HRD = 4)
+    $excluded_roles = [1, 3, 4];
+
+    $this->db->from('employee e');
+    $this->db->join('user u', 'u.id = e.user_id');
+    $this->db->where_not_in('u.role_id', $excluded_roles);
+
+    return $this->db->count_all_results();
+}
+
+public function count_karyawan_wajib_dinilai()
+{
+    $this->db->from('employee e');
+    $this->db->join('user u', 'u.id = e.user_id');
+    $this->db->where_not_in('u.role_id', [1, 3, 4]); // hanya karyawan biasa
+    return $this->db->count_all_results();
+}
 
 
 }

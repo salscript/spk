@@ -31,18 +31,10 @@
                 </li>
                 <li class="nav-item">
                    <a href="<?php echo base_url('questioner/questioner_user') ?>" class="nav-link <?php if ($this->uri->segment(1) == 'questioner') echo 'active' ?>">
-                     <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <i class="nav-icon fas fa-clipboard-list"></i>
                          <p>
                             Questioner
                          </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link <?php if ($this->uri->segment(1) == 'result') echo 'active' ?>">
-                        <i class="nav-icon fas fa-file-alt"></i>
-                        <p>
-                            Result
-                        </p>
                     </a>
                 </li>
                 <!-- <hr>

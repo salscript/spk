@@ -7,7 +7,7 @@ class Question extends MY_Controller
    {
       parent::__construct();
       cek_login();
-      // check_admin();
+      check_admin();
       $this->load->model('M_question');
       $this->load->model('M_criteria');
    }
@@ -16,24 +16,19 @@ class Question extends MY_Controller
    {
       $data['question'] = $this->M_question->get_all_questions();
       $role = $this->session->userdata('role_id');
-       if($role == 1){
-           $this->template->load('spk/template_admin', 'spk/admin/question/index', $data);
-        } else if($role == 3){
-           $this->template->load('spk/template_operator', 'spk/operator/question/index', $data);
-       }
+      //  if($role == 1){
+      //      $this->template->load('spk/template_admin', 'spk/admin/question/index', $data);
+      //   } else if($role == 3){
+      //      $this->template->load('spk/template_operator', 'spk/operator/question/index', $data);
+      //  }
+       $this->template->load('spk/template_admin', 'spk/admin/question/index', $data);
    }
 
    public function new_question()
    {
       $data['code_question'] = $this->M_question->code_question();
       $data['criteria'] = $this->M_criteria->get_all_criteria();
-      
-      $role = $this->session->userdata('role_id');
-       if($role == 1){
-           $this->template->load('spk/template_admin', 'spk/admin/question/addQuestion', $data);
-        } else if($role == 3){
-           $this->template->load('spk/template_operator', 'spk/operator/question/addQuestion', $data);
-       }
+     $this->template->load('spk/template_admin', 'spk/admin/question/addQuestion', $data);
    }
 
    public function save_question() {

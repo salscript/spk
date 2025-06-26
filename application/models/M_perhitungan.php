@@ -216,7 +216,70 @@ class M_perhitungan extends CI_Model
 
         return $kriteria;
     }
-    public function hitung_cf_sf_berdasarkan_bobot_kriteria($tanggal)
+    
+//     public function hitung_cf_sf_berdasarkan_bobot_kriteria($tanggal)
+// {
+//     $data = $this->get_data_nilai_aktual_by_tanggal($tanggal);
+//     $hasil = [];
+
+//     foreach ($data as $row) {
+//         $gap = $row->nilai_aktual - $row->target;
+//         $bobot_gap = $this->get_bobot_gap($gap);
+//         $type = strtolower($row->factor_type);
+
+//         $emp_id = $row->employee_id;
+//         $aspect_id = $row->aspect_id;
+
+//         $hasil[$aspect_id]['aspect_name'] = $row->aspect_name;
+//         $hasil[$aspect_id]['kriteria'][$row->criteria_id] = [
+//             'name' => $row->criteria_name,
+//             'type' => ucfirst($type)
+//         ];
+
+//         $hasil[$aspect_id]['karyawan'][$emp_id]['fullname'] = $row->fullname;
+
+//         // Kelompokkan berdasarkan Core / Secondary
+//         $hasil[$aspect_id]['karyawan'][$emp_id]['nilai_kriteria'][$row->criteria_id] = [
+//             'bobot_gap' => $bobot_gap,
+//             'criteria_weight' => $row->criteria_weight,
+//             'type' => ucfirst($type)
+//         ];
+//     }
+
+//     // Hitung CF, SF dan Total per aspek per karyawan
+//     foreach ($hasil as &$aspek) {
+//         foreach ($aspek['karyawan'] as &$karyawan) {
+//             $cf_total = 0;
+//             $cf_weight = 0;
+//             $sf_total = 0;
+//             $sf_weight = 0;
+
+//             foreach ($karyawan['nilai_kriteria'] as $nilai) {
+//                 if (strtolower($nilai['type']) == 'core') {
+//                     $cf_total += $nilai['bobot_gap'] * $nilai['criteria_weight'];
+//                     $cf_weight += $nilai['criteria_weight'];
+//                 } else {
+//                     $sf_total += $nilai['bobot_gap'] * $nilai['criteria_weight'];
+//                     $sf_weight += $nilai['criteria_weight'];
+//                 }
+//             }
+
+//             $cf_avg = $cf_weight > 0 ? $cf_total / $cf_weight : 0;
+//             $sf_avg = $sf_weight > 0 ? $sf_total / $sf_weight : 0;
+//             $total_aspek = round(($cf_avg * $cf_weight) + ($sf_avg * $sf_weight), 4);
+
+//             $karyawan['cf_nilai'] = round($cf_avg, 2);
+//             $karyawan['sf_nilai'] = round($sf_avg, 2);
+//             $karyawan['cf_weight'] = $cf_weight;
+//             $karyawan['sf_weight'] = $sf_weight;
+//             $karyawan['total_aspek'] = $total_aspek;
+//         }
+//     }
+
+//     return $hasil;
+// }
+
+public function hitung_cf_sf_berdasarkan_bobot_kriteria($tanggal)
 {
     $data = $this->get_data_nilai_aktual_by_tanggal($tanggal);
     $hasil = [];
@@ -229,15 +292,17 @@ class M_perhitungan extends CI_Model
         $emp_id = $row->employee_id;
         $aspect_id = $row->aspect_id;
 
+        // Simpan nama aspek dan kriteria
         $hasil[$aspect_id]['aspect_name'] = $row->aspect_name;
         $hasil[$aspect_id]['kriteria'][$row->criteria_id] = [
             'name' => $row->criteria_name,
             'type' => ucfirst($type)
         ];
 
+        // Simpan nama karyawan
         $hasil[$aspect_id]['karyawan'][$emp_id]['fullname'] = $row->fullname;
 
-        // Kelompokkan berdasarkan Core / Secondary
+        // Simpan nilai bobot gap per kriteria
         $hasil[$aspect_id]['karyawan'][$emp_id]['nilai_kriteria'][$row->criteria_id] = [
             'bobot_gap' => $bobot_gap,
             'criteria_weight' => $row->criteria_weight,
@@ -245,38 +310,48 @@ class M_perhitungan extends CI_Model
         ];
     }
 
-    // Hitung CF, SF dan Total per aspek per karyawan
+    // Hitung NCF dan NSF per karyawan per aspek
     foreach ($hasil as &$aspek) {
         foreach ($aspek['karyawan'] as &$karyawan) {
             $cf_total = 0;
-            $cf_weight = 0;
+            $cf_count = 0;
             $sf_total = 0;
-            $sf_weight = 0;
+            $sf_count = 0;
 
             foreach ($karyawan['nilai_kriteria'] as $nilai) {
-                if (strtolower($nilai['type']) == 'core') {
-                    $cf_total += $nilai['bobot_gap'] * $nilai['criteria_weight'];
-                    $cf_weight += $nilai['criteria_weight'];
+                if (strtolower($nilai['type']) === 'core') {
+                    $cf_total += $nilai['bobot_gap'];
+                    $cf_count++;
                 } else {
-                    $sf_total += $nilai['bobot_gap'] * $nilai['criteria_weight'];
-                    $sf_weight += $nilai['criteria_weight'];
+                    $sf_total += $nilai['bobot_gap'];
+                    $sf_count++;
                 }
             }
 
-            $cf_avg = $cf_weight > 0 ? $cf_total / $cf_weight : 0;
-            $sf_avg = $sf_weight > 0 ? $sf_total / $sf_weight : 0;
-            $total_aspek = round(($cf_avg * $cf_weight) + ($sf_avg * $sf_weight), 4);
+            $ncf = ($cf_count > 0) ? $cf_total / $cf_count : 0;
+            $nsf = ($sf_count > 0) ? $sf_total / $sf_count : 0;
 
-            $karyawan['cf_nilai'] = round($cf_avg, 2);
-            $karyawan['sf_nilai'] = round($sf_avg, 2);
+            // Kontribusi tetap dengan bobot CF 0.6 dan SF 0.4
+            $cf_weight = 0.60;
+            $sf_weight = 0.40;
+
+            $kontribusi_cf = round($ncf * $cf_weight, 4);
+            $kontribusi_sf = round($nsf * $sf_weight, 4);
+            $total_aspek = round($kontribusi_cf + $kontribusi_sf, 4);
+
+            $karyawan['cf_nilai'] = round($ncf, 2);
+            $karyawan['sf_nilai'] = round($nsf, 2);
             $karyawan['cf_weight'] = $cf_weight;
             $karyawan['sf_weight'] = $sf_weight;
+            $karyawan['kontribusi_cf'] = $kontribusi_cf;
+            $karyawan['kontribusi_sf'] = $kontribusi_sf;
             $karyawan['total_aspek'] = $total_aspek;
         }
     }
 
     return $hasil;
 }
+
 
 
 
@@ -289,6 +364,7 @@ public function get_list_aspek($tanggal)
                     ->group_by('a.id')
                     ->get('aspect a')->result_array();
 }
+
 public function simpan_hasil_profile_matching($tanggal)
 {
     $hasil = $this->hitung_nilai_aspek_by_tanggal($tanggal);

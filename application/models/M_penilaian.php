@@ -88,4 +88,32 @@ public function is_all_aspect_completed($questioner_id)
 
     return $aspek_terisi == $aspek_total;
 }
+
+public function get_rata_rata_per_kriteria()
+{
+    return $this->db->select('c.name AS kriteria, AVG(sc.value) AS nilai')
+        ->from('nilai_aktual na')
+        ->join('criteria c', 'c.id = na.criteria_id')
+        ->join('sub_criteria sc', 'sc.id = na.subkriteria_id') // ✅ gunakan sub_criteria
+        ->group_by('c.id')
+        ->get()
+        ->result();
+}
+
+
+
+public function get_top_karyawan($limit = 5)
+{
+    return $this->db->select('e.fullname, p.name as position_name, SUM(sc.value) as nilai')
+        ->from('nilai_aktual na')
+        ->join('employee e', 'e.id = na.employee_id')
+        ->join('sub_criteria sc', 'sc.id = na.subkriteria_id')
+        ->join('position p', 'p.id = e.position_id') // jika kamu ingin tampilkan posisi juga
+        ->group_by('na.employee_id')
+        ->order_by('nilai', 'DESC')
+        ->limit($limit)
+        ->get()->result();
+}
+
+
 }

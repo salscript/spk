@@ -56,7 +56,7 @@
                            <th>Jumlah Penilai</th>
                            <th>Total Nilai</th>
                            <th>Nilai Rata-rata</th>
-                           <th>Status</th>
+                           <!-- <th>Status</th> -->
                         </tr>
                      </thead>
                      <tbody>
@@ -76,15 +76,15 @@
                                  <span class="<?= $badge ?>"><?= $r->avg_score ?></span>
                               </td>
                              <td>
-                            <?php
+                            <!-- <?php
                                 $status = ($r->jumlah_penilai >= $r->expected_evaluator_count) ? 'Lengkap' : 'Belum Lengkap';
                                 $badge = $status === 'Lengkap' ? 'badge badge-success' : 'badge badge-warning';
                             ?>
                             <span class="<?= $badge ?>"><?= $status ?></span>
-                            </td>
+                            </td> -->
                            </tr>
                         <?php endforeach; ?>
-                     </tbody>
+                     </tbody> 
                   </table>
                </div>
             </div>
