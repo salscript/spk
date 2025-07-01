@@ -160,17 +160,25 @@ class M_user extends CI_Model
         $this->db->where('user_id', $id_user);
         return $this->db->update('employee', $data_name);
     }
-    function update_user_without_password($id_user, $role, $status, $update)
-{
-    $data_user = [
-        'role_id' => $role,
-        'status' => $status,
-        'updated_on' => $update
-    ];
 
-    $this->db->where('id', $id_user);
-    return $this->db->update('user', $data_user);
-}
+    function update_user_without_password($id_user, $role, $status, $update)
+    {
+        $data_user = [
+            'role_id' => $role,
+            'status' => $status,
+            'updated_on' => $update
+        ];
+
+        $this->db->where('id', $id_user);
+        return $this->db->update('user', $data_user);
+    }
+
+    function jumlah_user()
+    {
+        $this->db->select('*');
+        $this->db->from('user');
+        return $this->db->get()->num_rows();
+    }
 
 }
 

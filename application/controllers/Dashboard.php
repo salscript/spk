@@ -6,6 +6,10 @@ class Dashboard extends MY_Controller
    public function __construct()
    {
       parent::__construct();
+      $this->load->model('M_user');
+      $this->load->model('M_questioner');
+      $this->load->model('M_penilaian');
+      $this->load->model('M_criteria');
       cek_login();
    }
 
@@ -30,22 +34,26 @@ class Dashboard extends MY_Controller
 //     $data['title']            = "Dashboard";
 
 //     // Kirim ke view
-$data = array();
-    $this->template->load('spk/template_admin', 'spk/admin/dashboard', $data);
-}
+      // $data = array();
+      $data["user"] = $this->M_user->jumlah_user();
+      $data["questioner"] = $this->M_questioner->jumlah_questioner();
+      $data["criteria"] = $this->M_criteria->jumlah_criteria();
+      $data["penilaian"] = $this->M_penilaian->get_questioner_sudah_dinilai();
+      $this->template->load('spk/template_admin', 'spk/admin/dashboard', $data);
+   }
 
  
    public function user()
    {
       check_user();
-      $data = array();
-      $this->template->load('spk/template_user', 'spk/user/dashboard', $data);
+      $this->template->load('spk/template_user', 'spk/user/dashboard');
    }
 
    public function operator()
    {
       check_operator();
-      $data = array();
+      $data["questioner"] = $this->M_questioner->jumlah_questioner();
+      $data["penilaian"] = $this->M_penilaian->get_questioner_sudah_dinilai();
       $this->template->load('spk/template_operator', 'spk/operator/dashboard', $data);
    }
 }

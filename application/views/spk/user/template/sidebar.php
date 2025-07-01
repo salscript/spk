@@ -1,9 +1,9 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="#" class="brand-link">
-        <img src="<?= base_url() ?>assets/back/dist/img/technolife.webp" alt="Helpdesk Logo" class="brand-image" style="opacity: 1">
-        <span class="brand-text font-weight-normal">SPK IT</span>
+    <a href="<?= base_url('dashboard/admin') ?>" class="brand-link" style="background-color: #ffffff; border-bottom: 1px solid #ccc;">
+      <img src="<?= base_url('assets/back/dist/img/technolife.webp') ?>" alt="AdminLTE Logo" class="brand-image" style="opacity: .8;">
+      <span class="brand-text font-weight-bold ml-1 text-dark">PT. Technolife</span>
     </a>
 
     <!-- Sidebar -->

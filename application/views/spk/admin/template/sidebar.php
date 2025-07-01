@@ -2,11 +2,14 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4" style="font-family: 'Poppins', sans-serif;">
 
     <!-- Brand Logo -->
-    <a href="<?= base_url('dashboard/admin') ?>" class="brand-link d-flex align-items-center" style="background-color: #fff; border-bottom: 1px solid #ccc;">
-      <img src="<?= base_url('assets/back/dist/img/technolife.webp') ?>" 
-     alt="Technolife Logo" 
-     style="height: 55px; width: auto; margin-left: 10px; object-fit: contain;">
-        <span class="brand-text font-weight-bold ml-2 text-dark">PT. Technolife</span>
+    <!-- <a href="<?= base_url('dashboard/admin') ?>" class="brand-link d-flex align-items-center" style="background-color: #fff; border-bottom: 1px solid #ccc;">
+        <img src="<?= base_url('assets/back/dist/img/technolife.webp') ?>" alt="Technolife Logo" style="height: 30px; width: auto; margin-left: 10px; object-fit: contain;">
+        <span class="brand-text font-weight-bold ml-2 text-md text-dark">PT. Technolife</span>
+    </a> -->
+
+    <a href="<?= base_url('dashboard/admin') ?>" class="brand-link" style="background-color: #ffffff; border-bottom: 1px solid #ccc;">
+      <img src="<?= base_url('assets/back/dist/img/technolife.webp') ?>" alt="AdminLTE Logo" class="brand-image" style="opacity: .8;">
+      <span class="brand-text font-weight-bold ml-1 text-dark">PT. Technolife</span>
     </a>
 
     <!-- Sidebar -->
@@ -15,8 +18,8 @@
         <!-- User Panel -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="<?= base_url('assets/back/uploads/avatar/' . ($this->session->avatar ?? 'user2-160x160.jpg')) ?>" 
-                     class="img-circle elevation-2" alt="User Image">
+                <img src="<?php echo base_url('assets/back') ?><?= $this->session->avatar; ?>" class="img-circle elevation-2" alt="User Image">
+                <!-- <img src="<?= base_url('assets/back/uploads/avatar/' . ($this->session->avatar ?? 'user2-160x160.jpg')) ?>" class="img-circle elevation-2" alt="User Image"> -->
             </div>
             <div class="info">
                 <a href="#" class="d-block"><?= $this->session->fullname ?? 'Super Admin'; ?></a>

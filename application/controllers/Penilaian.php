@@ -15,13 +15,13 @@ class Penilaian extends CI_Controller
     }
 
    public function index()
-{
+    {
     $data['title'] = 'Data Penilaian';
     $data['questioners'] = $this->M_questioner->get_all();
 
     foreach ($data['questioners'] as &$q) {
-        // Cek apakah sudah ada nilai apapun
-        $q->sudah_diisi = $this->M_penilaian->sudah_ada_nilai($q->id);
+        // // Cek apakah sudah ada nilai apapun
+        // $q->sudah_diisi = $this->M_penilaian->sudah_ada_nilai($q->id);
 
         // ✅ Tambahan: cek apakah semua aspek sudah diisi
         $q->sudah_diisi_semua_aspek = $this->M_penilaian->is_all_aspect_completed($q->id);

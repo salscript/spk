@@ -21,6 +21,12 @@ class M_criteria extends CI_Model
         return $this->db->get()->result();
     }
 
+    function jumlah_criteria(){
+        $this->db->select("*");
+        $this->db->from("criteria");
+        return $this->db->get()->num_rows();
+    }
+
     function get_criteria_by_id($id) {
         $this->db->select("
             c.id as id,

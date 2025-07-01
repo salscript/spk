@@ -115,5 +115,27 @@ public function get_top_karyawan($limit = 5)
         ->get()->result();
 }
 
+    public function get_questioner_sudah_dinilai()
+    {
+        // Hitung total aspek
+        $aspek_total = $this->db->count_all('aspect');
+
+        // Query untuk ambil questioner_id yang sudah dinilai semua aspek
+        $subquery = $this->db->select('na.questioner_id')
+            ->from('nilai_aktual na')
+            ->join('criteria c', 'c.id = na.criteria_id')
+            ->group_by('na.questioner_id')
+            ->having('COUNT(DISTINCT c.aspect_id) =', $aspek_total)
+            ->get();
+
+        return $subquery->num_rows();
+    }
+
+    // function jumlah_penilaian(){
+    //     $total_questioner = $this->db->count_all('questioner');
+    //     $completed = $this->get_questioner_sudah_dinilai();
+
+        
+    // }
 
 }

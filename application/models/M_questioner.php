@@ -447,10 +447,15 @@ public function count_sudah_dinilai()
 }
 
 
-public function get_periode_aktif()
-{
-    return $this->db->where('status', 1)->order_by('id', 'desc')->limit(1)->get('questioner')->row();
-}
+    public function get_periode_aktif()
+    {
+        return $this->db->where('status', 1)->order_by('id', 'desc')->limit(1)->get('questioner')->row();
+    }
 
+    function jumlah_questioner(){
+        $this->db->select("*");
+        $this->db->from("questioner");
+        return $this->db->get()->num_rows();
+    }
 
 }

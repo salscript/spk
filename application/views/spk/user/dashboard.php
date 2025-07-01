@@ -45,6 +45,11 @@
             </div>
 
             <section class="content">
-                
+                <div class="container-fluid">
+                    <img src="<?= base_url('assets/back/dist/img/technolife.webp') ?>" width="190px" style="display: block; margin-left: auto; margin-right: auto; margin-top: 75px; margin-bottom: 20px">
+
+                    <h3 class="text-center">PT. Technolife Karya Industri Utama</h3>
+                    <p class="text-center">Alamat : Jl. Ir Soekarno No.4, RW.6, Cibeusi, Kec. Jatinangor, Kabupaten Sumedang, Jawa Barat 45363</p>
+                </div>
             </section>
         </div>
